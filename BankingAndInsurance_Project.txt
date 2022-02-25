@@ -1,0 +1,28 @@
+Admin                                       Banker                                                           User
+
+create banker profile.                      Create User Profile/Offline Register                         User can register itself.
+get all banker and user detials.            get all user details.                                        get all details for itself like profile,Transaction,credit.debit.
+get single banker and user details.         get a single user details.                                   get specific record for himself.
+delete a banker or user profile.            NA........................                                   Request to close his account/profile.
+Update a banker or user profile             Update a user profile.                                       Request to update few details.
+
+User Activity
+-----------------
+Register/Login
+Ekyc for banking activity.
+Transaction.
+Apply for other services or scheme.
+Update profile.
+Close account request.
+Loan apply.     
+
+
+https://videos.htcindia.com/AVideo/vEmbed/1007
+
+
+Explain Plan
+Index
+How to understand the time required to execute a query 
+How do you proivde hint for the query
+Store Procedure.
+                  
