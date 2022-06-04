@@ -1,9 +1,8 @@
 package com.starbanking.DAOImpl;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.PersistenceContextType;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -27,8 +26,16 @@ public class UserRepositoryImpl implements UserRepository {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
-	@PersistenceContext
+	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	private EntityManager entityManager;
+
+	public UserRepositoryImpl(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
+
+	public UserRepositoryImpl() {
+
+	}
 
 	@Override
 	public boolean saveUserDetails(User user, MainWallet mainWallet) {
@@ -47,9 +54,10 @@ public class UserRepositoryImpl implements UserRepository {
 			e.printStackTrace();
 			logger.info("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Save User Details");
-		} finally {
-			session.close();
 		}
+//		finally {
+//		  session.close();
+//		}
 		return status;
 	}
 
@@ -86,8 +94,6 @@ public class UserRepositoryImpl implements UserRepository {
 			e.printStackTrace();
 			logger.info("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Fetch Admin Details");
-		} finally {
-			session.close();
 		}
 	}
 
@@ -130,31 +136,24 @@ public class UserRepositoryImpl implements UserRepository {
 			e.printStackTrace();
 			logger.info("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Fetch User Details");
-		} finally {
-			session.close();
 		}
+//		finally {
+//			session.close();
+//		}
 	}
 
 	@Override
 	public User findUserByUsername(String username) {
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
-		String query = null;
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(User.class, "user");
 			if (null != username && !username.isEmpty() && !username.isBlank()) {
 				criteria.add(Restrictions.and(Restrictions.eq("Username", username), Restrictions.eq("isActive", 'Y')));
-//				query = "SELECT u.UserIdentificationNo, u.Username, u.applicantName, u.mobileno, u.emailid, "
-//						+ "u.role, u.password, u.dateOfBirth FROM User u WHERE u.Username=:username AND u.isActive='Y'";
-//				logger.info("Query{} " + query);
 			} else {
-				throw new ResourceNotFoundException("Invalid Username!!");
+				throw new ResourceNotFoundException("Invalid Username!!!");
 			}
-//			Query qry = session.createQuery(query);
-//			qry.setParameter("Username", username);
-//			Object obj = qry.getSingleResult();
-//			logger.info("obj" + obj);
 			criteria.setProjection(Projections.projectionList()
 					.add(Projections.alias(Projections.property("user.UserIdentificationNo"), "UserIdentificationNo"))
 					.add(Projections.alias(Projections.property("user.Username"), "Username"))
@@ -173,16 +172,17 @@ public class UserRepositoryImpl implements UserRepository {
 			User userdata = (User) criteria.uniqueResult();
 			logger.info("User Data{} " + userdata);
 			transaction.commit();
-			return null;
+			return userdata;
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
 			logger.info("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Fetch User Details");
-		} finally {
-			session.close();
 		}
+//		finally {
+//			session.close();
+//		}
 	}
 
 }
