@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
 			mainWallet.setTds(0.00);
 			mainWallet.setCreditAmount(0.00);
 			mainWallet.setDebitAmount(0.00);
+			mainWallet.setIsActive('Y');
 			mainWallet.setCreditType(null);
 			mainWallet.setDebitType(null);
 			boolean Savestatus = userRepository.saveUserDetails(userRegistration, mainWallet);

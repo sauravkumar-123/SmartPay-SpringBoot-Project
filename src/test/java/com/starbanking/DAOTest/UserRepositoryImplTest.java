@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContextType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
@@ -44,8 +45,10 @@ public class UserRepositoryImplTest {
 		userRepos = new UserRepositoryImpl(entityManager);
 	}
 
+	@DisplayName("Test Save User and their mainWalet details")
 	@Test
 	public void saveUserDetailsTest() {
+		logger.info("saveUserDetails");
 		User userRegistration = new User();
 		userRegistration.setApplicantName("Rinku Singh");
 		userRegistration.setEmailid("rinku.singh453x@gmail.com");
@@ -72,27 +75,34 @@ public class UserRepositoryImplTest {
 		mainWallet.setTds(0.00);
 		mainWallet.setCreditAmount(0.00);
 		mainWallet.setDebitAmount(0.00);
+		mainWallet.setIsActive('Y');
 		mainWallet.setCreditType(null);
 		mainWallet.setDebitType(null);
 		boolean status = userRepos.saveUserDetails(userRegistration, mainWallet);
 		Assertions.assertTrue(status);
 	}
 
+	@DisplayName("Test getAdminDetails method")
 	@Test
 	public void getAdminDetailsTest() {
+		logger.info("getAdminDetails");
 		User user = userRepos.getAdminDetails();
 		Assertions.assertNotNull(user);
 	}
 
+	@DisplayName("Test findUserByUsername method")
 	@Test
 	public void getUserDetailsTest() {
+		logger.info("getUserDetails");
 		User user = userRepos.getUserDetails("sauravkumar.123@gmail.com", "9691098742", 'Y');
 		Assertions.assertNotNull(user);
 	}
 
+	@DisplayName("Test findUserByUsername method")
 	@Test
-	public void findUserByUsername() {
-		User user = userRepos.findUserByUsername("IR412014");
+	public void findUserByUsernameTest() {
+		logger.info("findUserByUsername");
+		User user = userRepos.findUserByUsername("IR023210");
 		Assertions.assertNotNull(user);
 	}
 

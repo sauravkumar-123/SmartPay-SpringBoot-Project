@@ -49,6 +49,9 @@ public class MainWallet extends BaseEntity {
 
 	@Column(name = "debit_Amount")
 	private Double debitAmount;
+	
+	@Column(name = "IsActive")
+	private char isActive;
 
 	@Column(name = "credit_type", length = 20)
 	private String creditType;

@@ -27,12 +27,14 @@ public class StringUtilTest {
 
 	@Test
 	public void getLastSixDigitOfMobileNoTest() {
+		logger.info("getLastSixDigitOfMobileNo");
 		String result = StringUtil.getLastSixDigitOfMobileNo("9691098742");
 		Assertions.assertEquals("098742", result);
 	}
 
 	@Test
 	public void generateDefaultPasswordTest() {
+		logger.info("generateDefaultPassword");
 		String result = StringUtil.generateDefaultPassword("Saurav kumar");
 		Assertions.assertEquals("Saurav12345", result);
 	}
