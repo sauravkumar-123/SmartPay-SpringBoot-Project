@@ -10,7 +10,7 @@ import com.starbanking.DAO.UserRepository;
 import com.starbanking.Model.User;
 
 @Service
-public class userDetails implements UserDetailsService {
+public class LoadUserDetails implements UserDetailsService {
 
 	@Autowired
 	private UserRepository UserRepository;

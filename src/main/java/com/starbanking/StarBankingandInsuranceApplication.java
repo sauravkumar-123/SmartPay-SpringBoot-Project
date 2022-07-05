@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Bean;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
+import com.starbanking.Service.RolesAndPrivilegesService;
+import com.starbanking.ServiceImpl.RolesAndPrivilegesServiceImpl;
 
 import brave.sampler.Sampler;
 
@@ -51,6 +53,11 @@ public class StarBankingandInsuranceApplication {
 			builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
 			builder.serializers(new ZonedDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
 		};
+	}
+
+	@Bean
+	public RolesAndPrivilegesService rolesAndPrivileges() {
+		return new RolesAndPrivilegesServiceImpl();
 	}
 
 	@Bean

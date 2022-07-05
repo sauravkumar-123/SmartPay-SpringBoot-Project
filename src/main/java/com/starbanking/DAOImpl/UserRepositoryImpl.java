@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -104,7 +105,7 @@ public class UserRepositoryImpl implements UserRepository {
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(User.class, "user");
-			if (null != emailId && null != mobno && 'N' != isActive) {
+			if (StringUtils.isNotEmpty(emailId) && StringUtils.isNotEmpty(mobno) && 'N' != isActive) {
 				Criterion emailAdd = Restrictions.eq("emailid", emailId);
 				Criterion mobileNumber = Restrictions.eq("mobileno", mobno);
 				Criterion status = Restrictions.eq("isActive", isActive);

@@ -3,11 +3,13 @@ package com.starbanking.Security;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.starbanking.Model.Role;
 import com.starbanking.Model.User;
 
 public class UserSecurity implements UserDetails {
@@ -25,8 +27,11 @@ public class UserSecurity implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+		Set<Role> roles = user.getRoles();
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(user.getRole()));
+		roles.stream().forEach(role -> {
+			authorities.add(new SimpleGrantedAuthority(role.getName()));
+		});
 		return authorities;
 	}
 
@@ -57,7 +62,11 @@ public class UserSecurity implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		if (user.getIsActive() == 'Y') {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
