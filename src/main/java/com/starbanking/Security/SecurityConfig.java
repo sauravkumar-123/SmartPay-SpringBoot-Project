@@ -3,12 +3,13 @@ package com.starbanking.Security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
@@ -25,8 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// http.authorizeRequests().anyRequest().permitAll().and().formLogin().and().httpBasic();
 
 		http.csrf().disable().authorizeRequests().antMatchers("/v1/admin/**").authenticated().antMatchers("/v1/user/**")
-				.permitAll().and().formLogin().permitAll().and().logout().invalidateHttpSession(true)
-				.clearAuthentication(true).permitAll();
+				.permitAll().antMatchers("/swagger-ui.html#").permitAll().and().formLogin().permitAll().and().logout()
+				.invalidateHttpSession(true).clearAuthentication(true).permitAll();
 	}
 
 //@ InMemeoryAuthencation with passwordEncode.
@@ -54,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //	public UserDetailsService userDetailsService(DataSource dataSource) {
 //		return new JdbcUserDetailsManager(dataSource);
 //	}
-	
+
 //	@Bean
 //	public PasswordEncoder getPasswordEncoder() {
 //		return NoOpPasswordEncoder.getInstance();

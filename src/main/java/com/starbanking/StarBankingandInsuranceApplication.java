@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
@@ -22,7 +22,7 @@ import com.starbanking.ServiceImpl.RolesAndPrivilegesServiceImpl;
 
 import brave.sampler.Sampler;
 
-@EnableEurekaClient
+@EnableDiscoveryClient
 @SpringBootApplication
 public class StarBankingandInsuranceApplication {
 

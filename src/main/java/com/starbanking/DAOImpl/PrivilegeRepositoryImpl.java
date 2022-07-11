@@ -35,7 +35,6 @@ public class PrivilegeRepositoryImpl implements PrivilegeRepository {
 	public void savePrivilege(Privileges privilege) {
 		Session session = entityManager.unwrap(Session.class);
 		session.save(privilege);
-		session.close();
 	}
 
 	@Transactional(rollbackOn = Exception.class)
@@ -45,7 +44,7 @@ public class PrivilegeRepositoryImpl implements PrivilegeRepository {
 		String qry = "SELECT p FROM Privileges p WHERE p.name=:privilegeName";
 		Query query = session.createQuery(qry);
 		query.setParameter("privilegeName", privilegeName);
-		Privileges privilege = (Privileges) query.getSingleResult();
+		Privileges privilege = (Privileges) query.uniqueResult();
 		return privilege;
 	}
 
