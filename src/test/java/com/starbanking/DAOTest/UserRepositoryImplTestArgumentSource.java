@@ -116,6 +116,7 @@ public class UserRepositoryImplTestArgumentSource {
 				Arguments.of(userRegistration3, mainWallet3));
 	}
 	
+	
 	static Stream<? extends Arguments> getUserDetailsTestArguments(){
 		return Stream.of(Arguments.of("ravi.coll123@gmail.com","9874102562",'Y'),
 				         Arguments.of("kumari.geeta0123@gmail.com","8520102652",'Y'),

@@ -44,6 +44,7 @@ public class PrivilegeRepositoryImpl implements PrivilegeRepository {
 		String qry = "SELECT p FROM Privileges p WHERE p.name=:privilegeName";
 		Query query = session.createQuery(qry);
 		query.setParameter("privilegeName", privilegeName);
+		logger.debug("Query " + query);
 		Privileges privilege = (Privileges) query.uniqueResult();
 		return privilege;
 	}

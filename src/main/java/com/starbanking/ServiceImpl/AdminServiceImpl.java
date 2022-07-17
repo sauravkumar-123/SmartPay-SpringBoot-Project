@@ -1,16 +1,23 @@
 package com.starbanking.ServiceImpl;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.starbanking.DAO.RoleRepository;
 import com.starbanking.DAO.UserRepository;
 import com.starbanking.Enum.EnumsStatus.UserRole;
 import com.starbanking.Enum.EnumsStatus.YesNO;
 import com.starbanking.Exception.GlobalException;
 import com.starbanking.Model.MainWallet;
+import com.starbanking.Model.Role;
 import com.starbanking.Model.User;
 import com.starbanking.Service.AdminService;
 import com.starbanking.Utility.StringUtil;
@@ -27,10 +34,15 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private RoleRepository roleRepository;
+
 	@Override
 	public User registerAdmin(User user) {
 		User userData = userRepository.getUserDetails(user.getEmailid(), user.getMobileno(), 'Y');
 		if (null == userData) {
+			Role adminRole = roleRepository.findRoleByName(UserRole.ADMIN.getRoleName());
+			List<Role> roleList = Arrays.asList(adminRole);
 			User userRegistration = new User();
 			userRegistration.setApplicantName(user.getApplicantName());
 			userRegistration.setEmailid(user.getEmailid());
@@ -39,6 +51,7 @@ public class AdminServiceImpl implements AdminService {
 			userRegistration.setBankingServiceStatus(YesNO.NO);
 			userRegistration.setIsActive('Y');
 			userRegistration.setRole(UserRole.ADMIN.getRoleName());
+			userRegistration.setRoles(roleList.stream().collect(Collectors.toSet()));
 			userRegistration
 					.setPassword(passwordEncoder.encode(StringUtil.generateDefaultPassword(user.getApplicantName())));
 			userRegistration.setUserIdentificationNo(Utility.generateRandomfiveDigitNo());
@@ -64,7 +77,7 @@ public class AdminServiceImpl implements AdminService {
 				return null;
 			}
 		} else {
-			throw new GlobalException("Admin Details Already Avalibale");
+			throw new GlobalException("Admin Details Already Avaliable");
 		}
 	}
 }

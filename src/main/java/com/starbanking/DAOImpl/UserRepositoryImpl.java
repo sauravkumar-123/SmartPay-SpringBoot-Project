@@ -45,7 +45,7 @@ public class UserRepositoryImpl implements UserRepository {
 		boolean status = false;
 		try {
 			transaction = session.beginTransaction();
-			session.save(user);
+			session.merge(user);
 			session.save(mainWallet);
 			transaction.commit();
 			status = true;
@@ -150,7 +150,7 @@ public class UserRepositoryImpl implements UserRepository {
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(User.class, "user");
-			if (null != username && !username.isEmpty() && !username.isBlank()) {
+			if (StringUtils.isNotEmpty(username)) {
 				criteria.add(Restrictions.and(Restrictions.eq("Username", username), Restrictions.eq("isActive", 'Y')));
 			} else {
 				throw new ResourceNotFoundException("Invalid Username!!!");

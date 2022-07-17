@@ -31,6 +31,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		String autheritie = UserPrivilege.CREATE.getPrivilegeName();
 		Privileges privilege = privilegeRepository.findPrivilegeByName(autheritie);
 		if (null == privilege) {
+			logger.info("Set CREATE Privilege");
 			privilege = new Privileges();
 			privilege.setName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
@@ -43,6 +44,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		String autheritie = UserPrivilege.READ.getPrivilegeName();
 		Privileges privilege = privilegeRepository.findPrivilegeByName(autheritie);
 		if (null == privilege) {
+			logger.info("Set READ Privilege");
 			privilege = new Privileges();
 			privilege.setName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
@@ -55,6 +57,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		String autheritie = UserPrivilege.UPDATE.getPrivilegeName();
 		Privileges privilege = privilegeRepository.findPrivilegeByName(autheritie);
 		if (null == privilege) {
+			logger.info("Set UPDATE Privilege");
 			privilege = new Privileges();
 			privilege.setName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
@@ -67,6 +70,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		String autheritie = UserPrivilege.DELETE.getPrivilegeName();
 		Privileges privilege = privilegeRepository.findPrivilegeByName(autheritie);
 		if (null == privilege) {
+			logger.info("Set DELETE Privilege");
 			privilege = new Privileges();
 			privilege.setName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
@@ -79,6 +83,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		String roleName = UserRole.ADMIN.getRoleName();
 		Role role = roleRepository.findRoleByName(roleName);
 		if (null == role) {
+			logger.info("Set ADMIN role and its privileges");
 			role = new Role();
 			role.setName(roleName);
 			role.setPrivileges(adminPrivilegesSet);
@@ -92,6 +97,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		String roleName = UserRole.MERCHANT.getRoleName();
 		Role role = roleRepository.findRoleByName(roleName);
 		if (null == role) {
+			logger.info("Set MERCHANT role and its privileges");
 			role = new Role();
 			role.setName(roleName);
 			role.setPrivileges(merchantPrivilegesSet);
@@ -105,6 +111,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		String roleName = UserRole.DISTRIBUTOR.getRoleName();
 		Role role = roleRepository.findRoleByName(roleName);
 		if (null == role) {
+			logger.info("Set DISTRIBUTOR role and its privileges");
 			role = new Role();
 			role.setName(roleName);
 			role.setPrivileges(distributorPrivilegesSet);
@@ -118,6 +125,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		String roleName = UserRole.MASTERDISTRIBUTOR.getRoleName();
 		Role role = roleRepository.findRoleByName(roleName);
 		if (null == role) {
+			logger.info("Set MASTERDISTRIBUTOR role and its privileges");
 			role = new Role();
 			role.setName(roleName);
 			role.setPrivileges(masterDistributorPrivilegesSet);

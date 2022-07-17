@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// http.authorizeRequests().anyRequest().denyAll().and().formLogin().and().httpBasic();
 		// http.authorizeRequests().anyRequest().permitAll().and().formLogin().and().httpBasic();
 
-		http.csrf().disable().authorizeRequests().antMatchers("/v1/admin/**").authenticated().antMatchers("/v1/user/**")
+		http.csrf().disable().authorizeRequests().antMatchers("/v1/register/**").permitAll().antMatchers("/v1/user/**")
 				.permitAll().antMatchers("/swagger-ui.html#").permitAll().and().formLogin().permitAll().and().logout()
 				.invalidateHttpSession(true).clearAuthentication(true).permitAll();
 	}

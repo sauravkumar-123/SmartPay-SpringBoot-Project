@@ -1,5 +1,9 @@
 package com.starbanking.DAOTest;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -16,11 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.starbanking.DAO.RoleRepository;
 import com.starbanking.DAO.UserRepository;
 import com.starbanking.DAOImpl.UserRepositoryImpl;
 import com.starbanking.Enum.EnumsStatus.UserRole;
 import com.starbanking.Enum.EnumsStatus.YesNO;
 import com.starbanking.Model.MainWallet;
+import com.starbanking.Model.Role;
 import com.starbanking.Model.User;
 import com.starbanking.Utility.StringUtil;
 import com.starbanking.Utility.Utility;
@@ -39,6 +45,9 @@ public class UserRepositoryImplTest {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private RoleRepository roleRepository;
+
 	@BeforeAll
 	public void initalSetUp() {
 		logger.info("Userdetail SetUp Started");
@@ -50,6 +59,8 @@ public class UserRepositoryImplTest {
 	public void saveUserDetailsTest() {
 		logger.info("saveUserDetails");
 		User userRegistration = new User();
+		Role merchantRole = roleRepository.findRoleByName(UserRole.MERCHANT.getRoleName());
+		List<Role> roleList = Arrays.asList(merchantRole);
 		userRegistration.setApplicantName("Rinku Singh");
 		userRegistration.setEmailid("rinku.singh453x@gmail.com");
 		userRegistration.setMobileno("8541023210");
@@ -57,6 +68,7 @@ public class UserRepositoryImplTest {
 		userRegistration.setBankingServiceStatus(YesNO.NO);
 		userRegistration.setIsActive('Y');
 		userRegistration.setRole(UserRole.MERCHANT.getRoleName());
+		userRegistration.setRoles(roleList.stream().collect(Collectors.toSet()));
 		userRegistration.setPassword(
 				passwordEncoder.encode(StringUtil.generateDefaultPassword(userRegistration.getApplicantName())));
 		userRegistration.setUserIdentificationNo(Utility.generateRandomfiveDigitNo());

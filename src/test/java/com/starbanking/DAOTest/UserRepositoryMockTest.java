@@ -4,6 +4,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -18,11 +22,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.starbanking.DAO.RoleRepository;
 import com.starbanking.DAO.UserRepository;
 import com.starbanking.Enum.EnumsStatus.UserRole;
 import com.starbanking.Enum.EnumsStatus.YesNO;
 import com.starbanking.Model.MainWallet;
+import com.starbanking.Model.Role;
 import com.starbanking.Model.User;
 import com.starbanking.Utility.StringUtil;
 import com.starbanking.Utility.Utility;
@@ -33,6 +41,12 @@ import com.starbanking.Utility.Utility;
 public class UserRepositoryMockTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserRepositoryMockTest.class);
+
+	@Autowired
+	private RoleRepository roleRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	UserRepository userRepos;
 
@@ -50,6 +64,8 @@ public class UserRepositoryMockTest {
 	public void saveUserDetailsMockTest() {
 		logger.info("saveUserDetails");
 		User userRegistration1 = new User();
+		Role merchantRole = roleRepository.findRoleByName(UserRole.MERCHANT.getRoleName());
+		List<Role> roleList = Arrays.asList(merchantRole);
 		userRegistration1.setApplicantName("Nirmal Kumar Aalnkar");
 		userRegistration1.setEmailid("nirmal.kumar045@gmail.com");
 		userRegistration1.setMobileno("6520102360");
@@ -57,7 +73,9 @@ public class UserRepositoryMockTest {
 		userRegistration1.setBankingServiceStatus(YesNO.NO);
 		userRegistration1.setIsActive('Y');
 		userRegistration1.setRole(UserRole.MERCHANT.getRoleName());
-		userRegistration1.setPassword(StringUtil.generateDefaultPassword(userRegistration1.getApplicantName()));
+		userRegistration1.setRoles(roleList.stream().collect(Collectors.toSet()));
+		userRegistration1.setPassword(
+				passwordEncoder.encode(StringUtil.generateDefaultPassword(userRegistration1.getApplicantName())));
 		userRegistration1.setUserIdentificationNo(Utility.generateRandomfiveDigitNo());
 		userRegistration1.setUsername("IR" + StringUtil.getLastSixDigitOfMobileNo(userRegistration1.getMobileno()));
 		userRegistration1.setParentUsername("AD098742");
@@ -83,14 +101,18 @@ public class UserRepositoryMockTest {
 	public void getAdminDetailsMockTest() {
 		logger.info("getAdminDetails");
 		User userRegistration1 = new User();
+		Role merchantRole = roleRepository.findRoleByName(UserRole.ADMIN.getRoleName());
+		List<Role> roleList = Arrays.asList(merchantRole);
 		userRegistration1.setApplicantName("Radha Shayam");
 		userRegistration1.setEmailid("radheshyam095@gmail.com");
 		userRegistration1.setMobileno("8541206590");
 		userRegistration1.setDateOfBirth(Utility.convertStringToDate("10-02-1995"));
 		userRegistration1.setBankingServiceStatus(YesNO.NO);
 		userRegistration1.setIsActive('Y');
-		userRegistration1.setRole(UserRole.MERCHANT.getRoleName());
-		userRegistration1.setPassword(StringUtil.generateDefaultPassword(userRegistration1.getApplicantName()));
+		userRegistration1.setRole(UserRole.ADMIN.getRoleName());
+		userRegistration1.setRoles(roleList.stream().collect(Collectors.toSet()));
+		userRegistration1.setPassword(
+				passwordEncoder.encode(StringUtil.generateDefaultPassword(userRegistration1.getApplicantName())));
 		userRegistration1.setUserIdentificationNo(Utility.generateRandomfiveDigitNo());
 		userRegistration1.setUsername("IR" + StringUtil.getLastSixDigitOfMobileNo(userRegistration1.getMobileno()));
 		userRegistration1.setParentUsername("AD098742");

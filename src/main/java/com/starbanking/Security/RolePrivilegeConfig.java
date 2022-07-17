@@ -17,7 +17,7 @@ import com.starbanking.Model.Role;
 import com.starbanking.Service.RolesAndPrivilegesService;
 
 @Component
-public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
+public class RolePrivilegeConfig implements ApplicationListener<ContextRefreshedEvent> {
 
 	boolean alreadySetup = false;
 
