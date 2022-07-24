@@ -74,7 +74,10 @@ public class UserServiceImpl implements UserService {
 			mainWallet.setDebitType(null);
 			boolean Savestatus = userRepository.saveUserDetails(userRegistration, mainWallet);
 			if (Savestatus) {
+				String status = Utility.sendLoginDetailsToUserMobno(userRegistration.getApplicantName(),
+						userRegistration.getMobileno(), userRegistration.getUsername());
 				logger.info("User and Mainwallet Details{}" + userRegistration + " {} " + mainWallet);
+				logger.info("Send LoginDetails To UserMobno " + status);
 				return userRegistration;
 			} else {
 				return null;

@@ -34,7 +34,8 @@ public class RegistrationControllerTest {
 	@Autowired
 	private WebApplicationContext context;
 
-	ObjectMapper objectMapper = new ObjectMapper();
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@BeforeAll
 	public void initalSetUp() {
@@ -47,10 +48,10 @@ public class RegistrationControllerTest {
 	public void testUserRegistration() throws Exception {
 		logger.info("UserRegistration");
 		User user = new User();
-		user.setApplicantName("Shivani Kumari");
-		user.setMobileno("8956258410");
-		user.setEmailid("shivani.kumari654@gmail.com");
-		user.setDateOfBirth(Utility.convertStringToDate("10-02-1996"));
+		user.setApplicantName("Rupa Sinha");
+		user.setMobileno("7541203565");
+		user.setEmailid("rupa.sinha124@gmail.com");
+		user.setDateOfBirth(Utility.convertStringToDate("15-05-1995"));
 		String jsonRequest = objectMapper.writeValueAsString(user);
 		MvcResult result = mockMvc.perform(
 				post("/v1/register/saveUser").content(jsonRequest).contentType(MediaType.APPLICATION_JSON_VALUE))

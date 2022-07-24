@@ -8,11 +8,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.starbanking.DAO.UserRepository;
 import com.starbanking.Enum.EnumsStatus.UserRole;
 import com.starbanking.Enum.EnumsStatus.YesNO;
 import com.starbanking.Model.User;
@@ -26,14 +28,17 @@ public class AdminServiceMockTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(AdminServiceMockTest.class);
 
+	@Mock
+	private UserRepository userRepository;
+
+	@InjectMocks
+	private AdminService adminService;
+
 //	@Autowired
 //	private PasswordEncoder passwordEncoder;
 
 //	@Autowired
 //	private RoleRepository roleRepository;
-
-	@Mock
-	private AdminService adminService;
 
 	@DisplayName("Test registerAdminDetails method")
 	@Test
@@ -55,10 +60,10 @@ public class AdminServiceMockTest {
 		admin.setUsername("AD" + StringUtil.getLastSixDigitOfMobileNo(admin.getMobileno()));
 		admin.setParentUsername("Parents Details Not Avaliable");
 
-		given(adminService.registerAdmin(admin)).willReturn(admin);
+		given(userRepository.getUserDetails(admin.getEmailid(), admin.getMobileno(), 'Y')).willReturn(null);
 		Assertions.assertNotNull(adminService.registerAdmin(admin));
 	}
-	
+
 	@AfterAll
 	public void endSetUp() {
 		logger.info("UserService MockTest SetUp Ended");
