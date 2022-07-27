@@ -9,12 +9,12 @@
 		<version>2.6.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.starbanking</groupId>
-	<artifactId>StarBankingandInsurance</artifactId>
+	<groupId>com.Smartpay</groupId>
+	<artifactId>Smartpay</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>StarBankingandInsurance</name>
-	<description>A small banking and insurance project.</description>
+	<name>Smartpay</name>
+	<description>A small Banking and Payment Application.</description>
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>2021.0.0</spring-cloud.version>
@@ -162,7 +162,7 @@
 	</dependencyManagement>
 
 	<build>
-		<finalName>smallBankingAndInsurance</finalName>
+		<finalName>SmartPay</finalName>
 		<defaultGoal>clean install</defaultGoal>
 		<plugins>
 			<plugin>
