@@ -61,10 +61,10 @@ public class UserRepositoryImplTest {
 		User userRegistration = new User();
 		Role merchantRole = roleRepository.findRoleByName(UserRole.MERCHANT.getRoleName());
 		List<Role> roleList = Arrays.asList(merchantRole);
-		userRegistration.setApplicantName("Rinku Singh");
-		userRegistration.setEmailid("rinku.singh453x@gmail.com");
-		userRegistration.setMobileno("8541023210");
-		userRegistration.setDateOfBirth(Utility.convertStringToDate("20-10-1998"));
+		userRegistration.setApplicantName("Manyank Kumar");
+		userRegistration.setEmailid("manyank.kumar123@gmail.com");
+		userRegistration.setMobileno("8541215262");
+		userRegistration.setDateOfBirth(Utility.convertStringToDate("20-10-1990"));
 		userRegistration.setBankingServiceStatus(YesNO.NO);
 		userRegistration.setIsActive('Y');
 		userRegistration.setRole(UserRole.MERCHANT.getRoleName());
@@ -106,7 +106,7 @@ public class UserRepositoryImplTest {
 	@Test
 	public void getUserDetailsTest() {
 		logger.info("getUserDetails");
-		User user = userRepos.getUserDetails("sauravkumar.123@gmail.com", "9691098742", 'Y');
+		User user = userRepos.getUserDetails("suman.kumar452@gmail.com", "6520154580", 'Y');
 		Assertions.assertNotNull(user);
 	}
 
@@ -114,7 +114,7 @@ public class UserRepositoryImplTest {
 	@Test
 	public void findUserByUsernameTest() {
 		logger.info("findUserByUsername");
-		User user = userRepos.findUserByUsername("IR023210");
+		User user = userRepos.findUserByUsername("IR236510");
 		Assertions.assertNotNull(user);
 	}
 

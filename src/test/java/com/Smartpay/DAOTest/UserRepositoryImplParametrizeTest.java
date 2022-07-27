@@ -58,7 +58,7 @@ public class UserRepositoryImplParametrizeTest {
 
 	@DisplayName("Test findUserByUsername method")
 	@ParameterizedTest
-	@ValueSource(strings = { "IR023210", "IR102365", "IR102300", "IR023562" })
+	@ValueSource(strings = { "IR102362", "IR236510", "IR154580", "IR023210" })
 	public void findUserByUsernameTest(String username) {
 		logger.info("findUserByUsernameTset");
 		User user = userRepos.findUserByUsername(username);

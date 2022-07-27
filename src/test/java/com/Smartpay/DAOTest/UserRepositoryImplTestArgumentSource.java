@@ -53,9 +53,9 @@ public class UserRepositoryImplTestArgumentSource {
 		mainWallet1.setDebitType(null);
 
 		User userRegistration2 = new User();
-		userRegistration2.setApplicantName("Sanjay Kumar Singh");
-		userRegistration2.setEmailid("singh.sanjay075@hotmail.com");
-		userRegistration2.setMobileno("6512003620");
+		userRegistration2.setApplicantName("Sanjay Jadav");
+		userRegistration2.setEmailid("sanjay.jadhav@hotmail.com");
+		userRegistration2.setMobileno("8520321025");
 		userRegistration2.setDateOfBirth(Utility.convertStringToDate("03-03-1975"));
 		userRegistration2.setBankingServiceStatus(YesNO.NO);
 		userRegistration2.setIsActive('N');
@@ -118,8 +118,8 @@ public class UserRepositoryImplTestArgumentSource {
 	
 	
 	static Stream<? extends Arguments> getUserDetailsTestArguments(){
-		return Stream.of(Arguments.of("ravi.coll123@gmail.com","9874102562",'Y'),
-				         Arguments.of("kumari.geeta0123@gmail.com","8520102652",'Y'),
+		return Stream.of(Arguments.of("rinku.singh453x@gmail.com","8541023210",'Y'),
+				         Arguments.of("suman.kumar452@gmail.com","6520154580",'Y'),
 				         Arguments.of("simran.kumari097@gmail.com","9852102300",'N'));
 	}
 }

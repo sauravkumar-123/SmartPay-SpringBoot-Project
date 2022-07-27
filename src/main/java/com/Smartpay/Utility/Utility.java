@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.Smartpay.Constants.Constant;
 import com.Smartpay.Response.TwoFactorResponse;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -59,7 +60,6 @@ public class Utility {
 			HttpEntity httpEntity = response.getEntity();
 			String content = EntityUtils.toString(httpEntity);
 			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			TwoFactorResponse result = objectMapper.readValue(content, TwoFactorResponse.class);
 			logger.info("2Factor Transaction API Response:----" + result);
 			status = result.getStatus();
