@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -17,8 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import com.Smartpay.Constants.Constant;
 import com.Smartpay.Response.TwoFactorResponse;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Utility {
@@ -70,7 +69,47 @@ public class Utility {
 		}
 	}
 
-	public static void sendLoginOTP(String MobNo) {
+	public static String sendLoginOTP(String MobNo) {
+		String status = "Failed";
+		String LOGINOTPSENDAPI = "https://2factor.in/API/V1/" + Constant.twoFactorAPIkey + "/SMS/" + MobNo
+				+ "/AUTOGEN/SmartPay";
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+		try {
+			HttpGet request = new HttpGet(LOGINOTPSENDAPI);
+			request.addHeader("content-type", "application/json");
+			CloseableHttpResponse response = httpClient.execute(request);
+			HttpEntity httpEntity = response.getEntity();
+			String content = EntityUtils.toString(httpEntity);
+			ObjectMapper objectMapper = new ObjectMapper();
+			TwoFactorResponse result = objectMapper.readValue(content, TwoFactorResponse.class);
+			logger.info("2Factor Transaction API Response:----" + result);
+			status = result.getStatus();
+			return status;
+		} catch (Exception ex) {
+			logger.error("2Factor Transaction API Response:----" + ex.getMessage());
+			return status;
+		}
+	}
 
+	public static String verifyLoginOTP(String details, String inputOtp) {
+		String status = "Failed";
+		String VERIFYOTPAPI = "https://2factor.in/API/V1/" + Constant.twoFactorAPIkey + "/SMS/VERIFY/" + details + "/"
+				+ inputOtp;
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+		try {
+			HttpGet request = new HttpGet(VERIFYOTPAPI);
+			request.addHeader("content-type", "application/json");
+			CloseableHttpResponse response = httpClient.execute(request);
+			HttpEntity httpEntity = response.getEntity();
+			String content = EntityUtils.toString(httpEntity);
+			ObjectMapper objectMapper = new ObjectMapper();
+			TwoFactorResponse result = objectMapper.readValue(content, TwoFactorResponse.class);
+			logger.info("2Factor Transaction API Response:----" + result);
+			status = result.getStatus();
+			return status;
+		} catch (Exception ex) {
+			logger.error("2Factor Transaction API Response:----" + ex.getMessage());
+			return status;
+		}
 	}
 }

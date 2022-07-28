@@ -8,9 +8,7 @@ public class Constant {
 
 	// @2Factor API's.
 	public static final String twoFactorAPIkey = "99d3f5f5-09ec-11ed-9c12-0200cd936042";
-	public static String USERMOBNO="";
 	public static final String SENDLOGINDETAILSAPI = "http://2factor.in/API/V1/" + twoFactorAPIkey
 			+ "/ADDON_SERVICES/SEND/TSMS";
-	//public static final String LOGINOTPSENDAPI="https://2factor.in/API/V1/"+twoFactorAPIkey+"/SMS/"+USERMOBNO+"/AUTOGEN/SmartPay";
-	public static final String LOGINOTPSENDAPI="http://2factor.in/API/V1/"+twoFactorAPIkey+"/SMS/"+USERMOBNO+"/AUTOGEN";
+
 }

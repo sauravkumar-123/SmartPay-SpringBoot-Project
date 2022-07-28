@@ -31,7 +31,7 @@ public class UserServiceParametrizeTest {
 
 	@DisplayName("Test UserRegistration and their mainWalet Service")
 	@ParameterizedTest
-	@MethodSource("com.starbanking.ServiceTest.UserServiceArgumentSource#registerUserServiceTestArguments")
+	@MethodSource("com.Smartpay.ServiceTest.UserServiceArgumentSource#registerUserServiceTestArguments")
 	public void testRegisterUser(User user) {
 		logger.info("saveUserRegistration");
 		User result=userService.registerUser(user);

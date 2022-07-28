@@ -52,7 +52,25 @@ public class UtilTest {
 		logger.info("sendLoginDetailsToUserMobno");
 		String status = Utility.sendLoginDetailsToUserMobno("Saurav Kumar", "9691098742", "IR098742");
 		logger.info("Response Status " + status);
-		Assertions.assertEquals("Success",status);
+		Assertions.assertEquals("Success", status);
+	}
+
+	@DisplayName("Test LoginOTPSend")
+	@Test
+	public void testSendLoginOTP() {
+		logger.info("sendLoginOTP");
+		String status = Utility.sendLoginOTP("9691098742");
+		logger.info("Response Status " + status);
+		Assertions.assertEquals("Success", status);
+	}
+
+	@DisplayName("Test VerifyLoginOTP")
+	@Test
+	public void testVerifyLoginOTP() {
+		logger.info("verifyLoginOTP");
+		String status = Utility.verifyLoginOTP("897bd200-660f-4a12-b709-471b46334ea7", "884538");
+		logger.info("Response Status " + status);
+		Assertions.assertEquals("Success", status);
 	}
 
 	@AfterAll

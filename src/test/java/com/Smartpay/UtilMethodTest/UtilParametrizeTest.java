@@ -39,10 +39,30 @@ public class UtilParametrizeTest {
 
 	@DisplayName("Test sendLoginDetailsToUserMobno")
 	@ParameterizedTest
-	@MethodSource("com.starbanking.UtilMethodTest.UtilMethodArgumentSource#sendLoginDetailsTestArguments")
+	@MethodSource("com.Smartpay.UtilMethodTest.UtilMethodArgumentSource#sendLoginDetailsTestArguments")
 	public void sendLoginDetailsToUserMobnoTest(String applicantName, String mobNo, String UserName) {
 		logger.info("convertStringToDate");
 		String status = Utility.sendLoginDetailsToUserMobno(applicantName, mobNo, UserName);
+		logger.info("Response Status " + status);
+		Assertions.assertEquals("Success", status);
+	}
+
+	@DisplayName("Test LoginOTPSend")
+	@ParameterizedTest
+	@MethodSource("com.Smartpay.UtilMethodTest.UtilMethodArgumentSource#sendLoginOTPTestArguments")
+	public void testSendLoginOTP(String mobNo) {
+		logger.info("sendLoginOTP");
+		String status = Utility.sendLoginOTP(mobNo);
+		logger.info("Response Status " + status);
+		Assertions.assertEquals("Success", status);
+	}
+
+	@DisplayName("Test VerifyLoginOTP")
+	@ParameterizedTest
+	@MethodSource("com.Smartpay.UtilMethodTest.UtilMethodArgumentSource#verifyLoginOTPTestArguments")
+	public void testVerifyLoginOTP(String details, String inputOTP) {
+		logger.info("verifyLoginOTP");
+		String status = Utility.verifyLoginOTP(details, inputOTP);
 		logger.info("Response Status " + status);
 		Assertions.assertEquals("Success", status);
 	}

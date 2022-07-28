@@ -40,7 +40,7 @@ public class UserRepositoryImplParametrizeTest {
 
 	@DisplayName("Test Save User and their mainWalet details")
 	@ParameterizedTest
-	@MethodSource("com.starbanking.DAOTest.UserRepositoryImplTestArgumentSource#saveUserDetailsTestArguments")
+	@MethodSource("com.Smartpay.DAOTest.UserRepositoryImplTestArgumentSource#saveUserDetailsTestArguments")
 	public void saveUserDetailsTest(User user, MainWallet mainWallet) {
 		logger.info("saveUserDetailsTest");
 		boolean status = userRepos.saveUserDetails(user, mainWallet);
@@ -49,7 +49,7 @@ public class UserRepositoryImplParametrizeTest {
 
 	@DisplayName("Test getUserDetails method")
 	@ParameterizedTest
-	@MethodSource("com.starbanking.DAOTest.UserRepositoryImplTestArgumentSource#getUserDetailsTestArguments")
+	@MethodSource("com.Smartpay.DAOTest.UserRepositoryImplTestArgumentSource#getUserDetailsTestArguments")
 	public void getUserDetailsTest(String emailId, String mobno, char isActive) {
 		logger.info("getUserDetailsTest");
 		User user = userRepos.getUserDetails(emailId, mobno, isActive);
