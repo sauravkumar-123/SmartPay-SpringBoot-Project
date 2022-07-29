@@ -1,5 +1,9 @@
 package com.Smartpay.Security;
 
+import java.util.Collections;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -25,9 +31,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// http.authorizeRequests().anyRequest().denyAll().and().formLogin().and().httpBasic();
 		// http.authorizeRequests().anyRequest().permitAll().and().formLogin().and().httpBasic();
 
-		http.csrf().disable().authorizeRequests().antMatchers("/v1/register/**").permitAll().antMatchers("/v1/user/**")
-				.permitAll().antMatchers("/swagger-ui.html#").permitAll().and().formLogin().permitAll().and().logout()
-				.invalidateHttpSession(true).clearAuthentication(true).permitAll();
+		http.cors().configurationSource(new CorsConfigurationSource() {
+			@Override
+			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+				CorsConfiguration config = new CorsConfiguration();
+				config.setAllowedOrigins(Collections.singletonList("*"));
+				config.setAllowedMethods(Collections.singletonList("*"));
+				config.setAllowCredentials(true);
+				config.setAllowedHeaders(Collections.singletonList("*"));
+				config.setMaxAge(3600L);
+				return config;
+			}
+		}).and().csrf().disable().authorizeRequests().antMatchers("/v1/register/**").permitAll()
+				.antMatchers("/v1/user/**").authenticated().antMatchers("/swagger-ui.html#").permitAll().and()
+				.formLogin().permitAll().and().logout().invalidateHttpSession(true).clearAuthentication(true)
+				.permitAll();
 	}
 
 //@ InMemeoryAuthencation with passwordEncode.

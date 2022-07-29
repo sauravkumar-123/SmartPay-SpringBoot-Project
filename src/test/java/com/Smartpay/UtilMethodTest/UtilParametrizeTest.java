@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.Smartpay.Response.TwoFactorResponse;
 import com.Smartpay.Utility.Utility;
 
 @SpringBootTest
@@ -42,9 +43,9 @@ public class UtilParametrizeTest {
 	@MethodSource("com.Smartpay.UtilMethodTest.UtilMethodArgumentSource#sendLoginDetailsTestArguments")
 	public void sendLoginDetailsToUserMobnoTest(String applicantName, String mobNo, String UserName) {
 		logger.info("convertStringToDate");
-		String status = Utility.sendLoginDetailsToUserMobno(applicantName, mobNo, UserName);
-		logger.info("Response Status " + status);
-		Assertions.assertEquals("Success", status);
+		TwoFactorResponse result = Utility.sendLoginDetailsToUserMobno(applicantName, mobNo, UserName);
+		logger.info("TwoFactorResponse " + result);
+		Assertions.assertEquals("Success", result.getStatus());
 	}
 
 	@DisplayName("Test LoginOTPSend")
@@ -52,9 +53,9 @@ public class UtilParametrizeTest {
 	@MethodSource("com.Smartpay.UtilMethodTest.UtilMethodArgumentSource#sendLoginOTPTestArguments")
 	public void testSendLoginOTP(String mobNo) {
 		logger.info("sendLoginOTP");
-		String status = Utility.sendLoginOTP(mobNo);
-		logger.info("Response Status " + status);
-		Assertions.assertEquals("Success", status);
+		TwoFactorResponse result = Utility.sendLoginOTP(mobNo);
+		logger.info("TwoFactorResponse " + result);
+		Assertions.assertEquals("Success", result.getStatus());
 	}
 
 	@DisplayName("Test VerifyLoginOTP")
@@ -62,9 +63,9 @@ public class UtilParametrizeTest {
 	@MethodSource("com.Smartpay.UtilMethodTest.UtilMethodArgumentSource#verifyLoginOTPTestArguments")
 	public void testVerifyLoginOTP(String details, String inputOTP) {
 		logger.info("verifyLoginOTP");
-		String status = Utility.verifyLoginOTP(details, inputOTP);
-		logger.info("Response Status " + status);
-		Assertions.assertEquals("Success", status);
+		TwoFactorResponse result = Utility.verifyLoginOTP(details, inputOTP);
+		logger.info("TwoFactorResponse " + result);
+		Assertions.assertEquals("Success", result.getStatus());
 	}
 
 	@AfterAll

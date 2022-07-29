@@ -18,6 +18,7 @@ import com.Smartpay.Exception.GlobalException;
 import com.Smartpay.Model.MainWallet;
 import com.Smartpay.Model.Role;
 import com.Smartpay.Model.User;
+import com.Smartpay.Response.TwoFactorResponse;
 import com.Smartpay.Service.UserService;
 import com.Smartpay.Utility.StringUtil;
 import com.Smartpay.Utility.Utility;
@@ -74,10 +75,10 @@ public class UserServiceImpl implements UserService {
 			mainWallet.setDebitType(null);
 			boolean Savestatus = userRepository.saveUserDetails(userRegistration, mainWallet);
 			if (Savestatus) {
-				String status = Utility.sendLoginDetailsToUserMobno(userRegistration.getApplicantName(),
+				TwoFactorResponse response = Utility.sendLoginDetailsToUserMobno(userRegistration.getApplicantName(),
 						userRegistration.getMobileno(), userRegistration.getUsername());
 				logger.info("User and Mainwallet Details{}" + userRegistration + " {} " + mainWallet);
-				logger.info("Send LoginDetails To UserMobno " + status);
+				logger.info("Send LoginDetails To UserMobno " + response);
 				return userRegistration;
 			} else {
 				return null;

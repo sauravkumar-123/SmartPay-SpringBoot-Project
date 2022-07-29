@@ -1,20 +1,18 @@
 package com.Smartpay.UtilMethodTest;
 
 import java.util.Date;
-import java.util.stream.Stream;
 
-import org.apache.http.HttpEntity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.params.provider.Arguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.Smartpay.Response.TwoFactorResponse;
 import com.Smartpay.Utility.Utility;
 
 @SpringBootTest
@@ -50,27 +48,27 @@ public class UtilTest {
 	@Test
 	public void sendLoginDetailsToUserMobnoTest() {
 		logger.info("sendLoginDetailsToUserMobno");
-		String status = Utility.sendLoginDetailsToUserMobno("Saurav Kumar", "9691098742", "IR098742");
-		logger.info("Response Status " + status);
-		Assertions.assertEquals("Success", status);
+		TwoFactorResponse result = Utility.sendLoginDetailsToUserMobno("Saurav Kumar", "9691098742", "IR098742");
+		logger.info("TwoFactorResponse " + result);
+		Assertions.assertEquals("Success", result.getStatus());
 	}
 
 	@DisplayName("Test LoginOTPSend")
 	@Test
 	public void testSendLoginOTP() {
 		logger.info("sendLoginOTP");
-		String status = Utility.sendLoginOTP("9691098742");
-		logger.info("Response Status " + status);
-		Assertions.assertEquals("Success", status);
+		TwoFactorResponse result = Utility.sendLoginOTP("9691098742");
+		logger.info("TwoFactorResponse " + result);
+		Assertions.assertEquals("Success", result.getStatus());
 	}
 
 	@DisplayName("Test VerifyLoginOTP")
 	@Test
 	public void testVerifyLoginOTP() {
 		logger.info("verifyLoginOTP");
-		String status = Utility.verifyLoginOTP("897bd200-660f-4a12-b709-471b46334ea7", "884538");
-		logger.info("Response Status " + status);
-		Assertions.assertEquals("Success", status);
+		TwoFactorResponse result = Utility.verifyLoginOTP("5443b977-f85e-4ade-b877-057f9bde26ec", "146240");
+		logger.info("TwoFactorResponse " + result);
+		Assertions.assertEquals("Success", result.getStatus());
 	}
 
 	@AfterAll
