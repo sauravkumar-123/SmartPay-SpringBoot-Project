@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -42,9 +43,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				config.setMaxAge(3600L);
 				return config;
 			}
-		}).and().csrf().disable().authorizeRequests().antMatchers("/v1/user/**").authenticated()
-				.antMatchers("/swagger-ui.html#").permitAll().and().formLogin().permitAll().and().logout()
-				.invalidateHttpSession(true).clearAuthentication(true).permitAll();
+		}).and().csrf().disable().addFilterBefore(new AutherizationBeforeFilter(), BasicAuthenticationFilter.class)
+				.addFilterAfter(new AutherizationAfterFilter(), BasicAuthenticationFilter.class)
+				.addFilterAt(new AutherizationAtFilter(), BasicAuthenticationFilter.class).authorizeRequests()
+				.antMatchers("/v1/user/**").authenticated().antMatchers("/swagger-ui.html#").permitAll().and()
+				.formLogin().permitAll().and().logout().invalidateHttpSession(true).clearAuthentication(true)
+				.permitAll();
 	}
 
 //@ InMemeoryAuthencation with passwordEncode.

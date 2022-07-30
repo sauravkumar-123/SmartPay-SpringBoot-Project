@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,17 +40,43 @@ public class AuthController {
 	private UserRepository userRepository;
 
 	@ApiOperation("Login OTP Send API")
-	@RequestMapping(value = "/send-login-OTP", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/send-login-OTP", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> sendLoginOTP(
 			@RequestParam("Username") @NotNull(message = "Invalid Username") String Username,
 			@RequestParam("Password") @NotNull(message = "Invalid Password") String Password) {
 		Authentication authentication = authProvider
 				.authenticate(new UsernamePasswordAuthenticationToken(Username, Password));
-		logger.info("Authentication Details{} " + authentication);
+		logger.debug("Authentication Details{} " + authentication);
 		if (null != authentication) {
 			User user = userRepository.findUserByUsername(authentication.getName());
 			TwoFactorResponse result = Utility.sendLoginOTP(user.getMobileno());
 			return new ResponseEntity<Response>(new Response(true, "OTP sent", result), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(new Response(false, "Authencation Failed", null),
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@ApiOperation("User Login API")
+	@RequestMapping(value = "/user-login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Response> loginUser(
+			@RequestParam("Username") @NotNull(message = "Invalid Username") String Username,
+			@RequestParam("Password") @NotNull(message = "Invalid Password") String Password,
+			@RequestParam("OTPdetails") @NotNull(message = "Invalid OTP Details") String OTPdetails,
+			@RequestParam("inputOTP") @NotNull(message = "Invalid OTP") String inputOTP) {
+		Authentication authentication = authProvider
+				.authenticate(new UsernamePasswordAuthenticationToken(Username, Password));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		logger.debug("Authentication Details{} " + authentication);
+		if (null != authentication) {
+			TwoFactorResponse twoFactorResponse = Utility.verifyLoginOTP(OTPdetails, inputOTP);
+			if (twoFactorResponse.getStatus().equalsIgnoreCase("Success")) {
+				User user = userRepository.findUserByUsername(authentication.getName());
+				return new ResponseEntity<Response>(new Response(true, "Login Success", user), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Response>(new Response(true, "Wrong OTP", null),
+						HttpStatus.EXPECTATION_FAILED);
+			}
 		} else {
 			return new ResponseEntity<Response>(new Response(false, "Authencation Failed", null),
 					HttpStatus.INTERNAL_SERVER_ERROR);
