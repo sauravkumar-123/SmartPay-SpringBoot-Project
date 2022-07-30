@@ -32,7 +32,7 @@ public class Utility {
 	public static Date convertStringToDate(String inputDate) {
 		Date date = null;
 		try {
-			date = new SimpleDateFormat("dd-MM-yyyy").parse(inputDate);
+			date = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info(e.getMessage());
@@ -41,7 +41,7 @@ public class Utility {
 	}
 
 	public static TwoFactorResponse sendLoginDetailsToUserMobno(String applicantName, String mobNo, String UserName) {
-		TwoFactorResponse result = null;
+		TwoFactorResponse twoFactorResponse = null;
 		JSONObject json = new JSONObject();
 		json.put("From", "PaySmt");
 		json.put("To", mobNo);
@@ -59,19 +59,19 @@ public class Utility {
 			HttpEntity httpEntity = response.getEntity();
 			String content = EntityUtils.toString(httpEntity);
 			ObjectMapper objectMapper = new ObjectMapper();
-			result = objectMapper.readValue(content, TwoFactorResponse.class);
-			logger.info("2Factor Transaction API Response:----" + result);
-			return result;
+			twoFactorResponse = objectMapper.readValue(content, TwoFactorResponse.class);
+			logger.info("2Factor Transaction API Response:----" + twoFactorResponse);
+			return twoFactorResponse;
 		} catch (Exception ex) {
 			logger.error("2Factor Transaction API Response:----" + ex.getMessage());
-			result.setDetails(null);
-			result.setStatus("Failed");
-			return result;
+			twoFactorResponse.setDetails(null);
+			twoFactorResponse.setStatus("Failed");
+			return twoFactorResponse;
 		}
 	}
 
 	public static TwoFactorResponse sendLoginOTP(String MobNo) {
-		TwoFactorResponse result = null;
+		TwoFactorResponse twoFactorResponse = null;
 		String LOGINOTPSENDAPI = "https://2factor.in/API/V1/" + Constant.twoFactorAPIkey + "/SMS/" + MobNo
 				+ "/AUTOGEN/SmartPay";
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
@@ -82,19 +82,19 @@ public class Utility {
 			HttpEntity httpEntity = response.getEntity();
 			String content = EntityUtils.toString(httpEntity);
 			ObjectMapper objectMapper = new ObjectMapper();
-			result = objectMapper.readValue(content, TwoFactorResponse.class);
-			logger.info("2Factor Transaction API Response:----" + result);
-			return result;
+			twoFactorResponse = objectMapper.readValue(content, TwoFactorResponse.class);
+			logger.info("2Factor Transaction API Response:----" + twoFactorResponse);
+			return twoFactorResponse;
 		} catch (Exception ex) {
 			logger.error("2Factor Transaction API Response:----" + ex.getMessage());
-			result.setDetails(null);
-			result.setStatus("Failed");
-			return result;
+			twoFactorResponse.setDetails(null);
+			twoFactorResponse.setStatus("Failed");
+			return twoFactorResponse;
 		}
 	}
 
 	public static TwoFactorResponse verifyLoginOTP(String details, String inputOtp) {
-		TwoFactorResponse result = null;
+		TwoFactorResponse twoFactorResponse = null;
 		String VERIFYOTPAPI = "https://2factor.in/API/V1/" + Constant.twoFactorAPIkey + "/SMS/VERIFY/" + details + "/"
 				+ inputOtp;
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
@@ -105,14 +105,14 @@ public class Utility {
 			HttpEntity httpEntity = response.getEntity();
 			String content = EntityUtils.toString(httpEntity);
 			ObjectMapper objectMapper = new ObjectMapper();
-			result = objectMapper.readValue(content, TwoFactorResponse.class);
-			logger.info("2Factor Transaction API Response:----" + result);
-			return result;
+			twoFactorResponse = objectMapper.readValue(content, TwoFactorResponse.class);
+			logger.info("2Factor Transaction API Response:----" + twoFactorResponse);
+			return twoFactorResponse;
 		} catch (Exception ex) {
 			logger.error("2Factor Transaction API Response:----" + ex.getMessage());
-			result.setDetails(null);
-			result.setStatus("Failed");
-			return result;
+			twoFactorResponse.setDetails(null);
+			twoFactorResponse.setStatus("Failed");
+			return twoFactorResponse;
 		}
 	}
 }

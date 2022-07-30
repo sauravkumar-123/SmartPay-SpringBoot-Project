@@ -87,7 +87,7 @@ public class User extends BaseEntity {
 	@Column(name = "Parent_Username", length = 50)
 	private String parentUsername;
 
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "DOB")
 	private Date dateOfBirth;
 

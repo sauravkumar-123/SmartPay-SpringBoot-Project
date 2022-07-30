@@ -39,7 +39,7 @@ public class UtilTest {
 	@Test
 	public void convertStringToDateTest() {
 		logger.info("convertStringToDate");
-		Date result = Utility.convertStringToDate("10-05-1997");
+		Date result = Utility.convertStringToDate("1997-05-10");
 		logger.info("Converted Date {}" + result);
 		Assertions.assertNotNull(result);
 	}

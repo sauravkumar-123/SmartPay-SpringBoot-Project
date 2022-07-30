@@ -42,10 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				config.setMaxAge(3600L);
 				return config;
 			}
-		}).and().csrf().disable().authorizeRequests().antMatchers("/v1/register/**").permitAll()
-				.antMatchers("/v1/user/**").authenticated().antMatchers("/swagger-ui.html#").permitAll().and()
-				.formLogin().permitAll().and().logout().invalidateHttpSession(true).clearAuthentication(true)
-				.permitAll();
+		}).and().csrf().disable().authorizeRequests().antMatchers("/v1/user/**").authenticated()
+				.antMatchers("/swagger-ui.html#").permitAll().and().formLogin().permitAll().and().logout()
+				.invalidateHttpSession(true).clearAuthentication(true).permitAll();
 	}
 
 //@ InMemeoryAuthencation with passwordEncode.
