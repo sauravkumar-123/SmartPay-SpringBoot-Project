@@ -44,8 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				return config;
 			}
 		}).and().csrf().disable().addFilterBefore(new AutherizationBeforeFilter(), BasicAuthenticationFilter.class)
-				.addFilterAfter(new AutherizationAfterFilter(), BasicAuthenticationFilter.class)
-				.addFilterAt(new AutherizationAtFilter(), BasicAuthenticationFilter.class).authorizeRequests()
+				.addFilterAt(new AutherizationAtFilter(), BasicAuthenticationFilter.class)
+				.addFilterAfter(new AutherizationAfterFilter(), BasicAuthenticationFilter.class).authorizeRequests()
 				.antMatchers("/v1/user/**").authenticated().antMatchers("/swagger-ui.html#").permitAll().and()
 				.formLogin().permitAll().and().logout().invalidateHttpSession(true).clearAuthentication(true)
 				.permitAll();

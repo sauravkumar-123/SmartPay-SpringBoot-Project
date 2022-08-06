@@ -7,7 +7,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -18,11 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.filter.GenericFilterBean;
 
-import com.Smartpay.DAOImpl.MainWalletRepositoryImpl;
-
-public class AutherizationBeforeFilter implements Filter {
+@Component
+public class AutherizationBeforeFilter extends GenericFilterBean {
 
 	private static final Logger logger = LoggerFactory.getLogger(AutherizationBeforeFilter.class);
 
@@ -46,13 +48,18 @@ public class AutherizationBeforeFilter implements Filter {
 					int delim = token.indexOf(":");
 					if (delim == -1) {
 						throw new BadCredentialsException("Invalid basic authentication token");
-					}
-					String username = token.substring(0, delim);
-					String password = token.substring(delim + 1, token.length() + 1);
-					if (org.apache.commons.lang.StringUtils.isEmpty(username)
-							|| org.apache.commons.lang.StringUtils.isEmpty(password)) {
-						res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-						return;
+					} else {
+						String[] tokenArr = token.split(":");
+						String username = tokenArr[0];
+						String password = tokenArr[1];
+						if (org.apache.commons.lang.StringUtils.isEmpty(username)
+								|| org.apache.commons.lang.StringUtils.isEmpty(password)) {
+							res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+							return;
+						} else {
+							SecurityContextHolder.getContext()
+									.setAuthentication(new UsernamePasswordAuthenticationToken(username, password));
+						}
 					}
 				} catch (IllegalArgumentException e) {
 					throw new BadCredentialsException("Failed to decode basic authentication token");
@@ -60,7 +67,7 @@ public class AutherizationBeforeFilter implements Filter {
 			}
 		}
 		chain.doFilter(request, response);
-		
+
 	}
 
 	protected Charset getCredentialsCharset(HttpServletRequest request) {
