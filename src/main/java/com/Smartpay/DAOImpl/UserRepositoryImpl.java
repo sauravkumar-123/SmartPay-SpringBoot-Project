@@ -174,6 +174,9 @@ public class UserRepositoryImpl implements UserRepository {
 			logger.info("User Data{} " + userdata);
 			transaction.commit();
 			return userdata;
+		} catch (ResourceNotFoundException e) {
+			logger.info("Exception Message{} " + e.getMessage());
+			throw new ResourceNotFoundException(e.getMessage());
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();

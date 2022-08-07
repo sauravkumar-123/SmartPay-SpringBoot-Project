@@ -1,5 +1,6 @@
 package com.Smartpay.Security;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,9 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -32,23 +33,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// http.authorizeRequests().anyRequest().denyAll().and().formLogin().and().httpBasic();
 		// http.authorizeRequests().anyRequest().permitAll().and().formLogin().and().httpBasic();
 
-		http.cors().configurationSource(new CorsConfigurationSource() {
-			@Override
-			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-				CorsConfiguration config = new CorsConfiguration();
-				config.setAllowedOrigins(Collections.singletonList("*"));
-				config.setAllowedMethods(Collections.singletonList("*"));
-				config.setAllowCredentials(true);
-				config.setAllowedHeaders(Collections.singletonList("*"));
-				config.setMaxAge(3600L);
-				return config;
-			}
-		}).and().csrf().disable().addFilterBefore(new AutherizationBeforeFilter(), BasicAuthenticationFilter.class)
-				.addFilterAt(new AutherizationAtFilter(), BasicAuthenticationFilter.class)
-				.addFilterAfter(new AutherizationAfterFilter(), BasicAuthenticationFilter.class).authorizeRequests()
-				.antMatchers("/v1/user/**").authenticated().antMatchers("/swagger-ui.html#").permitAll().and()
-				.formLogin().permitAll().and().logout().invalidateHttpSession(true).clearAuthentication(true)
-				.permitAll();
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().cors()
+				.configurationSource(new CorsConfigurationSource() {
+					@Override
+					public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+						CorsConfiguration config = new CorsConfiguration();
+						config.setAllowedOrigins(Collections.singletonList("*"));
+						config.setAllowedMethods(Collections.singletonList("*"));
+						config.setAllowCredentials(true);
+						config.setAllowedHeaders(Collections.singletonList("*"));
+						config.setExposedHeaders(Arrays.asList("Authorization"));
+						config.setMaxAge(3600L);
+						return config;
+					}
+				}).and().csrf().disable().
+				/*
+				 * .addFilterBefore(new AutherizationBeforeFilter(),
+				 * BasicAuthenticationFilter.class). .addFilterAt(new AutherizationAtFilter(),
+				 * BasicAuthenticationFilter.class) .addFilterAfter(new
+				 * AutherizationAfterFilter(), BasicAuthenticationFilter.class)
+				 */authorizeRequests().antMatchers("/v1/user/**").authenticated().antMatchers("/swagger-ui.html#")
+				.permitAll().and().formLogin().permitAll().and().logout().invalidateHttpSession(true)
+				.clearAuthentication(true).permitAll();
 	}
 
 //@ InMemeoryAuthencation with passwordEncode.

@@ -11,6 +11,7 @@ import javax.validation.Path.Node;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -92,5 +93,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(), false, "Argument Validation Failed!!",
 				errors);
 		return new ResponseEntity<ExceptionResponse>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value = { BadCredentialsException.class })
+	public ResponseEntity<ExceptionResponse> handleBadCredentialsExceptionException(BadCredentialsException exception) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(), false, exception.getMessage(),
+				null);
+		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 }
