@@ -2,7 +2,6 @@ package com.Smartpay.Controller;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,14 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Smartpay.DAO.UserRepository;
 import com.Smartpay.Model.User;
+import com.Smartpay.Response.JWTAuthResponse;
 import com.Smartpay.Response.Response;
 import com.Smartpay.Response.TwoFactorResponse;
+import com.Smartpay.Security.JWTUtils;
 import com.Smartpay.Security.SmartPayAuthencationProvider;
 import com.Smartpay.Utility.Utility;
 
 import io.swagger.annotations.ApiOperation;
 
 @RestController
+@Validated
 @RequestMapping("/v1/auth")
 public class AuthController {
 
@@ -39,6 +41,9 @@ public class AuthController {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private JWTUtils jwtUtils;
 
 	@ApiOperation("Login OTP Send API")
 	@RequestMapping(value = "/send-login-OTP", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -78,7 +83,13 @@ public class AuthController {
 			TwoFactorResponse twoFactorResponse = Utility.verifyLoginOTP(OTPdetails, InputOTP);
 			if (twoFactorResponse.getStatus().equalsIgnoreCase("Success")) {
 				User user = userRepository.findUserByUsername(authentication.getName());
-				return new ResponseEntity<Response>(new Response(true, "Login Success", user), HttpStatus.OK);
+				String token = jwtUtils.generateAccessToken(user);
+				JWTAuthResponse authResponse = new JWTAuthResponse();
+				authResponse.setAuthToken(token);
+				authResponse.setMessage("Authencation Success");
+				authResponse.setStatus("Token Generated");
+				authResponse.setUsername(authentication.getName());
+				return new ResponseEntity<Response>(new Response(true, "Login Success", authResponse), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Response>(new Response(false, "Wrong OTP", twoFactorResponse),
 						HttpStatus.INTERNAL_SERVER_ERROR);

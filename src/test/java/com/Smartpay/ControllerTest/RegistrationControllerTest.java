@@ -51,7 +51,7 @@ public class RegistrationControllerTest {
 		user.setApplicantName("Sarvesh Rai");
 		user.setMobileno("6852102065");
 		user.setEmailid("sarvesh.rai@gmail.com");
-		user.setDateOfBirth(Utility.convertStringToDate("11-05-1982"));
+		user.setDateOfBirth(Utility.convertStringToDate("1996-05-11"));
 		String jsonRequest = objectMapper.writeValueAsString(user);
 		MvcResult result = mockMvc.perform(
 				post("/v1/register/saveUser").content(jsonRequest).contentType(MediaType.APPLICATION_JSON_VALUE))

@@ -4,15 +4,20 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -20,9 +25,24 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+	private LoadUserDetails loadUserDetails;
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		// auth.authenticationProvider(null);
+		auth.userDetailsService(username -> loadUserDetails.loadUserByUsername(username));
+	}
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 	@Override
@@ -46,17 +66,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						config.setMaxAge(3600L);
 						return config;
 					}
-				}).and().csrf().disable().
-				/*
-				 * .addFilterBefore(new AutherizationBeforeFilter(),
-				 * BasicAuthenticationFilter.class). .addFilterAt(new AutherizationAtFilter(),
-				 * BasicAuthenticationFilter.class) .addFilterAfter(new
-				 * AutherizationAfterFilter(), BasicAuthenticationFilter.class)
-				 */authorizeRequests().antMatchers("/v1/user/**").authenticated().antMatchers("/swagger-ui.html#")
-				.permitAll().and().formLogin().permitAll().and().logout().invalidateHttpSession(true)
+				}).and().csrf().disable();
+
+		/*
+		 * .addFilterBefore(new JWTTokenGeneratorFilter(),
+		 * BasicAuthenticationFilter.class) .addFilterAfter(new
+		 * JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
+		 * .addFilterBefore(new AutherizationBeforeFilter(),
+		 * BasicAuthenticationFilter.class). .addFilterAt(new AutherizationAtFilter(),
+		 * BasicAuthenticationFilter.class) .addFilterAfter(new
+		 * AutherizationAfterFilter(), BasicAuthenticationFilter.class)
+		 */
+		http.authorizeRequests().antMatchers("/v1/user/**").authenticated().antMatchers("/v1/auth/**").permitAll()
+				.antMatchers("/swagger-ui.html#").permitAll().anyRequest().authenticated().and().exceptionHandling()
+				.accessDeniedPage("/403").and().formLogin().permitAll().and().logout().invalidateHttpSession(true)
 				.clearAuthentication(true).permitAll();
+
+		http.exceptionHandling().authenticationEntryPoint((request, response, ex) -> {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
+		});
+
+		http.addFilterBefore(new JWTTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
 //@ InMemeoryAuthencation with passwordEncode.
 
 //	@Override

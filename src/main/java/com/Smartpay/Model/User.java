@@ -63,7 +63,7 @@ public class User extends BaseEntity {
 	@NotNull(message = "Invalid Applicant Name")
 	@NotBlank(message = "Invalid Applicant Name")
 	@NotEmpty(message = "Invalid Applicant Name")
-	@Size(min = 1, max = 70, message = "Minimum 1 Or Maximum 70 Character are Allowed")
+	@Size(min = 1, max = 200, message = "Minimum 1 Or Maximum 200 Character are Allowed")
 	@Column(name = "Applicant_Name", length = 70)
 	private String applicantName;
 
@@ -78,7 +78,7 @@ public class User extends BaseEntity {
 	@NotBlank(message = "Invalid User EmailId")
 	@NotEmpty(message = "Invalid User EmailId")
 	@Pattern(regexp = Constant.emailIdPattern, message = "Email-Id Is Invalid")
-	@Column(name = "Email_Id", length = 50)
+	@Column(name = "Email_Id", length = 150)
 	private String emailid;
 
 	@Column(name = "User_Role", length = 20)
@@ -107,4 +107,5 @@ public class User extends BaseEntity {
 	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "UserIdentificationNo") }, inverseJoinColumns = {
 			@JoinColumn(name = "Role_ID") })
 	private Set<Role> roles = new HashSet<>();
+
 }

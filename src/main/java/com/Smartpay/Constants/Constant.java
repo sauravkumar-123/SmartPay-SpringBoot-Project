@@ -11,4 +11,7 @@ public class Constant {
 	public static final String SENDLOGINDETAILSAPI = "http://2factor.in/API/V1/" + twoFactorAPIkey
 			+ "/ADDON_SERVICES/SEND/TSMS";
 
+	// @JWT
+	public static final String JWTKEY = "jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4";
+	public static final String JWTHEADER = "Authorization";
 }
