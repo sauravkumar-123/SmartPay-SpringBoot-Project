@@ -102,4 +102,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 				null);
 		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
+
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(value = { FileStorageException.class })
+	public ResponseEntity<ExceptionResponse> handleFileStorageException(FileStorageException exception) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(), false, exception.getMessage(),
+				null);
+		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@ResponseStatus(value = HttpStatus.NOT_FOUND)
+	@ExceptionHandler(value = { FileNotFoundException.class })
+	public ResponseEntity<ExceptionResponse> handleFileNotFoundException(FileNotFoundException exception) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(), false, exception.getMessage(),
+				null);
+		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.NOT_FOUND);
+	}
 }

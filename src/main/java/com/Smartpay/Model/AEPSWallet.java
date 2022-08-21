@@ -1,36 +1,35 @@
 package com.Smartpay.Model;
 
+import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-@Getter
-@Setter
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@EqualsAndHashCode
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Table(name = "MainWallet")
-public class MainWallet extends BaseEntity {
+@Table(name = "AEPSWallet")
+public class AEPSWallet extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "MainWalletId")
-	private Long mainWalletId;
-
-	@Column(name = "userName", length = 10)
-	private String userName;
+	@Column(name = "AepsWalletId")
+	private Long aepsWalletId;
 
 	@Column(name = "CurrentBalance")
 	private Double currentBalance;
@@ -58,4 +57,8 @@ public class MainWallet extends BaseEntity {
 
 	@Column(name = "DebitType", length = 80)
 	private String debitType;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "MerchantIdentificationNo")
+	private Merchant merchant;
 }

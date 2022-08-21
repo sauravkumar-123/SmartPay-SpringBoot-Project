@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -54,8 +55,8 @@ public class User extends BaseEntity {
 	@Column(name = "UserIdentificationNo")
 	private Long UserIdentificationNo;
 
-//	@OneToOne(mappedBy = "users", fetch = FetchType.LAZY)
-//	private Merchant merchant;
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+	private Merchant merchant;
 
 	@Column(name = "Username", length = 10)
 	private String Username;
@@ -64,7 +65,7 @@ public class User extends BaseEntity {
 	@NotBlank(message = "Invalid Applicant Name")
 	@NotEmpty(message = "Invalid Applicant Name")
 	@Size(min = 1, max = 200, message = "Minimum 1 Or Maximum 200 Character are Allowed")
-	@Column(name = "Applicant_Name", length = 70)
+	@Column(name = "Applicant_Name", length = 200)
 	private String applicantName;
 
 	@NotNull(message = "Invalid User MobileNo")

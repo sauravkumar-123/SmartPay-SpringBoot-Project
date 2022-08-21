@@ -1,5 +1,7 @@
 package com.Smartpay.Enum;
 
+import org.springframework.security.access.event.PublicInvocationEvent;
+
 public class EnumsStatus {
 
 	public enum YesNO {
@@ -49,4 +51,23 @@ public class EnumsStatus {
 
 	}
 
+	public enum MaritalStatus {
+		UNMARRIED, MARRIED, WIDOW, WIDOWER
+	}
+
+	public enum Gender {
+		MALE, FEMALE, TRANSGENDER
+	}
+
+	public enum BusinessType {
+		Individual, SoleProprietorship, PartnershipFirm
+	}
+
+	public enum AccountType {
+		Current, Saving
+	}
+
+	public enum AddressType {
+		CurrentAddress, PermanentAddress
+	}
 }
