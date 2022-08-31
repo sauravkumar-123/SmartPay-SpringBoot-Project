@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Smartpay.DAO.UserRepository;
 import com.Smartpay.Model.User;
 import com.Smartpay.Response.JWTAuthResponse;
+import com.Smartpay.Response.OAuthResponse;
 import com.Smartpay.Response.Response;
 import com.Smartpay.Response.TwoFactorResponse;
 import com.Smartpay.Security.JWTUtils;
@@ -100,4 +103,23 @@ public class AuthController {
 		}
 	}
 
+	@ApiOperation("Oauth Information")
+	@GetMapping("/info")
+	public ResponseEntity<Response> getOAuthDetails(OAuth2AuthenticationToken token) {
+		logger.info("OAuth Details ", token);
+		if (null != token) {
+			OAuthResponse oAuthResponse = new OAuthResponse();
+			oAuthResponse.setAuthenciated(token.isAuthenticated());
+			oAuthResponse.setAuthorities(token.getAuthorities());
+			oAuthResponse.setClientRegestrationId(token.getAuthorizedClientRegistrationId());
+			oAuthResponse.setCredentials(token.getCredentials());
+			oAuthResponse.setDetails(token.getDetails());
+			oAuthResponse.setName(token.getName());
+			oAuthResponse.setPrincipal(token.getPrincipal());
+			return new ResponseEntity<Response>(new Response(true, "Success", oAuthResponse), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(new Response(false, "Authencation Failed", null),
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

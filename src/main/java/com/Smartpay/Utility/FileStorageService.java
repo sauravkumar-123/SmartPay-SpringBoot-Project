@@ -58,7 +58,7 @@ public class FileStorageService {
 				}
 
 			}else {
-				throw new FileStorageException("Alowed Files in .JPG, .JPEG, .PNG Format Only");
+				throw new FileStorageException("Allowed Files in .JPG, .JPEG, .PNG Format Only");
 			}
 		} else {
 			throw new FileNotFoundException("Invalid File Received!!");

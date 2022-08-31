@@ -18,7 +18,29 @@ Loan apply.
 
 
 https://videos.htcindia.com/AVideo/vEmbed/1007
+/*************************Google Login API*******************/ 
+CLIENT ID : 65324304311-tvh4snq709m3abctjfs83g1arlu06t83.apps.googleusercontent.com
 
+CLIENT SECRET : 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
+
+{
+  "web": {
+    "client_id": "65324304311-tvh4snq709m3abctjfs83g1arlu06t83.apps.googleusercontent.com",
+    "project_id": "smartpay-360117",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "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"
+  }
+}
+/*****************************************Git Hub API********************************************************/
+
+CLIENT ID : 3be7a6f5da01066de3a4
+
+CLIENT SECRET : 98ea416f4b1e088cb10bbfe6ee042b6ada88a690
+
+
+/**************************************************************************************************************************/
 
 Explain Plan
 Index

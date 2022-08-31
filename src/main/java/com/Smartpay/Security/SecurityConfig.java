@@ -15,8 +15,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -45,14 +50,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
+//	@Override
+//	protected void configure(HttpSecurity http) throws Exception {
+//		http.authorizeRequests().anyRequest().authenticated().and().oauth2Login();
+//	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
 		// @default security configuration.
 
 		// http.authorizeRequests().anyRequest().denyAll().and().formLogin().and().httpBasic();
-		// http.authorizeRequests().anyRequest().permitAll().and().formLogin().and().httpBasic();
-
+//		// http.authorizeRequests().anyRequest().permitAll().and().formLogin().and().httpBasic();
+//
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().cors()
 				.configurationSource(new CorsConfigurationSource() {
 					@Override
@@ -76,11 +86,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 * BasicAuthenticationFilter.class). .addFilterAt(new AutherizationAtFilter(),
 		 * BasicAuthenticationFilter.class) .addFilterAfter(new
 		 * AutherizationAfterFilter(), BasicAuthenticationFilter.class)
+		 * 
+		 * 
 		 */
+		// http.authorizeRequests().antMatchers("/v1/Oauth/**").permitAll().and().oauth2Login();
+
 		http.authorizeRequests().antMatchers("/v1/user/**").authenticated().antMatchers("/v1/auth/**").permitAll()
-				.antMatchers("/swagger-ui.html#").permitAll().anyRequest().authenticated().and().exceptionHandling()
-				.accessDeniedPage("/403").and().formLogin().permitAll().and().logout().invalidateHttpSession(true)
-				.clearAuthentication(true).permitAll();
+				.antMatchers("/swagger-ui.html#").permitAll().anyRequest().authenticated().and().oauth2Login().and()
+				.exceptionHandling().accessDeniedPage("/403").and().formLogin().permitAll().and().logout()
+				.invalidateHttpSession(true).clearAuthentication(true).permitAll();
 
 		http.exceptionHandling().authenticationEntryPoint((request, response, ex) -> {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
@@ -89,14 +103,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(new JWTTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
+//	private ClientRegistration clientRegistration() {
+//		return CommonOAuth2Provider.GOOGLE.getBuilder("google")
+//				.clientId("65324304311-tvh4snq709m3abctjfs83g1arlu06t83.apps.googleusercontent.com")
+//				.clientSecret("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").build();
+//	}
+
+//private ClientRegistration clientRegistration() {
+//	ClientRegistration cr = ClientRegistration.withRegistrationId("github")
+//			.clientId("65324304311-tvh4snq709m3abctjfs83g1arlu06t83.apps.googleusercontent.com")
+//			.clientSecret("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").scope(new String[] { "read:user" })
+//			.authorizationUri("https://accounts.google.com/o/oauth2/auth")
+//			.tokenUri("https://oauth2.googleapis.com/token").userInfoUri("https://www.googleapis.com/oauth2/v1/certs")
+//			.userNameAttributeName("id").clientName("Google")
+//			.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//			.redirectUriTemplate("{baseUrl}/{action}/oauth2/code/{registrationId}").build();
+//	return cr;
+//}
+
+//	@Bean
+//	public ClientRegistrationRepository clientRepository() {
+//		ClientRegistration clientReg = clientRegistration();
+//		return new InMemoryClientRegistrationRepository(clientReg);
+//	}
+
 //@ InMemeoryAuthencation with passwordEncode.
 
 //	@Override
