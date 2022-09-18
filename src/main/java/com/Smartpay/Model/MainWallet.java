@@ -3,9 +3,11 @@ package com.Smartpay.Model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,9 +27,11 @@ import lombok.ToString;
 public class MainWallet extends BaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "MainWalletId")
-	private Long mainWalletId;
+	@GeneratedValue(generator = "idGen")
+	@GenericGenerator(name = "idGen", strategy = "uuid.hex")
+	@Column(name = "MainWalletId", length = 200)
+	@Size(min = 1, max = 200, message = "min 1 and max 200 character are allowed")
+	private String mainWalletId;
 
 	@Column(name = "userName", length = 10)
 	private String userName;

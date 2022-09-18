@@ -40,6 +40,8 @@ CLIENT ID : 3be7a6f5da01066de3a4
 CLIENT SECRET : 98ea416f4b1e088cb10bbfe6ee042b6ada88a690
 
 
+keyClock : t26yHVS3xBmCIqdhVtOenRJSNSrtgTQi
+
 /**************************************************************************************************************************/
 
 Explain Plan

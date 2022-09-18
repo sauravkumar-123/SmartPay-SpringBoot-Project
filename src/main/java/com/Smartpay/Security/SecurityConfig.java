@@ -26,6 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import com.Smartpay.Security.Jwt.JWTTokenFilter;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -91,10 +93,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 */
 		// http.authorizeRequests().antMatchers("/v1/Oauth/**").permitAll().and().oauth2Login();
 
-		http.authorizeRequests().antMatchers("/v1/user/**").authenticated().antMatchers("/v1/auth/**").permitAll()
-				.antMatchers("/swagger-ui.html#").permitAll().anyRequest().authenticated().and().oauth2Login().and()
-				.exceptionHandling().accessDeniedPage("/403").and().formLogin().permitAll().and().logout()
-				.invalidateHttpSession(true).clearAuthentication(true).permitAll();
+		http.authorizeRequests().antMatchers("/v1/user/**").permitAll().antMatchers("/v1/auth/**").permitAll()
+				.antMatchers("/swagger-ui.html#").permitAll().antMatchers("/v1/register/**").permitAll().anyRequest()
+				.authenticated().and().oauth2Login().and().exceptionHandling().accessDeniedPage("/403").and()
+				.formLogin().permitAll().and().logout().invalidateHttpSession(true).clearAuthentication(true)
+				.permitAll();
 
 		http.exceptionHandling().authenticationEntryPoint((request, response, ex) -> {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());

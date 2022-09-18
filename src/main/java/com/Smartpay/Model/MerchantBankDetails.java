@@ -8,7 +8,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,13 +17,19 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
 
 import com.Smartpay.Enum.EnumsStatus.AccountType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -33,9 +38,11 @@ import lombok.NoArgsConstructor;
 public class MerchantBankDetails extends BaseEntity {
 
 	@Id
-	@Column(name = "BankDetailsID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long bankDetailsID;
+	@GeneratedValue(generator = "idGen")
+	@GenericGenerator(name = "idGen", strategy = "uuid.hex")
+	@Column(name = "BankDetailsID", length = 200)
+	@Size(min = 1, max = 200, message = "min 1 and max 200 character are allowed")
+	private String bankDetailsID;
 
 	@NotBlank(message = "Invalid AccountHolder Name")
 	@Column(name = "AccountholderName", length = 200)
@@ -60,10 +67,11 @@ public class MerchantBankDetails extends BaseEntity {
 	private String bankName;
 
 	@NotBlank(message = "Invalid Branch Name")
-	@Column(name = "BranchName", length = 150)
+	@Column(name = "BranchName", length = 200)
 	private String branchName;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonBackReference
 	@JoinColumn(name = "MerchantIdentificationNo")
 	private Merchant merchant;
 }

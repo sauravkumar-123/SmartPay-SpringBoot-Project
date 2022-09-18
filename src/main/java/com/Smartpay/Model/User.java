@@ -31,6 +31,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.Smartpay.Constants.Constant;
 import com.Smartpay.Enum.EnumsStatus.YesNO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -55,22 +56,19 @@ public class User extends BaseEntity {
 	@Column(name = "UserIdentificationNo")
 	private Long UserIdentificationNo;
 
-	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Merchant merchant;
 
 	@Column(name = "Username", length = 10)
 	private String Username;
 
-	@NotNull(message = "Invalid Applicant Name")
 	@NotBlank(message = "Invalid Applicant Name")
-	@NotEmpty(message = "Invalid Applicant Name")
 	@Size(min = 1, max = 200, message = "Minimum 1 Or Maximum 200 Character are Allowed")
 	@Column(name = "Applicant_Name", length = 200)
 	private String applicantName;
 
-	@NotNull(message = "Invalid User MobileNo")
 	@NotBlank(message = "Invalid User MobileNo")
-	@NotEmpty(message = "Invalid User MobileNo")
 	@Pattern(regexp = Constant.mobileNumberPattern, message = "Mobile Number Is Invalid")
 	@Column(name = "User_MobileNo", length = 20)
 	private String mobileno;

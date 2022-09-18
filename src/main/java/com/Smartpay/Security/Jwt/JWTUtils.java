@@ -1,4 +1,4 @@
-package com.Smartpay.Security;
+package com.Smartpay.Security.Jwt;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;

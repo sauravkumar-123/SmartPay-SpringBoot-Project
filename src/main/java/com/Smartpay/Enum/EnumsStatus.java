@@ -70,4 +70,8 @@ public class EnumsStatus {
 	public enum AddressType {
 		CurrentAddress, PermanentAddress
 	}
+	
+	public enum DocumentsUploadStatus{
+		Success, Pending, Failed
+	}
 }

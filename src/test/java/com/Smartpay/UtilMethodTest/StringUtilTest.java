@@ -39,6 +39,13 @@ public class StringUtilTest {
 		Assertions.assertEquals("Saurav12345", result);
 	}
 
+	@Test
+	public void testGetLast4digit() {
+		logger.info("getLast4digit");
+		String result = StringUtil.getLast4digit("FXZPK7876K");
+		Assertions.assertEquals("876K", result);
+	}
+
 	@AfterAll
 	public void finish() {
 		logger.info("StringUtil Method SetUp Ended");

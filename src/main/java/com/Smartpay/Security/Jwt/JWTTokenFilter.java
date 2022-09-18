@@ -1,4 +1,4 @@
-package com.Smartpay.Security;
+package com.Smartpay.Security.Jwt;
 
 import java.io.IOException;
 
@@ -17,11 +17,13 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.Smartpay.Model.User;
+import com.Smartpay.Security.UserSecurity;
 
 @Component
 public class JWTTokenFilter extends OncePerRequestFilter {
 
 	@Autowired
+	//@Qualifier("jwtValid")
 	private JWTokenValadation jwTokenValadation;
 
 	@Override

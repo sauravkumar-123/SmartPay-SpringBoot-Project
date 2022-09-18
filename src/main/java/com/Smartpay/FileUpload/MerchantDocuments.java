@@ -1,9 +1,11 @@
-package com.Smartpay.Model;
+package com.Smartpay.FileUpload;
 
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,11 +18,12 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.Smartpay.Enum.EnumsStatus.AddressType;
+import com.Smartpay.Enum.EnumsStatus.YesNO;
+import com.Smartpay.Model.BaseEntity;
+import com.Smartpay.Model.Merchant;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,45 +35,31 @@ import lombok.Setter;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Table(name = "AEPSWallet")
-public class AEPSWallet extends BaseEntity {
+@Table(name = "Merchant_Documents")
+public class MerchantDocuments extends BaseEntity {
 
 	@Id
 	@GeneratedValue(generator = "idGen")
 	@GenericGenerator(name = "idGen", strategy = "uuid.hex")
-	@Column(name = "AepsWalletId", length = 200)
+	@Column(name = "MerchantDocumentsID", length = 200)
 	@Size(min = 1, max = 200, message = "min 1 and max 200 character are allowed")
-	private String aepsWalletId;
+	private String merchantDocumentsID;
 
-	@Column(name = "CurrentBalance")
-	private Double currentBalance;
+	@Column(name = "PanCardImagePath", length = 200)
+	private String panCardImagePath;
 
-	@Column(name = "Charges")
-	private Double charges;
+	@Column(name = "AadhaarCardImagePath", length = 200)
+	private String aadhaarCardImagePath;
 
-	@Column(name = "CommissionCredit")
-	private Double commissionCredit;
+	@Column(name = "CancledCheckImagePath", length = 200)
+	private String cancledCheckPath;
 
-	@Column(name = "TDS")
-	private Double tds;
-
-	@Column(name = "CreditAmount")
-	private Double creditAmount;
-
-	@Column(name = "DebitAmount")
-	private Double debitAmount;
-
-	@Column(name = "IsActive")
-	private char isActive;
-
-	@Column(name = "CreditType", length = 80)
-	private String creditType;
-
-	@Column(name = "DebitType", length = 80)
-	private String debitType;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "IsApproved", length = 4)
+	private YesNO isApproved;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonBackReference
-	@JoinColumn(name = "MerchantIdentificationNo")
+	@JoinColumn(name = "Username")
 	private Merchant merchant;
 }

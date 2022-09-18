@@ -1,6 +1,8 @@
 package com.Smartpay.Utility;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Random;
 
@@ -17,7 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.Smartpay.Constants.Constant;
+import com.Smartpay.Exception.GlobalException;
 import com.Smartpay.Response.TwoFactorResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Utility {
@@ -33,8 +38,7 @@ public class Utility {
 		Date date = null;
 		try {
 			date = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (ParseException e) {
 			logger.info(e.getMessage());
 		}
 		return date;
@@ -63,7 +67,7 @@ public class Utility {
 			logger.info("2Factor Transaction API Response:----" + twoFactorResponse);
 			return twoFactorResponse;
 		} catch (Exception ex) {
-			logger.error("2Factor Transaction API Response:----" + ex.getMessage());
+			logger.debug("2Factor Transaction API Response:----" + ex.getMessage());
 			twoFactorResponse.setDetails(null);
 			twoFactorResponse.setStatus("Failed");
 			return twoFactorResponse;
@@ -86,7 +90,7 @@ public class Utility {
 			logger.info("2Factor Transaction API Response:----" + twoFactorResponse);
 			return twoFactorResponse;
 		} catch (Exception ex) {
-			logger.error("2Factor Transaction API Response:----" + ex.getMessage());
+			logger.debug("2Factor Transaction API Response:----" + ex.getMessage());
 			twoFactorResponse.setDetails(null);
 			twoFactorResponse.setStatus("Failed");
 			return twoFactorResponse;
@@ -109,10 +113,11 @@ public class Utility {
 			logger.info("2Factor Transaction API Response:----" + twoFactorResponse);
 			return twoFactorResponse;
 		} catch (Exception ex) {
-			logger.error("2Factor Transaction API Response:----" + ex.getMessage());
+			logger.debug("2Factor Transaction API Response:----" + ex.getMessage());
 			twoFactorResponse.setDetails(null);
 			twoFactorResponse.setStatus("Failed");
 			return twoFactorResponse;
 		}
 	}
+
 }

@@ -52,8 +52,7 @@ public class UserRepositoryImpl implements UserRepository {
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			e.printStackTrace();
-			logger.info("Exception Message{} " + e.getMessage());
+			logger.debug("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Save User Details");
 		}
 //		finally {
@@ -86,14 +85,13 @@ public class UserRepositoryImpl implements UserRepository {
 					.add(Projections.alias(Projections.property("user.updatedDate"), "updatedDate")));
 			criteria.setResultTransformer(Transformers.aliasToBean(User.class));
 			User userdata = (User) criteria.uniqueResult();
-			logger.info("Admin Data{} " + userdata);
+			// logger.info("Admin Data{} " + userdata);
 			transaction.commit();
 			return userdata;
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			e.printStackTrace();
-			logger.info("Exception Message{} " + e.getMessage());
+			logger.debug("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Fetch Admin Details");
 		}
 	}
@@ -128,14 +126,13 @@ public class UserRepositoryImpl implements UserRepository {
 					.add(Projections.alias(Projections.property("user.updatedDate"), "updatedDate")));
 			criteria.setResultTransformer(Transformers.aliasToBean(User.class));
 			User userdata = (User) criteria.uniqueResult();
-			logger.info("User Data{} " + userdata);
+//			logger.info("User Data{} " + userdata);
 			transaction.commit();
 			return userdata;
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			e.printStackTrace();
-			logger.info("Exception Message{} " + e.getMessage());
+			logger.debug("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Fetch User Details");
 		}
 //		finally {
@@ -180,7 +177,6 @@ public class UserRepositoryImpl implements UserRepository {
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			e.printStackTrace();
 			logger.info("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Fetch User Details");
 		}

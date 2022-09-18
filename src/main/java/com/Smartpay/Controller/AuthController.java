@@ -26,8 +26,8 @@ import com.Smartpay.Response.JWTAuthResponse;
 import com.Smartpay.Response.OAuthResponse;
 import com.Smartpay.Response.Response;
 import com.Smartpay.Response.TwoFactorResponse;
-import com.Smartpay.Security.JWTUtils;
 import com.Smartpay.Security.SmartPayAuthencationProvider;
+import com.Smartpay.Security.Jwt.JWTUtils;
 import com.Smartpay.Utility.Utility;
 
 import io.swagger.annotations.ApiOperation;

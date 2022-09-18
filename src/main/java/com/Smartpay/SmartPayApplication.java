@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.client.RestTemplate;
 
+import com.Smartpay.Security.Jwt.JWTokenValadation;
 import com.Smartpay.Service.RolesAndPrivilegesService;
 import com.Smartpay.ServiceImpl.RolesAndPrivilegesServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,6 +70,11 @@ public class SmartPayApplication {
 	public ObjectMapper objectMapper() {
 		return new ObjectMapper();
 	}
+
+//	@Bean(value = "jwtValid")
+//	public JWTokenValadation jwtValidation() {
+//		return new JWTokenValadation();
+//	}
 
 	@Bean
 	public Sampler defaultSampler() {
