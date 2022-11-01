@@ -44,14 +44,14 @@ public class Utility {
 		return date;
 	}
 
-	public static TwoFactorResponse sendLoginDetailsToUserMobno(String applicantName, String mobNo, String UserName) {
+	public static TwoFactorResponse sendLoginDetailsToUserMobno(String applicantName, String mobNo, String username) {
 		TwoFactorResponse twoFactorResponse = null;
 		JSONObject json = new JSONObject();
 		json.put("From", "PaySmt");
 		json.put("To", mobNo);
 		json.put("TemplateName", "SmartPay");
 		json.put("VAR1", applicantName);
-		json.put("VAR2", UserName);
+		json.put("VAR2", username);
 		json.put("VAR3", StringUtil.generateDefaultPassword(applicantName));
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 		try {
@@ -97,9 +97,9 @@ public class Utility {
 		}
 	}
 
-	public static TwoFactorResponse verifyLoginOTP(String details, String inputOtp) {
+	public static TwoFactorResponse verifyLoginOTP(String sessionId, String inputOtp) {
 		TwoFactorResponse twoFactorResponse = null;
-		String VERIFYOTPAPI = "https://2factor.in/API/V1/" + Constant.twoFactorAPIkey + "/SMS/VERIFY/" + details + "/"
+		String VERIFYOTPAPI = "https://2factor.in/API/V1/" + Constant.twoFactorAPIkey + "/SMS/VERIFY/" + sessionId + "/"
 				+ inputOtp;
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 		try {

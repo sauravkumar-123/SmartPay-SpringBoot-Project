@@ -34,27 +34,27 @@ import lombok.Setter;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Table(name = "MerchantBankDetails")
+@Table(name = "Merchant_Bank_Details")
 public class MerchantBankDetails extends BaseEntity {
 
 	@Id
 	@GeneratedValue(generator = "idGen")
 	@GenericGenerator(name = "idGen", strategy = "uuid.hex")
-	@Column(name = "BankDetailsID", length = 200)
+	@Column(name = "Bank_Details_ID", length = 200)
 	@Size(min = 1, max = 200, message = "min 1 and max 200 character are allowed")
 	private String bankDetailsID;
 
 	@NotBlank(message = "Invalid AccountHolder Name")
-	@Column(name = "AccountholderName", length = 200)
+	@Column(name = "Accoun_Holder_Name", length = 200)
 	@Size(min = 1, max = 200, message = "Minimum 1 Or Maximum 200 Character are Allowed")
 	private String accountHolderName;
 
 	@NotBlank(message = "Invalid Account Number")
-	@Column(name = "AccountNumber", length = 50)
+	@Column(name = "Account_Number", length = 20)
 	private String accountNumber;
 
 	@NotBlank(message = "Invalid IFSC Code")
-	@Column(name = "IFSCCode", length = 11)
+	@Column(name = "IFSC_Code", length = 11)
 	@Size(min = 11, max = 11, message = "IFSC Code should be 11 Character")
 	private String ifscCode;
 
@@ -63,15 +63,15 @@ public class MerchantBankDetails extends BaseEntity {
 	private AccountType accountType;
 
 	@NotBlank(message = "Invalid Bank Name")
-	@Column(name = "BankName", length = 200)
+	@Column(name = "Bank_Name", length = 200)
 	private String bankName;
 
 	@NotBlank(message = "Invalid Branch Name")
-	@Column(name = "BranchName", length = 200)
+	@Column(name = "Branch_Name", length = 200)
 	private String branchName;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonBackReference
-	@JoinColumn(name = "MerchantIdentificationNo")
+	@JoinColumn(name = "merchantIdentificationNo")
 	private Merchant merchant;
 }

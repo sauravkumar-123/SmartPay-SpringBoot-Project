@@ -41,9 +41,9 @@ public class PrivilegeRepositoryImpl implements PrivilegeRepository {
 	@Override
 	public Privileges findPrivilegeByName(String privilegeName) {
 		Session session = entityManager.unwrap(Session.class);
-		String qry = "SELECT p FROM Privileges p WHERE p.name=:privilegeName";
+		String qry = "SELECT p FROM Privileges p WHERE p.privilegeName=:name";
 		Query query = session.createQuery(qry);
-		query.setParameter("privilegeName", privilegeName);
+		query.setParameter("name", privilegeName);
 		logger.debug("Query " + query);
 		Privileges privilege = (Privileges) query.uniqueResult();
 		return privilege;

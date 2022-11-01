@@ -12,7 +12,7 @@ public interface UserRepository {
 
 	public User getAdminDetails();
 
-	public User getUserDetails(String emailId, String mobno, char isActive);
+	public User getUserDetails(String emailId, String mobno);
 
 	public User findUserByUsername(String username);
 }

@@ -23,7 +23,6 @@ import com.Smartpay.Enum.EnumsStatus.AddressType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,40 +40,46 @@ public class Address extends BaseEntity {
 	@Id
 	@GeneratedValue(generator = "idGen")
 	@GenericGenerator(name = "idGen", strategy = "uuid.hex")
-	@Column(name = "AddressDetailsID", length = 200)
+	@Column(name = "Address_Details_ID", length = 200)
 	@Size(min = 1, max = 200, message = "min 1 and max 200 character are allowed")
-	private String AddressDetailsID;
+	private String addressDetailsID;
 
 	@NotBlank(message = "Invalid Address Data")
+	@Size(min = 1, max = 250, message = "Maximum 250 character are allowed")
 	@Column(name = "Address", length = 250)
 	private String address;
 
 	@NotBlank(message = "Invalid Input")
-	@Column(name = "VillageOrCity", length = 150)
+	@Size(min = 1, max = 200, message = "Maximum 200 character are allowed")
+	@Column(name = "Village_Or_City", length = 200)
 	private String villageCity;
 
 	@NotBlank(message = "Invalid District")
-	@Column(name = "District", length = 150)
+	@Size(min = 1, max = 200, message = "Maximum 200 character are allowed")
+	@Column(name = "District", length = 200)
 	private String district;
 
 	@NotBlank(message = "Invalid Pincode")
-	@Column(name = "Pincode", length = 10)
+	@Size(min = 6, max = 6, message = "Pincode Should be 6 Character")
+	@Column(name = "Pincode", length = 6)
 	private String pincode;
 
 	@NotBlank(message = "Invalid State")
+	@Size(min = 1, max = 200, message = "Maximum 150 character are allowed")
 	@Column(name = "State", length = 150)
 	private String state;
 
 	@NotBlank(message = "Invalid Country")
+	@Size(min = 1, max = 200, message = "Maximum 150 character are allowed")
 	@Column(name = "Country", length = 150)
 	private String country;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AddressType", length = 30)
+	@Column(name = "Address_Type", length = 50)
 	private AddressType addressType;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonBackReference
-	@JoinColumn(name = "MerchantIdentificationNo")
+	@JoinColumn(name = "merchantIdentificationNo")
 	private Merchant merchant;
 }

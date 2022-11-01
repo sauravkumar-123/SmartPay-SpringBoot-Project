@@ -41,10 +41,10 @@ public class RoleRepositoryImpl implements RoleRepository {
 	@Override
 	public Role findRoleByName(String roleName) {
 		Session session = entityManager.unwrap(Session.class);
-		String qry = "SELECT r FROM Role r WHERE r.name=:roleName";
+		String qry = "SELECT r FROM Role r WHERE r.roleName=:name";
 		Query query = session.createQuery(qry);
-		query.setParameter("roleName", roleName);
-		logger.debug("Query " + query);
+		query.setParameter("name", roleName);
+		logger.info("Query " + query);
 		Role role = (Role) query.uniqueResult();
 		return role;
 	}

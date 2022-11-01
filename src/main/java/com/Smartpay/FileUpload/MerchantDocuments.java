@@ -41,25 +41,25 @@ public class MerchantDocuments extends BaseEntity {
 	@Id
 	@GeneratedValue(generator = "idGen")
 	@GenericGenerator(name = "idGen", strategy = "uuid.hex")
-	@Column(name = "MerchantDocumentsID", length = 200)
+	@Column(name = "Merchant_Documents_ID", length = 200)
 	@Size(min = 1, max = 200, message = "min 1 and max 200 character are allowed")
 	private String merchantDocumentsID;
 
-	@Column(name = "PanCardImagePath", length = 200)
+	@Column(name = "PanCard_Image_Path", length = 250)
 	private String panCardImagePath;
 
-	@Column(name = "AadhaarCardImagePath", length = 200)
+	@Column(name = "AadhaarCard_Image_Path", length = 250)
 	private String aadhaarCardImagePath;
 
-	@Column(name = "CancledCheckImagePath", length = 200)
+	@Column(name = "CancledCheck_Image_Path", length = 250)
 	private String cancledCheckPath;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "IsApproved", length = 4)
 	private YesNO isApproved;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonBackReference
-	@JoinColumn(name = "Username")
+	@JoinColumn(name = "merchantIdentificationNo")
 	private Merchant merchant;
 }

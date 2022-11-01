@@ -1,11 +1,13 @@
 package com.Smartpay.Enum;
 
-import org.springframework.security.access.event.PublicInvocationEvent;
-
 public class EnumsStatus {
 
 	public enum YesNO {
 		NO, YES
+	}
+
+	public enum IsActive {
+		ACTIVE, INACTIVE
 	}
 
 	public enum UserRole {
@@ -70,8 +72,8 @@ public class EnumsStatus {
 	public enum AddressType {
 		CurrentAddress, PermanentAddress
 	}
-	
-	public enum DocumentsUploadStatus{
+
+	public enum DocumentsUploadStatus {
 		Success, Pending, Failed
 	}
 }

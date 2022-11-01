@@ -33,7 +33,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		if (null == privilege) {
 			logger.info("Set CREATE Privilege");
 			privilege = new Privileges();
-			privilege.setName(autheritie);
+			privilege.setPrivilegeName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
 		}
 		return privilege;
@@ -46,7 +46,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		if (null == privilege) {
 			logger.info("Set READ Privilege");
 			privilege = new Privileges();
-			privilege.setName(autheritie);
+			privilege.setPrivilegeName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
 		}
 		return privilege;
@@ -59,7 +59,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		if (null == privilege) {
 			logger.info("Set UPDATE Privilege");
 			privilege = new Privileges();
-			privilege.setName(autheritie);
+			privilege.setPrivilegeName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
 		}
 		return privilege;
@@ -72,7 +72,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		if (null == privilege) {
 			logger.info("Set DELETE Privilege");
 			privilege = new Privileges();
-			privilege.setName(autheritie);
+			privilege.setPrivilegeName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
 		}
 		return privilege;
@@ -85,7 +85,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		if (null == role) {
 			logger.info("Set ADMIN role and its privileges");
 			role = new Role();
-			role.setName(roleName);
+			role.setRoleName(roleName);
 			role.setPrivileges(adminPrivilegesSet);
 			roleRepository.saveRoles(role);
 		}
@@ -99,7 +99,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		if (null == role) {
 			logger.info("Set MERCHANT role and its privileges");
 			role = new Role();
-			role.setName(roleName);
+			role.setRoleName(roleName);
 			role.setPrivileges(merchantPrivilegesSet);
 			roleRepository.saveRoles(role);
 		}
@@ -113,7 +113,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		if (null == role) {
 			logger.info("Set DISTRIBUTOR role and its privileges");
 			role = new Role();
-			role.setName(roleName);
+			role.setRoleName(roleName);
 			role.setPrivileges(distributorPrivilegesSet);
 			roleRepository.saveRoles(role);
 		}
@@ -127,7 +127,7 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 		if (null == role) {
 			logger.info("Set MASTERDISTRIBUTOR role and its privileges");
 			role = new Role();
-			role.setName(roleName);
+			role.setRoleName(roleName);
 			role.setPrivileges(masterDistributorPrivilegesSet);
 			roleRepository.saveRoles(role);
 		}

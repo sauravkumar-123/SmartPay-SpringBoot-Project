@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Path.Node;
+import javax.ws.rs.BadRequestException;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -97,7 +98,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = { BadCredentialsException.class })
-	public ResponseEntity<ExceptionResponse> handleBadCredentialsExceptionException(BadCredentialsException exception) {
+	public ResponseEntity<ExceptionResponse> handleBadCredentialsException(BadCredentialsException exception) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(), false, exception.getMessage(),
+				null);
+		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value = { BadRequestException.class })
+	public ResponseEntity<ExceptionResponse> handleBadRequestException(BadRequestException exception) {
 		ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(), false, exception.getMessage(),
 				null);
 		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);

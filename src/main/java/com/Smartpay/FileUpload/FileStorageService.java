@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -21,6 +23,8 @@ import com.Smartpay.Exception.FileStorageException;
 @Service
 public class FileStorageService {
 
+	private static final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
+
 	private final Path fileStorageLocation;
 
 	@Autowired
@@ -30,12 +34,13 @@ public class FileStorageService {
 		try {
 			Files.createDirectories(this.fileStorageLocation);
 		} catch (Exception ex) {
+			logger.debug("Failed To Create Directory");
 			throw new FileStorageException("Could not create the directory where the uploaded files will be stored.",
 					ex);
 		}
 	}
 
-	public String[] storeFile(MultipartFile[] files, String username) {
+	public String[] storeFile(MultipartFile[] files, String aadharlast4digit) {
 		String[] resultArr = new String[files.length];
 		for (int i = 0; i < files.length; i++) {
 			MultipartFile file = files[i];
@@ -53,7 +58,7 @@ public class FileStorageService {
 						|| (fileName.contains(".png") || fileName.contains(".PNG"))) {
 
 					try {
-						Path targetLocation = this.fileStorageLocation.resolve(fileName + username);
+						Path targetLocation = this.fileStorageLocation.resolve(fileName + aadharlast4digit);
 						Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 						String fileLocation = String.valueOf(targetLocation);
 						resultArr[i] = fileLocation;

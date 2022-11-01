@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.Smartpay.DAO.MerchantRepository;
+import com.Smartpay.Enum.EnumsStatus.IsActive;
 import com.Smartpay.Exception.GlobalException;
 import com.Smartpay.Model.Merchant;
 import com.Smartpay.Model.User;
@@ -60,49 +61,37 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(Merchant.class, "merchant");
-			criteria.add(Restrictions.and(Restrictions.eq("user", user), Restrictions.eq("isActive", 'Y')));
+			criteria.add(Restrictions.and(Restrictions.eq("user", user), Restrictions.eq("isActive", IsActive.ACTIVE)));
 			criteria.setProjection(Projections.projectionList()
-					.add(Projections.alias(Projections.property("merchant.MerchantIdentificationNo"),
-							"MerchantIdentificationNo"))
-					.add(Projections.alias(Projections.property("merchant.user"), "user"))
-					.add(Projections.alias(Projections.property("merchant.bankDetails"), "bankDetails"))
-					.add(Projections.alias(Projections.property("merchant.addresses"), "addresses"))
-					.add(Projections.alias(Projections.property("merchant.guardianName"), "guardianName"))
-					.add(Projections.alias(Projections.property("merchant.maritalStatus"), "maritalStatus"))
-					.add(Projections.alias(Projections.property("merchant.gender"), "gender"))
-					.add(Projections.alias(Projections.property("merchant.businessType"), "businessType"))
+					.add(Projections.alias(Projections.property("merchant.merchantIdentificationNo"),
+							"merchantIdentificationNo"))
 					.add(Projections.alias(Projections.property("merchant.aepsServiceStatus"), "aepsServiceStatus"))
 					.add(Projections.alias(Projections.property("merchant.EKYCstatus"), "EKYCstatus"))
 					.add(Projections.alias(Projections.property("merchant.bankOnboardStatus"), "bankOnboardStatus"))
 					.add(Projections.alias(Projections.property("merchant.isActive"), "isActive"))
 					.add(Projections.alias(Projections.property("merchant.documentsUploadStatus"),
 							"documentsUploadStatus"))
-					.add(Projections.alias(Projections.property("merchant.panCardNo"), "panCardNo"))
-					.add(Projections.alias(Projections.property("merchant.aadhaarcardNo"), "aadhaarcardNo"))
-					.add(Projections.alias(Projections.property("merchant.merchantDocuments"), "merchantDocuments"))
-					.add(Projections.alias(Projections.property("merchant.businesspanno"), "businesspanno"))
-					.add(Projections.alias(Projections.property("merchant.gstNo"), "gstNo"))
-					.add(Projections.alias(Projections.property("merchant.tanNo"), "tanNo"))
 					.add(Projections.alias(Projections.property("merchant.createdDate"), "createdDate"))
 					.add(Projections.alias(Projections.property("merchant.updatedDate"), "updatedDate")));
 			criteria.setResultTransformer(Transformers.aliasToBean(Merchant.class));
 			Merchant merchantData = (Merchant) criteria.uniqueResult();
+			logger.info("Merchant Details{} ", merchantData);
 			transaction.commit();
 			return merchantData;
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.info("Exception Message{} " + e.getMessage());
-			throw new GlobalException("Unbale To Fetch Merchnat Details");
+			logger.debug("Exception Message{} " + e.getMessage());
+			throw new GlobalException("Unbale To Fetch Merchant Details");
 		}
 	}
 
 	@Override
-	public Merchant findMerchantByUsername(String username) {
+	public Merchant findMerchantById(String identificationNo) {
 		Session session = entityManager.unwrap(Session.class);
-		String qry = "SELECT m.merchant_identification_no AS MerchantId, m.username AS Username FROM Merchant m WHERE m.username=:userName";
+		String qry = "SELECT m.merchantIdentificationNo AS merchantIdentificationNo, m.aadhaarcardNo AS aadhaarcardNo, m.isActive AS isActive FROM Merchant m WHERE m.merchantIdentificationNo=:id";
 		Query query = session.createQuery(qry);
-		query.setParameter("userName", username);
+		query.setParameter("id", identificationNo);
 		logger.debug("Query", query);
 		Merchant merchant = (Merchant) query.uniqueResult();
 		return merchant;

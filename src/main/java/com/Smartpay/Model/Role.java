@@ -26,24 +26,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "roles")
+@Table(name = "Roles")
 @XmlRootElement
 public class Role {
 
 	@Id
-	@Column(name = "Role_ID")
+	@Column(name = "Role_Id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int roleId;
 
 	@Column(name = "Role_Name", length = 50)
-	private String name;
+	private String roleName;
 
 	@ManyToMany(mappedBy = "roles")
 	private Set<User> user;
 
 	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "Role_ID"), inverseJoinColumns = @JoinColumn(name = "Privilege_Id"))
+	@JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "Role_Id"), inverseJoinColumns = @JoinColumn(name = "Privilege_Id"))
 	private Set<Privileges> privileges = new HashSet<>();
 
 }

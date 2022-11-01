@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.client.RestTemplate;
 
-import com.Smartpay.Security.Jwt.JWTokenValadation;
 import com.Smartpay.Service.RolesAndPrivilegesService;
 import com.Smartpay.ServiceImpl.RolesAndPrivilegesServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;

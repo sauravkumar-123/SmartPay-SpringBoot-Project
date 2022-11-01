@@ -38,20 +38,22 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
 	@Override
 	public MerchantDocuments getDocDetailsByMerchantDetail(Merchant merchant) {
 		Session session = entityManager.unwrap(Session.class);
-		Transaction transaction = session.beginTransaction();
-		Criteria criteria = session.createCriteria(MerchantDocuments.class, "docs");
-		if (null != merchant) {
-			criteria.add(Restrictions.eq("merchant", merchant));
-		}
-		criteria.setProjection(Projections.projectionList()
-				.add(Projections.alias(Projections.property("docs.merchantDocumentsID"), "merchantDocumentsID"))
-				.add(Projections.alias(Projections.property("docs.panCardImagePath"), "panCardImagePath"))
-				.add(Projections.alias(Projections.property("docs.aadhaarCardImagePath"), "aadhaarCardImagePath"))
-				.add(Projections.alias(Projections.property("docs.cancledCheckPath"), "cancledCheckPath"))
-				.add(Projections.alias(Projections.property("docs.isApproved"), "isApproved")));
-		criteria.setResultTransformer(Transformers.aliasToBean(MerchantDocuments.class));
+		Transaction transaction = null;
 		try {
+			transaction = session.beginTransaction();
+			Criteria criteria = session.createCriteria(MerchantDocuments.class, "docs");
+			if (null != merchant) {
+				criteria.add(Restrictions.eq("merchant", merchant));
+			}
+			criteria.setProjection(Projections.projectionList()
+					.add(Projections.alias(Projections.property("docs.merchantDocumentsID"), "merchantDocumentsID"))
+					.add(Projections.alias(Projections.property("docs.panCardImagePath"), "panCardImagePath"))
+					.add(Projections.alias(Projections.property("docs.aadhaarCardImagePath"), "aadhaarCardImagePath"))
+					.add(Projections.alias(Projections.property("docs.cancledCheckPath"), "cancledCheckPath"))
+					.add(Projections.alias(Projections.property("docs.isApproved"), "isApproved")));
+			criteria.setResultTransformer(Transformers.aliasToBean(MerchantDocuments.class));
 			MerchantDocuments result = (MerchantDocuments) criteria.uniqueResult();
+			logger.info("Documents Upload Details{}", result);
 			transaction.commit();
 			return result;
 		} catch (Exception e) {

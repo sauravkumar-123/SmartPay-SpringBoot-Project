@@ -34,28 +34,28 @@ public class DocumentsUploadServiceImpl implements DocumentsUploadService {
 	private MerchantDocumentsRepository merchantDocumentsRepository;
 
 	@Override
-	public MerchantDocuments uploadDocumentsForBankingService(String username,
+	public MerchantDocuments uploadDocumentsForBankingService(String identificationNo,
 			MerchantDocumentsRequest merchantDocumentsRequest) {
 		logger.info("Enter Into uploadDocumentsForBankingService");
-		Merchant merchant = merchantRepository.findMerchantByUsername(username);
+		Merchant merchant = merchantRepository.findMerchantById(identificationNo);
 		if (null != merchant) {
 			MerchantDocuments docs = merchantDocumentsRepository.getDocDetailsByMerchantDetail(merchant);
 			if (null == docs) {
 				String[] filelocationArr = fileStorageService.storeFile(merchantDocumentsRequest.getDocuments(),
-						username);
+						merchant.getAadhaarcardNo());
 				MerchantDocuments merchantDocuments = new MerchantDocuments();
 				merchantDocuments.setMerchant(merchant);
-				merchantDocuments.setAadhaarCardImagePath(filelocationArr[1]);
-				merchantDocuments.setPanCardImagePath(filelocationArr[2]);
-				merchantDocuments.setCancledCheckPath(filelocationArr[3]);
+				merchantDocuments.setAadhaarCardImagePath(filelocationArr[0]);
+				merchantDocuments.setPanCardImagePath(filelocationArr[1]);
+				merchantDocuments.setCancledCheckPath(filelocationArr[2]);
 				merchantDocuments.setIsApproved(YesNO.NO);
 				return merchantDocumentsRepository.saveDocumentsDetail(docs);
 			} else {
-				logger.info("Documents Already Uploaded");
-				throw new FileStorageException("Documents Alreday Uploaded For : " + username);
+				logger.debug("Documents Already Uploaded");
+				throw new FileStorageException("Documents Alreday Uploaded");
 			}
 		} else {
-			logger.info("Merchant Details Not Found To Uplaod Documents");
+			logger.debug("Merchant Details Not Found To Uplaod Documents");
 			throw new ResourceNotFoundException("Merchant Details Not Found");
 		}
 

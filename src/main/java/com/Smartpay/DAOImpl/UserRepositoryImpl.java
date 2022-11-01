@@ -3,6 +3,7 @@ package com.Smartpay.DAOImpl;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.ws.rs.BadRequestException;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
@@ -17,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.Smartpay.DAO.UserRepository;
+import com.Smartpay.Enum.EnumsStatus.IsActive;
 import com.Smartpay.Exception.GlobalException;
-import com.Smartpay.Exception.ResourceNotFoundException;
 import com.Smartpay.Model.MainWallet;
 import com.Smartpay.Model.User;
 
@@ -53,7 +54,7 @@ public class UserRepositoryImpl implements UserRepository {
 			if (transaction != null)
 				transaction.rollback();
 			logger.debug("Exception Message{} " + e.getMessage());
-			throw new GlobalException("Unbale To Save User Details");
+			throw new GlobalException("Unable To Save User Details");
 		}
 //		finally {
 //		  session.close();
@@ -68,24 +69,18 @@ public class UserRepositoryImpl implements UserRepository {
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(User.class, "user");
-			criteria.add(Restrictions.ilike("Username", "AD%"));
-			criteria.add(Restrictions.eq("isActive", 'Y'));
+			criteria.add(Restrictions.ilike("username", "AD%"));
+			criteria.add(Restrictions.eq("isActive", IsActive.ACTIVE));
 			criteria.setProjection(Projections.projectionList()
-					.add(Projections.alias(Projections.property("user.UserIdentificationNo"), "UserIdentificationNo"))
-					.add(Projections.alias(Projections.property("user.Username"), "Username"))
+					.add(Projections.alias(Projections.property("user.userIdentificationNo"), "userIdentificationNo"))
+					.add(Projections.alias(Projections.property("user.customerId"), "customerId"))
+					.add(Projections.alias(Projections.property("user.username"), "username"))
 					.add(Projections.alias(Projections.property("user.applicantName"), "applicantName"))
-					.add(Projections.alias(Projections.property("user.mobileno"), "mobileno"))
-					.add(Projections.alias(Projections.property("user.emailid"), "emailid"))
 					.add(Projections.alias(Projections.property("user.role"), "role"))
-					.add(Projections.alias(Projections.property("user.parentUsername"), "parentUsername"))
-					.add(Projections.alias(Projections.property("user.dateOfBirth"), "dateOfBirth"))
-					.add(Projections.alias(Projections.property("user.isActive"), "isActive"))
-					.add(Projections.alias(Projections.property("user.bankingServiceStatus"), "bankingServiceStatus"))
-					.add(Projections.alias(Projections.property("user.createdDate"), "createdDate"))
-					.add(Projections.alias(Projections.property("user.updatedDate"), "updatedDate")));
+					.add(Projections.alias(Projections.property("user.createdDate"), "createdDate")));
 			criteria.setResultTransformer(Transformers.aliasToBean(User.class));
 			User userdata = (User) criteria.uniqueResult();
-			// logger.info("Admin Data{} " + userdata);
+			logger.info("Admin Details{} " + userdata);
 			transaction.commit();
 			return userdata;
 		} catch (Exception e) {
@@ -97,43 +92,44 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
-	public User getUserDetails(String emailId, String mobno, char isActive) {
+	public User getUserDetails(String emailId, String mobNo) {
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(User.class, "user");
-			if (StringUtils.isNotEmpty(emailId) && StringUtils.isNotEmpty(mobno) && 'N' != isActive) {
-				Criterion emailAdd = Restrictions.eq("emailid", emailId);
-				Criterion mobileNumber = Restrictions.eq("mobileno", mobno);
-				Criterion status = Restrictions.eq("isActive", isActive);
+			if (StringUtils.isNotEmpty(emailId) && StringUtils.isNotEmpty(mobNo)) {
+				Criterion emailAdd = Restrictions.eq("emailId", emailId);
+				Criterion mobileNumber = Restrictions.eq("mobileNo", mobNo);
+				Criterion status = Restrictions.eq("isActive", IsActive.ACTIVE);
 
 				criteria.add(Restrictions.or(emailAdd, mobileNumber));
 				criteria.add(Restrictions.and(status));
+			} else {
+				throw new BadRequestException("Invalid Parameter Email Id Or Mobile No");
 			}
 			criteria.setProjection(Projections.projectionList()
-					.add(Projections.alias(Projections.property("user.UserIdentificationNo"), "UserIdentificationNo"))
-					.add(Projections.alias(Projections.property("user.Username"), "Username"))
+					.add(Projections.alias(Projections.property("user.userIdentificationNo"), "userIdentificationNo"))
+					.add(Projections.alias(Projections.property("user.customerId"), "customerId"))
+					.add(Projections.alias(Projections.property("user.username"), "username"))
 					.add(Projections.alias(Projections.property("user.applicantName"), "applicantName"))
-					.add(Projections.alias(Projections.property("user.mobileno"), "mobileno"))
-					.add(Projections.alias(Projections.property("user.emailid"), "emailid"))
 					.add(Projections.alias(Projections.property("user.role"), "role"))
-					.add(Projections.alias(Projections.property("user.parentUsername"), "parentUsername"))
-					.add(Projections.alias(Projections.property("user.dateOfBirth"), "dateOfBirth"))
-					.add(Projections.alias(Projections.property("user.isActive"), "isActive"))
-					.add(Projections.alias(Projections.property("user.bankingServiceStatus"), "bankingServiceStatus"))
-					.add(Projections.alias(Projections.property("user.createdDate"), "createdDate"))
-					.add(Projections.alias(Projections.property("user.updatedDate"), "updatedDate")));
+					.add(Projections.alias(Projections.property("user.createdDate"), "createdDate")));
 			criteria.setResultTransformer(Transformers.aliasToBean(User.class));
 			User userdata = (User) criteria.uniqueResult();
-//			logger.info("User Data{} " + userdata);
+			logger.info("User Data{} " + userdata);
 			transaction.commit();
 			return userdata;
+		} catch (BadRequestException e) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.debug("Exception Message{} " + e.getMessage());
+			throw new BadRequestException(e.getMessage());
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
 			logger.debug("Exception Message{} " + e.getMessage());
-			throw new GlobalException("Unbale To Fetch User Details");
+			throw new GlobalException("Unable To Fetch User Details");
 		}
 //		finally {
 //			session.close();
@@ -148,37 +144,38 @@ public class UserRepositoryImpl implements UserRepository {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(User.class, "user");
 			if (StringUtils.isNotEmpty(username)) {
-				criteria.add(Restrictions.and(Restrictions.eq("Username", username), Restrictions.eq("isActive", 'Y')));
+				criteria.add(Restrictions.and(Restrictions.eq("username", username),
+						Restrictions.eq("isActive", IsActive.ACTIVE)));
 			} else {
-				throw new ResourceNotFoundException("Invalid Username!!!");
+				throw new BadRequestException("Invalid Username!!!");
 			}
 			criteria.setProjection(Projections.projectionList()
-					.add(Projections.alias(Projections.property("user.UserIdentificationNo"), "UserIdentificationNo"))
-					.add(Projections.alias(Projections.property("user.Username"), "Username"))
+					.add(Projections.alias(Projections.property("user.userIdentificationNo"), "userIdentificationNo"))
+					.add(Projections.alias(Projections.property("user.customerId"), "customerId"))
+					.add(Projections.alias(Projections.property("user.username"), "username"))
 					.add(Projections.alias(Projections.property("user.applicantName"), "applicantName"))
-					.add(Projections.alias(Projections.property("user.mobileno"), "mobileno"))
-					.add(Projections.alias(Projections.property("user.emailid"), "emailid"))
+					.add(Projections.alias(Projections.property("user.mobileNo"), "mobileNo"))
+					.add(Projections.alias(Projections.property("user.emailId"), "emailId"))
 					.add(Projections.alias(Projections.property("user.role"), "role"))
 					.add(Projections.alias(Projections.property("user.password"), "password"))
 					.add(Projections.alias(Projections.property("user.parentUsername"), "parentUsername"))
 					.add(Projections.alias(Projections.property("user.dateOfBirth"), "dateOfBirth"))
-					.add(Projections.alias(Projections.property("user.isActive"), "isActive"))
-					.add(Projections.alias(Projections.property("user.bankingServiceStatus"), "bankingServiceStatus"))
-					.add(Projections.alias(Projections.property("user.createdDate"), "createdDate"))
-					.add(Projections.alias(Projections.property("user.updatedDate"), "updatedDate")));
+					.add(Projections.alias(Projections.property("user.createdDate"), "createdDate")));
 			criteria.setResultTransformer(Transformers.aliasToBean(User.class));
 			User userdata = (User) criteria.uniqueResult();
 			logger.info("User Data{} " + userdata);
 			transaction.commit();
 			return userdata;
-		} catch (ResourceNotFoundException e) {
-			logger.info("Exception Message{} " + e.getMessage());
-			throw new ResourceNotFoundException(e.getMessage());
+		} catch (BadRequestException e) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.debug("Exception Message{} " + e.getMessage());
+			throw new BadRequestException(e.getMessage());
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.info("Exception Message{} " + e.getMessage());
-			throw new GlobalException("Unbale To Fetch User Details");
+			logger.debug("Exception Message{} " + e.getMessage());
+			throw new GlobalException("Unable To Fetch User Details");
 		}
 //		finally {
 //			session.close();

@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.Smartpay.Enum.EnumsStatus.IsActive;
 import com.Smartpay.Model.Role;
 import com.Smartpay.Model.User;
 
@@ -30,7 +31,7 @@ public class UserSecurity implements UserDetails {
 		Set<Role> roles = user.getRoles();
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		roles.stream().forEach(role -> {
-			authorities.add(new SimpleGrantedAuthority(role.getName()));
+			authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
 		});
 		return authorities;
 	}
@@ -62,7 +63,7 @@ public class UserSecurity implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		if (user.getIsActive() == 'Y') {
+		if (user.getIsActive() == IsActive.ACTIVE) {
 			return true;
 		} else {
 			return false;
