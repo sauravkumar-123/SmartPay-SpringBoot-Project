@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.Smartpay.Enum.EnumsStatus.IsActive;
@@ -30,6 +32,8 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Entity
 @Table(name = "Main_Wallet")
+@DynamicInsert
+@DynamicUpdate
 public class MainWallet extends BaseEntity {
 
 	@Id

@@ -61,7 +61,8 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(Merchant.class, "merchant");
-			criteria.add(Restrictions.and(Restrictions.eq("user", user), Restrictions.eq("isActive", IsActive.ACTIVE)));
+			criteria.add(Restrictions.and(Restrictions.eq("merchant.user", user),
+					Restrictions.eq("merchant.isActive", IsActive.ACTIVE)));
 			criteria.setProjection(Projections.projectionList()
 					.add(Projections.alias(Projections.property("merchant.merchantIdentificationNo"),
 							"merchantIdentificationNo"))

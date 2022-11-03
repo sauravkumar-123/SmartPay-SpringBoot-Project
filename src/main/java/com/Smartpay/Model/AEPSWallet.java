@@ -18,6 +18,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.Smartpay.Enum.EnumsStatus.IsActive;
@@ -36,6 +38,8 @@ import lombok.Setter;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Table(name = "AEPS_Wallet")
+@DynamicInsert
+@DynamicUpdate
 public class AEPSWallet extends BaseEntity {
 
 	@Id

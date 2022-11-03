@@ -11,6 +11,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +25,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "Privileges")
+@DynamicInsert
+@DynamicUpdate
 @XmlRootElement
 public class Privileges {
 

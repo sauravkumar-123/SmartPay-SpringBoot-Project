@@ -12,12 +12,14 @@
 	<groupId>com.Smartpay</groupId>
 	<artifactId>Smartpay</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>Smartpay</name>
 	<description>A small Banking and Payment Application.</description>
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>2021.0.0</spring-cloud.version>
+		<start-class>com.Smartpay.SmartPayApplication</start-class>
+		<skipTests>true</skipTests>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -195,6 +197,7 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<skipTests>${skipTests}</skipTests>
 				</configuration>
 			</plugin>
 		</plugins>

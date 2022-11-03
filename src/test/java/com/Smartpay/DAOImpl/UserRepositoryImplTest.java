@@ -105,7 +105,7 @@ class UserRepositoryImplTest extends BaseTest {
 	@Test
 	public void testFindUserByUsername() {
 		logger.info("testFindUserByUsername");
-		User result = userRepos.findUserByUsername("IR506500");
+		User result = userRepos.findUserByUsername("IR002565");
 		Assertions.assertNotNull(result);
 	}
 

@@ -69,8 +69,8 @@ public class UserRepositoryImpl implements UserRepository {
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(User.class, "user");
-			criteria.add(Restrictions.ilike("username", "AD%"));
-			criteria.add(Restrictions.eq("isActive", IsActive.ACTIVE));
+			criteria.add(Restrictions.ilike("user.username", "AD%"));
+			criteria.add(Restrictions.eq("user.isActive", IsActive.ACTIVE));
 			criteria.setProjection(Projections.projectionList()
 					.add(Projections.alias(Projections.property("user.userIdentificationNo"), "userIdentificationNo"))
 					.add(Projections.alias(Projections.property("user.customerId"), "customerId"))
@@ -99,9 +99,9 @@ public class UserRepositoryImpl implements UserRepository {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(User.class, "user");
 			if (StringUtils.isNotEmpty(emailId) && StringUtils.isNotEmpty(mobNo)) {
-				Criterion emailAdd = Restrictions.eq("emailId", emailId);
-				Criterion mobileNumber = Restrictions.eq("mobileNo", mobNo);
-				Criterion status = Restrictions.eq("isActive", IsActive.ACTIVE);
+				Criterion emailAdd = Restrictions.eq("user.emailId", emailId);
+				Criterion mobileNumber = Restrictions.eq("user.mobileNo", mobNo);
+				Criterion status = Restrictions.eq("user.isActive", IsActive.ACTIVE);
 
 				criteria.add(Restrictions.or(emailAdd, mobileNumber));
 				criteria.add(Restrictions.and(status));
@@ -144,8 +144,8 @@ public class UserRepositoryImpl implements UserRepository {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(User.class, "user");
 			if (StringUtils.isNotEmpty(username)) {
-				criteria.add(Restrictions.and(Restrictions.eq("username", username),
-						Restrictions.eq("isActive", IsActive.ACTIVE)));
+				criteria.add(Restrictions.and(Restrictions.eq("user.username", username),
+						Restrictions.eq("user.isActive", IsActive.ACTIVE)));
 			} else {
 				throw new BadRequestException("Invalid Username!!!");
 			}

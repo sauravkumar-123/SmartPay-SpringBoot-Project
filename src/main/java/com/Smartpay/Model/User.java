@@ -25,6 +25,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -51,6 +53,8 @@ import lombok.ToString;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "User")
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class User extends BaseEntity {
 
 	@Id
@@ -109,8 +113,8 @@ public class User extends BaseEntity {
 
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "User_Identification_No") }, inverseJoinColumns = {
-			@JoinColumn(name = "Role_Id") })
+	@JoinTable(name = "user_roles", joinColumns = {
+			@JoinColumn(name = "User_Identification_No") }, inverseJoinColumns = { @JoinColumn(name = "Role_Id") })
 	private Set<Role> roles = new HashSet<>();
 
 }

@@ -21,6 +21,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.Smartpay.Enum.EnumsStatus.BusinessType;
@@ -46,6 +48,8 @@ import lombok.Setter;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Table(name = "Merchant")
+@DynamicInsert
+@DynamicUpdate
 public class Merchant extends BaseEntity {
 
 	@Id

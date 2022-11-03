@@ -61,8 +61,8 @@ public class UserController {
 	 */) {
 		Merchant merchantDetails = merchantService.updateUserProfileToMerchant(userName, merchantRequest);
 		if (null != merchantDetails) {
-			return new ResponseEntity<Response>(new Response(true, "User Upgraded To Merchant Proile", merchantDetails),
-					HttpStatus.OK);
+			return new ResponseEntity<Response>(
+					new Response(true, "User Upgraded To Merchant Profile", merchantDetails), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Response>(
 					new Response(false, "Unable to Update Merchant Profile", merchantDetails),
@@ -71,10 +71,10 @@ public class UserController {
 	}
 
 	@ApiOperation("Upload Merchnat Documents To Verify With Admin")
-	@RequestMapping(value = "/uploadDocuments/{userName}", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response> uploadMerchantDocuments(
+	@RequestMapping(value = "/uploadDocuments/{identificationNo}", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Response> uploadMerchantDocuments(@PathVariable("identificationNo") String identificationNo,
 			@Valid @ModelAttribute MerchantDocumentsRequest merchantDocumentsRequest) {
-		MerchantDocuments result = documentsUploadService.uploadDocumentsForBankingService(null,
+		MerchantDocuments result = documentsUploadService.uploadDocumentsForBankingService(identificationNo,
 				merchantDocumentsRequest);
 		if (null != result) {
 			return new ResponseEntity<Response>(

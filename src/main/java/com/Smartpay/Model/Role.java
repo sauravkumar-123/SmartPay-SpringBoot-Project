@@ -14,6 +14,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +30,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "Roles")
+@DynamicInsert
+@DynamicUpdate
 @XmlRootElement
 public class Role {
 
