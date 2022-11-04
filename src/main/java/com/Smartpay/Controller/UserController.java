@@ -59,8 +59,11 @@ public class UserController {
 	 * @Valid @RequestParam("pancardImageFilePath") @NotBlank(message =
 	 * "Invalid File Path") MultipartFile pancardImageFilePath
 	 */) {
+		logger.info("Entred into UserController::updateUserTOMerchantProfile()");
+		logger.info("Request Payload to updateUserTOMerchantProfile {} ", userName, merchantRequest);
 		Merchant merchantDetails = merchantService.updateUserProfileToMerchant(userName, merchantRequest);
 		if (null != merchantDetails) {
+			logger.debug("Profile Update Response {}", merchantDetails);
 			return new ResponseEntity<Response>(
 					new Response(true, "User Upgraded To Merchant Profile", merchantDetails), HttpStatus.OK);
 		} else {
@@ -74,9 +77,13 @@ public class UserController {
 	@RequestMapping(value = "/uploadDocuments/{identificationNo}", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> uploadMerchantDocuments(@PathVariable("identificationNo") String identificationNo,
 			@Valid @ModelAttribute MerchantDocumentsRequest merchantDocumentsRequest) {
+		logger.info("Entred into UserController::uploadMerchantDocuments()");
+		logger.info("Request Payload to uploadMerchantDocuments {} ", identificationNo,
+				merchantDocumentsRequest.getDocuments());
 		MerchantDocuments result = documentsUploadService.uploadDocumentsForBankingService(identificationNo,
 				merchantDocumentsRequest);
 		if (null != result) {
+			logger.debug("Documents Uplaod Response {}", result);
 			return new ResponseEntity<Response>(
 					new Response(true, "Upload Success...Wait For Approval", result.getIsApproved()), HttpStatus.OK);
 		} else {
@@ -89,6 +96,8 @@ public class UserController {
 	@GetMapping("/downloadFile/{fileName:.+}")
 	public ResponseEntity<Resource> downloadImageFile(@PathVariable(value = "fileName") String fileName,
 			HttpServletRequest request) {
+		logger.info("Entred into UserController::downloadImageFile()");
+		logger.info("Request Payload to downloadImageFile {} ", fileName, request);
 		// Load file as Resource
 		Resource resource = fileStorageService.loadFileAsResource(fileName);
 		// Try to determine file's content type

@@ -41,6 +41,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public boolean saveUserDetails(User user, MainWallet mainWallet) {
+		logger.info("Entred into UserRepository::saveUserDetails()");
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		boolean status = false;
@@ -53,7 +54,7 @@ public class UserRepositoryImpl implements UserRepository {
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.debug("Exception Message{} " + e.getMessage());
+			logger.error("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unable To Save User Details");
 		}
 //		finally {
@@ -64,6 +65,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public User getAdminDetails() {
+		logger.info("Entred into UserRepository::getAdminDetails()");
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
@@ -80,19 +82,20 @@ public class UserRepositoryImpl implements UserRepository {
 					.add(Projections.alias(Projections.property("user.createdDate"), "createdDate")));
 			criteria.setResultTransformer(Transformers.aliasToBean(User.class));
 			User userdata = (User) criteria.uniqueResult();
-			logger.info("Admin Details{} " + userdata);
+			logger.debug("Admin Details{} " + userdata);
 			transaction.commit();
 			return userdata;
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.debug("Exception Message{} " + e.getMessage());
+			logger.error("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Fetch Admin Details");
 		}
 	}
 
 	@Override
 	public User getUserDetails(String emailId, String mobNo) {
+		logger.info("Entred into UserRepository::getUserDetails()");
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
@@ -117,18 +120,18 @@ public class UserRepositoryImpl implements UserRepository {
 					.add(Projections.alias(Projections.property("user.createdDate"), "createdDate")));
 			criteria.setResultTransformer(Transformers.aliasToBean(User.class));
 			User userdata = (User) criteria.uniqueResult();
-			logger.info("User Data{} " + userdata);
+			logger.debug("User Data{} " + userdata);
 			transaction.commit();
 			return userdata;
 		} catch (BadRequestException e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.debug("Exception Message{} " + e.getMessage());
+			logger.error("Exception Message{} " + e.getMessage());
 			throw new BadRequestException(e.getMessage());
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.debug("Exception Message{} " + e.getMessage());
+			logger.error("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unable To Fetch User Details");
 		}
 //		finally {
@@ -138,6 +141,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public User findUserByUsername(String username) {
+		logger.info("Entred into UserRepository::findUserByUsername()");
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
@@ -163,18 +167,18 @@ public class UserRepositoryImpl implements UserRepository {
 					.add(Projections.alias(Projections.property("user.createdDate"), "createdDate")));
 			criteria.setResultTransformer(Transformers.aliasToBean(User.class));
 			User userdata = (User) criteria.uniqueResult();
-			logger.info("User Data{} " + userdata);
+			logger.debug("User Data{} " + userdata);
 			transaction.commit();
 			return userdata;
 		} catch (BadRequestException e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.debug("Exception Message{} " + e.getMessage());
+			logger.error("Exception Message{} " + e.getMessage());
 			throw new BadRequestException(e.getMessage());
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.debug("Exception Message{} " + e.getMessage());
+			logger.error("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unable To Fetch User Details");
 		}
 //		finally {

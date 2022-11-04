@@ -33,6 +33,7 @@ public class RoleRepositoryImpl implements RoleRepository {
 	@Transactional(rollbackOn = Exception.class)
 	@Override
 	public void saveRoles(Role role) {
+		logger.info("Entred into RoleRepository::saveRoles()");
 		Session session = entityManager.unwrap(Session.class);
 		session.save(role);
 	}
@@ -40,11 +41,12 @@ public class RoleRepositoryImpl implements RoleRepository {
 	@Transactional(rollbackOn = Exception.class)
 	@Override
 	public Role findRoleByName(String roleName) {
+		logger.info("Entred into RoleRepository::findRoleByName()");
 		Session session = entityManager.unwrap(Session.class);
 		String qry = "SELECT r FROM Role r WHERE r.roleName=:name";
 		Query query = session.createQuery(qry);
 		query.setParameter("name", roleName);
-		logger.info("Query " + query);
+		logger.debug("Query " + query);
 		Role role = (Role) query.uniqueResult();
 		return role;
 	}

@@ -22,7 +22,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
@@ -58,8 +61,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 			String message = error.getDefaultMessage();
 			errors.put(fieldName, message);
 		});
-		ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(), false,
-				"Argument Validation Failed!!", errors);
+		log.info("Valadation Error!!{} ", errors);
+		ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(), false, "Failed!!", errors);
 		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 
@@ -72,8 +75,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 			String message = error.getDefaultMessage();
 			errors.put(fieldName, message);
 		});
-		ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(), false, "Argument Validation Failed!!",
-				errors);
+		log.info("Valadation Error!!{} ", errors);
+		ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(), false, "Failed!!", errors);
 		return new ResponseEntity<Object>(response, HttpStatus.BAD_REQUEST);
 	}
 
@@ -91,8 +94,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 				errors.put(fieldName, constraintViolation.getMessage());
 			}
 		}
-		ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(), false, "Argument Validation Failed!!",
-				errors);
+		log.info("Validation Error!!{} ", errors);
+		ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(), false, "Failed!!", errors);
 		return new ResponseEntity<ExceptionResponse>(response, HttpStatus.BAD_REQUEST);
 	}
 

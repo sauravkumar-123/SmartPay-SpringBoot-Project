@@ -33,6 +33,7 @@ public class PrivilegeRepositoryImpl implements PrivilegeRepository {
 	@Transactional(rollbackOn = Exception.class)
 	@Override
 	public void savePrivilege(Privileges privilege) {
+		logger.info("Entred into PrivilegeRepository::savePrivilege()");
 		Session session = entityManager.unwrap(Session.class);
 		session.save(privilege);
 	}
@@ -40,6 +41,7 @@ public class PrivilegeRepositoryImpl implements PrivilegeRepository {
 	@Transactional(rollbackOn = Exception.class)
 	@Override
 	public Privileges findPrivilegeByName(String privilegeName) {
+		logger.info("Entred into PrivilegeRepository::findPrivilegeByName()");
 		Session session = entityManager.unwrap(Session.class);
 		String qry = "SELECT p FROM Privileges p WHERE p.privilegeName=:name";
 		Query query = session.createQuery(qry);

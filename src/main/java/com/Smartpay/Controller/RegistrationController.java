@@ -38,9 +38,11 @@ public class RegistrationController {
 	@ApiOperation("Admin Registration API")
 	@RequestMapping(value = "/saveAdmin", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> registerAdmin(@Valid @RequestBody User user) {
+		logger.info("Entred into RegistrationController::registerAdmin()");
+		logger.info("Request Payload to registerAdmin {} ", user);
 		RegistrationResponse result = adminService.registerAdmin(user);
-		logger.info("Admin Details{} " + result);
 		if (null != result) {
+			logger.debug("Admin Registration Response {} " + result);
 			return new ResponseEntity<Response>(new Response(true, "Admin Details Saved", result), HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<Response>(new Response(false, "Unable To Save Admin Details", result),
@@ -51,9 +53,11 @@ public class RegistrationController {
 	@ApiOperation("User Registration API")
 	@RequestMapping(value = "/saveUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> registerUser(@Valid @RequestBody User user) {
+		logger.info("Entred into RegistrationController::registerUser()");
+		logger.info("Request Payload to registerUser {} ", user);
 		RegistrationResponse result = userService.registerUser(user);
-		logger.info("User Details{} " + result);
 		if (null != result) {
+			logger.debug("User Registration Response {} " + result);
 			return new ResponseEntity<Response>(new Response(true, "User Details Saved", result), HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<Response>(new Response(false, "Unable To Save User Details", result),

@@ -39,23 +39,26 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 
 	@Override
 	public Merchant saveMerchantProfile(Merchant merchant) {
+		logger.info("Entred into MerchantRepository::saveMerchantProfile()");
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
 			Merchant saveResult = (Merchant) session.merge(merchant);
 			transaction.commit();
+			logger.debug("merchant saved data {} ", saveResult);
 			return saveResult;
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.info("Exception Message{} " + e.getMessage());
+			logger.error("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Save Merchant Details");
 		}
 	}
 
 	@Override
 	public Merchant findMerchantByUserDetails(User user) {
+		logger.info("Entred into MerchantRepository::findMerchantByUserDetails()");
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
@@ -76,19 +79,20 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 					.add(Projections.alias(Projections.property("merchant.updatedDate"), "updatedDate")));
 			criteria.setResultTransformer(Transformers.aliasToBean(Merchant.class));
 			Merchant merchantData = (Merchant) criteria.uniqueResult();
-			logger.info("Merchant Details{} ", merchantData);
+			logger.debug("Merchant Details{} ", merchantData);
 			transaction.commit();
 			return merchantData;
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.debug("Exception Message{} " + e.getMessage());
+			logger.error("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Fetch Merchant Details");
 		}
 	}
 
 	@Override
 	public Merchant findMerchantById(String identificationNo) {
+		logger.info("Entred into MerchantRepository::findMerchantById()");
 		Session session = entityManager.unwrap(Session.class);
 		String qry = "SELECT m.merchantIdentificationNo AS merchantIdentificationNo, m.aadhaarcardNo AS aadhaarcardNo, m.isActive AS isActive FROM Merchant m WHERE m.merchantIdentificationNo=:id";
 		Query query = session.createQuery(qry);
