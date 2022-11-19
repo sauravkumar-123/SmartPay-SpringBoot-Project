@@ -82,8 +82,8 @@ public class UserServiceImpl implements UserService {
 				TwoFactorResponse twofactorResponse = Utility.sendLoginDetailsToUserMobno(
 						userRegistration.getApplicantName(), userRegistration.getMobileNo(),
 						userRegistration.getUsername());
-				logger.info("User and Mainwallet Details{}" + userRegistration + " {} " + mainWallet);
-				logger.info("Send LoginDetails To UserMobno " + twofactorResponse);
+				logger.debug("User and Mainwallet Details{}" + userRegistration + " {} " + mainWallet);
+				logger.debug("Send LoginDetails To UserMobno " + twofactorResponse);
 				RegistrationResponse response = new RegistrationResponse();
 				response.setApplicantName(userRegistration.getApplicantName());
 				response.setBankingServiceStatus(userRegistration.getBankingServiceStatus());
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
 				return null;
 			}
 		} else {
-			logger.debug("User Registration Details Already Present....");
+			logger.error("User Registration Details Already Present....");
 			throw new GlobalException("User Details Already Avaliable");
 		}
 	}

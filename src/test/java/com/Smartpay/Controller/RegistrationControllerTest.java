@@ -64,10 +64,10 @@ class RegistrationControllerTest extends BaseTest {
 	public void testRegisterUser() throws Exception {
 		logger.info("testRegisterUser");
 		User user = new User();
-		user.setApplicantName("Nisha Gupta");
-		user.setMobileNo("8541020012");
-		user.setEmailId("nisha.gupta.83@gmail.com");
-		user.setDateOfBirth(Utility.convertStringToDate("1983-11-02"));
+		user.setApplicantName("Surbhi Kumari");
+		user.setMobileNo("7565201087");
+		user.setEmailId("kumari.surbhi1999@hotmail.com");
+		user.setDateOfBirth(Utility.convertStringToDate("1999-04-14"));
 		String jsonRequest = objectMapper.writeValueAsString(user);
 		MvcResult result = mockMvc.perform(
 				post("/v1/register/saveUser").content(jsonRequest).contentType(MediaType.APPLICATION_JSON_VALUE))

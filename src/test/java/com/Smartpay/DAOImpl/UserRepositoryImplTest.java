@@ -109,6 +109,34 @@ class UserRepositoryImplTest extends BaseTest {
 		Assertions.assertNotNull(result);
 	}
 
+	@DisplayName("Test UpdateUserDetails")
+	@Test
+	public void testUpdateUserDetails() {
+		logger.info("testUpdateUserDetails");
+		User userRegistration = new User();
+		Role merchantRole = roleRepository.findRoleByName(UserRole.MERCHANT.getRoleName());
+		List<Role> roleList = Arrays.asList(merchantRole);
+		userRegistration.setApplicantName("Sridhar Reddy");
+		userRegistration.setEmailId("sridhar.reddy@outlook.com");
+		userRegistration.setMobileNo("8500692510");
+		userRegistration.setDateOfBirth(Utility.convertStringToDate("1993-10-10"));
+		userRegistration.setBankingServiceStatus(YesNO.NO);
+		userRegistration.setIsActive(IsActive.ACTIVE);
+		userRegistration.setRole(UserRole.MERCHANT.getRoleName());
+		userRegistration.setRoles(roleList.stream().collect(Collectors.toSet()));
+		userRegistration.setPassword(
+				passwordEncoder.encode(StringUtil.generateDefaultPassword(userRegistration.getApplicantName())));
+		userRegistration.setCustomerId((Utility.generateRandomfiveDigitNo()));
+		userRegistration.setUsername("IR" + StringUtil.getLastSixDigitOfMobileNo(userRegistration.getMobileNo()));
+
+		User parentDetails = userRepos.getAdminDetails();
+		if (null != parentDetails) {
+			userRegistration.setParentUsername(parentDetails.getUsername());
+		}
+		boolean result = userRepos.updateUserDetails(userRegistration);
+		Assertions.assertTrue(result);
+	}
+
 	@AfterAll
 	public void finish() {
 		logger.info("UserRepository Methods Test Finished....");

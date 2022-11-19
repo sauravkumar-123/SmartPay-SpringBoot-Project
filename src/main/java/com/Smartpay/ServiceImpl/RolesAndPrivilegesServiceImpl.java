@@ -28,10 +28,11 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 
 	@Override
 	public Privileges createWritePrivileges() {
+		logger.info("Enter into RolesAndPrivilegesService::createWritePrivileges()");
 		String autheritie = UserPrivilege.CREATE.getPrivilegeName();
 		Privileges privilege = privilegeRepository.findPrivilegeByName(autheritie);
 		if (null == privilege) {
-			logger.info("Set CREATE Privilege");
+			logger.debug("Set CREATE Privilege");
 			privilege = new Privileges();
 			privilege.setPrivilegeName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
@@ -41,10 +42,11 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 
 	@Override
 	public Privileges createReadPrivileges() {
+		logger.info("Enter into RolesAndPrivilegesService::createReadPrivileges()");
 		String autheritie = UserPrivilege.READ.getPrivilegeName();
 		Privileges privilege = privilegeRepository.findPrivilegeByName(autheritie);
 		if (null == privilege) {
-			logger.info("Set READ Privilege");
+			logger.debug("Set READ Privilege");
 			privilege = new Privileges();
 			privilege.setPrivilegeName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
@@ -54,10 +56,11 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 
 	@Override
 	public Privileges createUpdatePrivileges() {
+		logger.info("Enter into RolesAndPrivilegesService::createUpdatePrivileges()");
 		String autheritie = UserPrivilege.UPDATE.getPrivilegeName();
 		Privileges privilege = privilegeRepository.findPrivilegeByName(autheritie);
 		if (null == privilege) {
-			logger.info("Set UPDATE Privilege");
+			logger.debug("Set UPDATE Privilege");
 			privilege = new Privileges();
 			privilege.setPrivilegeName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
@@ -67,10 +70,11 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 
 	@Override
 	public Privileges createDeletePrivileges() {
+		logger.info("Enter into RolesAndPrivilegesService::createDeletePrivileges()");
 		String autheritie = UserPrivilege.DELETE.getPrivilegeName();
 		Privileges privilege = privilegeRepository.findPrivilegeByName(autheritie);
 		if (null == privilege) {
-			logger.info("Set DELETE Privilege");
+			logger.debug("Set DELETE Privilege");
 			privilege = new Privileges();
 			privilege.setPrivilegeName(autheritie);
 			privilegeRepository.savePrivilege(privilege);
@@ -80,10 +84,11 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 
 	@Override
 	public Role createAdminRole(Set<Privileges> adminPrivilegesSet) {
+		logger.info("Enter into RolesAndPrivilegesService::createAdminRole()");
 		String roleName = UserRole.ADMIN.getRoleName();
 		Role role = roleRepository.findRoleByName(roleName);
 		if (null == role) {
-			logger.info("Set ADMIN role and its privileges");
+			logger.debug("Set ADMIN role and its privileges");
 			role = new Role();
 			role.setRoleName(roleName);
 			role.setPrivileges(adminPrivilegesSet);
@@ -94,10 +99,11 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 
 	@Override
 	public Role createMerchantRole(Set<Privileges> merchantPrivilegesSet) {
+		logger.info("Enter into RolesAndPrivilegesService::createMerchantRole()");
 		String roleName = UserRole.MERCHANT.getRoleName();
 		Role role = roleRepository.findRoleByName(roleName);
 		if (null == role) {
-			logger.info("Set MERCHANT role and its privileges");
+			logger.debug("Set MERCHANT role and its privileges");
 			role = new Role();
 			role.setRoleName(roleName);
 			role.setPrivileges(merchantPrivilegesSet);
@@ -108,10 +114,11 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 
 	@Override
 	public Role createDistributorRole(Set<Privileges> distributorPrivilegesSet) {
+		logger.info("Enter into RolesAndPrivilegesService::createDistributorRole()");
 		String roleName = UserRole.DISTRIBUTOR.getRoleName();
 		Role role = roleRepository.findRoleByName(roleName);
 		if (null == role) {
-			logger.info("Set DISTRIBUTOR role and its privileges");
+			logger.debug("Set DISTRIBUTOR role and its privileges");
 			role = new Role();
 			role.setRoleName(roleName);
 			role.setPrivileges(distributorPrivilegesSet);
@@ -122,10 +129,11 @@ public class RolesAndPrivilegesServiceImpl implements RolesAndPrivilegesService 
 
 	@Override
 	public Role createMasterDistributor(Set<Privileges> masterDistributorPrivilegesSet) {
+		logger.info("Enter into RolesAndPrivilegesService::createMasterDistributor()");
 		String roleName = UserRole.MASTERDISTRIBUTOR.getRoleName();
 		Role role = roleRepository.findRoleByName(roleName);
 		if (null == role) {
-			logger.info("Set MASTERDISTRIBUTOR role and its privileges");
+			logger.debug("Set MASTERDISTRIBUTOR role and its privileges");
 			role = new Role();
 			role.setRoleName(roleName);
 			role.setPrivileges(masterDistributorPrivilegesSet);

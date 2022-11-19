@@ -15,4 +15,6 @@ public interface UserRepository {
 	public User getUserDetails(String emailId, String mobno);
 
 	public User findUserByUsername(String username);
+
+	public boolean updateUserDetails(User user);
 }

@@ -12,7 +12,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -32,7 +31,6 @@ import com.Smartpay.Enum.EnumsStatus.IsActive;
 import com.Smartpay.Enum.EnumsStatus.MaritalStatus;
 import com.Smartpay.Enum.EnumsStatus.YesNO;
 import com.Smartpay.FileUpload.MerchantDocuments;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -52,6 +50,11 @@ import lombok.Setter;
 @DynamicUpdate
 public class Merchant extends BaseEntity {
 
+//	@PrePersist
+//	void preInsert() {
+//		merchantIdentificationNo = "402880ea53e092e70264e093aa180006";
+//	}
+
 	@Id
 	@GeneratedValue(generator = "idGen")
 	@GenericGenerator(name = "idGen", strategy = "uuid.hex")
@@ -59,10 +62,18 @@ public class Merchant extends BaseEntity {
 	@Size(min = 1, max = 200, message = "min 1 and max 200 character are allowed")
 	private String merchantIdentificationNo;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-	@JsonBackReference
-	@JoinColumn(name = "userIdentificationNo")
-	private User user;
+	/*
+	 * @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional =false)
+	 * 
+	 * @JsonBackReference
+	 * 
+	 * @JoinColumn(name = "userIdentificationNo") private User user;
+	 * 
+	 */
+
+	@Column(name = "User_Identification_No", length = 200)
+	@Size(max = 200)
+	private String userIdentificationNo;
 
 	@OneToMany(mappedBy = "merchant", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference

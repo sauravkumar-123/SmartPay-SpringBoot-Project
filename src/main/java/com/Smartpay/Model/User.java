@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -57,6 +58,11 @@ import lombok.ToString;
 @DynamicUpdate
 public class User extends BaseEntity {
 
+//	@PrePersist
+//	void preInsert() {
+//		userIdentificationNo = "402880ea83e092e70163e093aa280009";
+//	}
+
 	@Id
 	@GeneratedValue(generator = "idGen")
 	@GenericGenerator(name = "idGen", strategy = "uuid.hex")
@@ -67,9 +73,9 @@ public class User extends BaseEntity {
 	@Column(name = "Customer_Id")
 	private Long customerId;
 
-	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-	@JsonManagedReference
-	private Merchant merchant;
+//	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+//	@JsonManagedReference
+//	private Merchant merchant;
 
 	@Column(name = "Username", length = 10)
 	private String username;

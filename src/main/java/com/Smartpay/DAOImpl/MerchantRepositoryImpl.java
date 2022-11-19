@@ -19,7 +19,6 @@ import com.Smartpay.DAO.MerchantRepository;
 import com.Smartpay.Enum.EnumsStatus.IsActive;
 import com.Smartpay.Exception.GlobalException;
 import com.Smartpay.Model.Merchant;
-import com.Smartpay.Model.User;
 
 @Repository
 public class MerchantRepositoryImpl implements MerchantRepository {
@@ -52,19 +51,19 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 			if (transaction != null)
 				transaction.rollback();
 			logger.error("Exception Message{} " + e.getMessage());
-			throw new GlobalException("Unbale To Save Merchant Details");
+			throw new GlobalException("Unbale To Save Merchant Details!! Error:: " + e.getMessage());
 		}
 	}
 
 	@Override
-	public Merchant findMerchantByUserDetails(User user) {
+	public Merchant findMerchantByUserId(String identificationNo) {
 		logger.info("Entred into MerchantRepository::findMerchantByUserDetails()");
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(Merchant.class, "merchant");
-			criteria.add(Restrictions.and(Restrictions.eq("merchant.user", user),
+			criteria.add(Restrictions.and(Restrictions.eq("merchant.userIdentificationNo", identificationNo),
 					Restrictions.eq("merchant.isActive", IsActive.ACTIVE)));
 			criteria.setProjection(Projections.projectionList()
 					.add(Projections.alias(Projections.property("merchant.merchantIdentificationNo"),
@@ -94,9 +93,10 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 	public Merchant findMerchantById(String identificationNo) {
 		logger.info("Entred into MerchantRepository::findMerchantById()");
 		Session session = entityManager.unwrap(Session.class);
-		String qry = "SELECT m.merchantIdentificationNo AS merchantIdentificationNo, m.aadhaarcardNo AS aadhaarcardNo, m.isActive AS isActive FROM Merchant m WHERE m.merchantIdentificationNo=:id";
+		String qry = "SELECT m.merchantIdentificationNo AS merchantIdentificationNo, m.aadhaarcardNo AS aadhaarcardNo FROM Merchant m WHERE m.merchantIdentificationNo=:id AND m.isActive=:status";
 		Query query = session.createQuery(qry);
 		query.setParameter("id", identificationNo);
+		query.setParameter("status", IsActive.ACTIVE);
 		logger.debug("Query", query);
 		Merchant merchant = (Merchant) query.uniqueResult();
 		return merchant;

@@ -41,7 +41,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public RegistrationResponse registerAdmin(User user) {
-		logger.info("Enter Into Admin Registration Service");
+		logger.info("Enter into Admin Registration Service");
 		User userData = userRepository.getUserDetails(user.getEmailId(), user.getMobileNo());
 		if (null == userData) {
 			Role adminRole = roleRepository.findRoleByName(UserRole.ADMIN.getRoleName());
@@ -74,7 +74,7 @@ public class AdminServiceImpl implements AdminService {
 			mainWallet.setDebitType(null);
 			boolean saveStatus = userRepository.saveUserDetails(userRegistration, mainWallet);
 			if (saveStatus) {
-				logger.info("Admin and Mainwallet Details{}" + userRegistration + " {} " + mainWallet);
+				logger.debug("Admin and Mainwallet Details{}" + userRegistration + " {} " + mainWallet);
 				RegistrationResponse response = new RegistrationResponse();
 				response.setApplicantName(userRegistration.getApplicantName());
 				response.setBankingServiceStatus(userRegistration.getBankingServiceStatus());
@@ -89,7 +89,7 @@ public class AdminServiceImpl implements AdminService {
 				return null;
 			}
 		} else {
-			logger.debug("Admin Registration Details Already Present....");
+			logger.error("Admin Registration Details Already Present....");
 			throw new GlobalException("Admin Details Already Avaliable");
 		}
 	}

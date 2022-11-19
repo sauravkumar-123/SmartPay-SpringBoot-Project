@@ -37,6 +37,7 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
 
 	@Override
 	public MerchantDocuments getDocDetailsByMerchantDetail(Merchant merchant) {
+		logger.info("Entred into MerchantDocumentsRepository::getDocDetailsByMerchantDetail()");
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
@@ -53,13 +54,13 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
 					.add(Projections.alias(Projections.property("docs.isApproved"), "isApproved")));
 			criteria.setResultTransformer(Transformers.aliasToBean(MerchantDocuments.class));
 			MerchantDocuments result = (MerchantDocuments) criteria.uniqueResult();
-			logger.info("Documents Upload Details{}", result);
+			logger.debug("Documents Upload Details{}", result);
 			transaction.commit();
 			return result;
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.debug("Exception Message{} " + e.getMessage());
+			logger.error("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Fetch Documents Details");
 		}
 
@@ -67,6 +68,7 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
 
 	@Override
 	public MerchantDocuments saveDocumentsDetail(MerchantDocuments docdetails) {
+		logger.info("Entred into MerchantDocumentsRepository::saveDocumentsDetail()");
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
@@ -77,7 +79,7 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
 		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-			logger.debug("Exception Message{} " + e.getMessage());
+			logger.error("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unbale To Save Documents Details");
 		}
 	}

@@ -49,7 +49,7 @@ public class MerchantBankDetails extends BaseEntity {
 	private String bankDetailsID;
 
 	@NotBlank(message = "Invalid AccountHolder Name")
-	@Column(name = "Accoun_Holder_Name", length = 200)
+	@Column(name = "Account_Holder_Name", length = 200)
 	@Size(min = 1, max = 200, message = "Minimum 1 Or Maximum 200 Character are Allowed")
 	private String accountHolderName;
 

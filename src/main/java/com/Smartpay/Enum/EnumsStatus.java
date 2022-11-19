@@ -74,6 +74,6 @@ public class EnumsStatus {
 	}
 
 	public enum DocumentsUploadStatus {
-		Success, Pending, Failed
+		SUCCESS, PENDING, FAILED
 	}
 }

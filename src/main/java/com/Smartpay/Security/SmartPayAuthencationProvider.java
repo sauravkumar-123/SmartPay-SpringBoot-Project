@@ -17,7 +17,10 @@ import org.springframework.stereotype.Component;
 import com.Smartpay.DAO.UserRepository;
 import com.Smartpay.Model.User;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class SmartPayAuthencationProvider implements AuthenticationProvider {
 
 	@Autowired
@@ -28,6 +31,7 @@ public class SmartPayAuthencationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		log.info("Enter into SmartPayAuthencationProvider::authenticate()");
 		String userName = authentication.getName();
 		String password = authentication.getCredentials().toString();
 		User user = userRepository.findUserByUsername(userName);
@@ -37,9 +41,11 @@ public class SmartPayAuthencationProvider implements AuthenticationProvider {
 				authorities.add(new SimpleGrantedAuthority(user.getRole()));
 				return new UsernamePasswordAuthenticationToken(userName, password, authorities);
 			} else {
+				log.error("Authencation Failed!!!!..");
 				throw new BadCredentialsException("Invalid Password!!");
 			}
 		} else {
+			log.error("User Details Not Avaliable With Username:: ", userName);
 			throw new BadCredentialsException("User Not Registred With Username: " + userName);
 		}
 	}

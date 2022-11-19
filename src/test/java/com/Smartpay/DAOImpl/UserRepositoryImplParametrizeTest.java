@@ -191,6 +191,42 @@ public class UserRepositoryImplParametrizeTest extends BaseTest {
 		Assertions.assertNotNull(result);
 	}
 
+	@DisplayName("Test UpdateUserDetails")
+	@MethodSource("updateUserDetailsArguments")
+	@ParameterizedTest
+	public void testUpdateUserDetails(User user) {
+		logger.info("testUpdateUserDetails");
+		boolean result = userRepos.updateUserDetails(user);
+		Assertions.assertTrue(result);
+	}
+
+	private Stream<? extends Arguments> updateUserDetailsArguments() {
+
+		Role merchantRole = roleRepository.findRoleByName(UserRole.MERCHANT.getRoleName());
+		List<Role> roleList = Arrays.asList(merchantRole);
+
+		User userRegistration1 = new User();
+		userRegistration1.setApplicantName("Raghubindar Das");
+		userRegistration1.setEmailId("raghubindar.das045@gmail.com");
+		userRegistration1.setMobileNo("7541002658");
+		userRegistration1.setDateOfBirth(Utility.convertStringToDate("1996-03-07"));
+		userRegistration1.setBankingServiceStatus(YesNO.NO);
+		userRegistration1.setIsActive(IsActive.ACTIVE);
+		userRegistration1.setRole(UserRole.MERCHANT.getRoleName());
+		userRegistration1.setRoles(roleList.stream().collect(Collectors.toSet()));
+		userRegistration1.setPassword(
+				passwordEncoder.encode(StringUtil.generateDefaultPassword(userRegistration1.getApplicantName())));
+		userRegistration1.setCustomerId((Utility.generateRandomfiveDigitNo()));
+		userRegistration1.setUsername("IR" + StringUtil.getLastSixDigitOfMobileNo(userRegistration1.getMobileNo()));
+
+		User parentDetails = userRepos.getAdminDetails();
+		if (null != parentDetails) {
+			userRegistration1.setParentUsername(parentDetails.getUsername());
+		}
+
+		return Stream.of(Arguments.of(userRegistration1));
+	}
+
 	@AfterAll
 	public void finish() {
 		logger.info("UserRepository Methods ParametrizeTest Finished....");

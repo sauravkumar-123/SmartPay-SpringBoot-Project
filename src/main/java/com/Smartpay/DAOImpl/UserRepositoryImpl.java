@@ -10,6 +10,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
@@ -55,7 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
 			if (transaction != null)
 				transaction.rollback();
 			logger.error("Exception Message{} " + e.getMessage());
-			throw new GlobalException("Unable To Save User Details");
+			throw new GlobalException("Unable To Save User Details!! Error:: " + e.getMessage());
 		}
 //		finally {
 //		  session.close();
@@ -71,7 +72,7 @@ public class UserRepositoryImpl implements UserRepository {
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(User.class, "user");
-			criteria.add(Restrictions.ilike("user.username", "AD%"));
+			criteria.add(Restrictions.ilike("user.username", "AD%", MatchMode.START));
 			criteria.add(Restrictions.eq("user.isActive", IsActive.ACTIVE));
 			criteria.setProjection(Projections.projectionList()
 					.add(Projections.alias(Projections.property("user.userIdentificationNo"), "userIdentificationNo"))
@@ -184,6 +185,30 @@ public class UserRepositoryImpl implements UserRepository {
 //		finally {
 //			session.close();
 //		}
+	}
+
+	@Override
+	public boolean updateUserDetails(User user) {
+		logger.info("Entred into UserRepository::updateUserDetails()");
+		Session session = entityManager.unwrap(Session.class);
+		Transaction transaction = null;
+		boolean status = false;
+		try {
+			transaction = session.beginTransaction();
+			session.saveOrUpdate(user);
+			transaction.commit();
+			status = true;
+		} catch (Exception e) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.error("Exception Message{} " + e.getMessage());
+			throw new GlobalException("Unable To Update User Details!! Error:: " + e.getMessage());
+		}
+//		finally {
+//		  session.close();
+//		}
+		return status;
+
 	}
 
 }

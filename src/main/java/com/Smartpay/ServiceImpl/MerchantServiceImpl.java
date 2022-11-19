@@ -32,14 +32,20 @@ public class MerchantServiceImpl implements MerchantService {
 
 	@Override
 	public Merchant updateUserProfileToMerchant(String userName, Merchant merchant) {
-		logger.info("Enter Into updateUserProfileToMerchant");
+		logger.info("Enter into MerchantService::updateUserProfileToMerchant()");
+		Merchant result = null;
 		User user = userRepository.findUserByUsername(userName);
 		if (null != user) {
-			Merchant merchantDetails = merchantRepository.findMerchantByUserDetails(user);
+			Merchant merchantDetails = merchantRepository.findMerchantById(user.getUserIdentificationNo());
 			if (null == merchantDetails) {
 				Merchant merchantProfile = new Merchant();
+
+				// @ Going to update user banking service status.
 				user.setBankingServiceStatus(YesNO.YES);
-				merchantProfile.setUser(user);
+				user.setIsActive(IsActive.ACTIVE);
+
+				// @ now going to set Merchant Data.
+				merchantProfile.setUserIdentificationNo(user.getUserIdentificationNo());
 				merchantProfile.setBankDetails(merchant.getBankDetails());
 				merchantProfile.setAddresses(merchant.getAddresses());
 				merchantProfile.setGuardianName(merchant.getGuardianName());
@@ -49,7 +55,7 @@ public class MerchantServiceImpl implements MerchantService {
 				merchantProfile.setAepsServiceStatus(YesNO.NO);
 				merchantProfile.setEKYCstatus(YesNO.NO);
 				merchantProfile.setBankOnboardStatus(YesNO.NO);
-				merchantProfile.setDocumentsUploadStatus(DocumentsUploadStatus.Pending);
+				merchantProfile.setDocumentsUploadStatus(DocumentsUploadStatus.PENDING);
 				merchantProfile.setIsActive(IsActive.ACTIVE);
 				merchantProfile.setPanCardNo(merchant.getPanCardNo());
 				merchantProfile.setAadhaarcardNo(merchant.getAadhaarcardNo());
@@ -67,19 +73,25 @@ public class MerchantServiceImpl implements MerchantService {
 				aepsWallet.setIsActive(IsActive.ACTIVE);
 				aepsWallet.setCreditType(null);
 				aepsWallet.setDebitType(null);
+				aepsWallet.setMerchant(merchantProfile);
 				merchantProfile.setAepsWallet(aepsWallet);
-				Merchant result = merchantRepository.saveMerchantProfile(merchantProfile);
-				logger.info("Merchant Details{} ", result);
+				boolean updateResult = userRepository.updateUserDetails(user);
+				if (updateResult) {
+					result = merchantRepository.saveMerchantProfile(merchantProfile);
+					logger.debug("Merchant Details{} ", result);
+				} else {
+					logger.error("user banking service not updated..");
+					throw new GlobalException("Unable To Update User Banking Service Status..!!");
+				}
 				return result;
 			} else {
-				logger.debug("User Profile Already Upgraded To Merchant Type.....");
+				logger.error("User Profile Already Upgraded To Merchant Type.....");
 				throw new GlobalException("User Alreday Updgraded To Merchant Profile");
 			}
 		} else {
-			logger.debug("User Registration Not Found.....");
+			logger.error("User Registration Not Found.....");
 			throw new ResourceNotFoundException("No User Registred With: " + userName);
 		}
 
 	}
-
 }

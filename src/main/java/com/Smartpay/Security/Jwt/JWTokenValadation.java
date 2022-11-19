@@ -11,8 +11,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class JWTokenValadation {
 
 	@Value("${jwt.key}")
@@ -21,6 +23,7 @@ public class JWTokenValadation {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JWTokenValadation.class);
 
 	public boolean validateAccessToken(String token) {
+		log.info("Enter into JWT Token Valadation");
 		try {
 			Jwts.parser().setSigningKey(jwtKey).parseClaimsJws(token);
 			return true;
