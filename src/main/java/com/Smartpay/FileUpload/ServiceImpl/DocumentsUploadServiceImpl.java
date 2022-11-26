@@ -16,6 +16,7 @@ import com.Smartpay.FileUpload.Dao.MerchantDocumentsRepository;
 import com.Smartpay.FileUpload.Service.DocumentsUploadService;
 import com.Smartpay.Model.Merchant;
 import com.Smartpay.Request.MerchantDocumentsRequest;
+import com.Smartpay.Utility.StringUtil;
 
 import net.bytebuddy.asm.Advice.Return;
 
@@ -34,15 +35,15 @@ public class DocumentsUploadServiceImpl implements DocumentsUploadService {
 	private MerchantDocumentsRepository merchantDocumentsRepository;
 
 	@Override
-	public MerchantDocuments uploadDocumentsForBankingService(String identificationNo,
-			MerchantDocumentsRequest merchantDocumentsRequest) {
+	public MerchantDocuments uploadDocumentsForBankingService(String identificationNo, MultipartFile[] files) {
 		logger.info("Enter Into uploadDocumentsForBankingService");
-		Merchant merchant = merchantRepository.findMerchantById(identificationNo);
+		Merchant merchant = merchantRepository.findMerchantByMerchantId(identificationNo);
 		if (null != merchant) {
-			MerchantDocuments docs = merchantDocumentsRepository.getDocDetailsByMerchantDetail(merchant);
+			MerchantDocuments docs = merchantDocumentsRepository
+					.getDocDetailsByMerchantId(merchant.getMerchantIdentificationNo());
 			if (null == docs) {
-				String[] filelocationArr = fileStorageService.storeFile(merchantDocumentsRequest.getDocuments(),
-						merchant.getAadhaarcardNo());
+				String[] filelocationArr = fileStorageService.storeFile(files,
+						StringUtil.getLast4digit(merchant.getAadhaarcardNo()));
 				MerchantDocuments merchantDocuments = new MerchantDocuments();
 				merchantDocuments.setMerchant(merchant);
 				merchantDocuments.setAadhaarCardImagePath(filelocationArr[0]);

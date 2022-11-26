@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RegistrationControllerTest extends BaseTest {
+public class RegistrationControllerTest extends BaseTest {
 
 	private MockMvc mockMvc;
 
@@ -80,6 +80,7 @@ class RegistrationControllerTest extends BaseTest {
 	@AfterAll
 	public void finish() {
 		logger.info("RegistrationController API's Test  Finished....");
+		mockMvc = null;
 	}
 
 }

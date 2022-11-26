@@ -58,7 +58,7 @@ public class FileStorageService {
 						|| (fileName.contains(".png") || fileName.contains(".PNG"))) {
 
 					try {
-						Path targetLocation = this.fileStorageLocation.resolve(fileName + aadharlast4digit);
+						Path targetLocation = this.fileStorageLocation.resolve(aadharlast4digit + fileName);
 						Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 						String fileLocation = String.valueOf(targetLocation);
 						resultArr[i] = fileLocation;

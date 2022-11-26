@@ -36,16 +36,14 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
 	}
 
 	@Override
-	public MerchantDocuments getDocDetailsByMerchantDetail(Merchant merchant) {
+	public MerchantDocuments getDocDetailsByMerchantId(String identificationNo) {
 		logger.info("Entred into MerchantDocumentsRepository::getDocDetailsByMerchantDetail()");
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(MerchantDocuments.class, "docs");
-			if (null != merchant) {
-				criteria.add(Restrictions.eq("docs.merchant", merchant));
-			}
+			criteria.add(Restrictions.eq("docs.merchant.merchantIdentificationNo", identificationNo));
 			criteria.setProjection(Projections.projectionList()
 					.add(Projections.alias(Projections.property("docs.merchantDocumentsID"), "merchantDocumentsID"))
 					.add(Projections.alias(Projections.property("docs.panCardImagePath"), "panCardImagePath"))
@@ -61,7 +59,7 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
 			if (transaction != null)
 				transaction.rollback();
 			logger.error("Exception Message{} " + e.getMessage());
-			throw new GlobalException("Unbale To Fetch Documents Details");
+			throw new GlobalException("Unable To Fetch Documents Details");
 		}
 
 	}
@@ -80,7 +78,7 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
 			if (transaction != null)
 				transaction.rollback();
 			logger.error("Exception Message{} " + e.getMessage());
-			throw new GlobalException("Unbale To Save Documents Details");
+			throw new GlobalException("Unable To Save Documents Details");
 		}
 	}
 

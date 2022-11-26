@@ -8,7 +8,7 @@ import com.Smartpay.Model.Merchant;
 @Repository
 public interface MerchantDocumentsRepository {
 
-	public MerchantDocuments getDocDetailsByMerchantDetail(Merchant merchant);
+	public MerchantDocuments getDocDetailsByMerchantId(String identificationNo);
 
 	public MerchantDocuments saveDocumentsDetail(MerchantDocuments docdetails);
 

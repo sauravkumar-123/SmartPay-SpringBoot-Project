@@ -36,7 +36,7 @@ public class MerchantServiceImpl implements MerchantService {
 		Merchant result = null;
 		User user = userRepository.findUserByUsername(userName);
 		if (null != user) {
-			Merchant merchantDetails = merchantRepository.findMerchantById(user.getUserIdentificationNo());
+			Merchant merchantDetails = merchantRepository.findMerchantByUserId(user.getUserIdentificationNo());
 			if (null == merchantDetails) {
 				Merchant merchantProfile = new Merchant();
 

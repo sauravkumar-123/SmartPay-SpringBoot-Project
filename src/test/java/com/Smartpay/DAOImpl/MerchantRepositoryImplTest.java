@@ -1,34 +1,54 @@
 package com.Smartpay.DAOImpl;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-class MerchantRepositoryImplTest {
+import com.Smartpay.Base.BaseTest;
+import com.Smartpay.DAO.MerchantRepository;
+import com.Smartpay.Model.Merchant;
 
-	@Test
-	void testMerchantRepositoryImplEntityManager() {
-		fail("Not yet implemented");
+@SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class MerchantRepositoryImplTest extends BaseTest {
+
+	@Autowired
+	private MerchantRepository merchantRepository;
+
+	@BeforeAll
+	public void init() {
+		logger.info("MerchantRepository Methods Test Start....");
+		merchantRepository = new MerchantRepositoryImpl(super.entityManager);
 	}
 
-	@Test
-	void testMerchantRepositoryImpl() {
-		fail("Not yet implemented");
-	}
-
+	@DisplayName("Test SaveMerchantProfile")
 	@Test
 	void testSaveMerchantProfile() {
-		fail("Not yet implemented");
+		logger.info("testSaveMerchantProfile");
 	}
 
+	@DisplayName("Test FindMerchantByUserId")
 	@Test
-	void testFindMerchantByUserDetails() {
-		fail("Not yet implemented");
+	void testFindMerchantByUserId() {
+		logger.info("testFindMerchantByUserId");
 	}
 
+	@DisplayName("Test FindMerchantByMerchantId")
 	@Test
-	void testFindMerchantById() {
-		fail("Not yet implemented");
+	void testFindMerchantByMerchantId() {
+		logger.info("testFindMerchantById");
+		Merchant result = merchantRepository.findMerchantByMerchantId("402880e984afcd930184afdd5dac000a");
+		Assertions.assertNotNull(result);
 	}
 
+	@AfterAll
+	public void finish() {
+		logger.info("MerchantRepository Methods Test Start....");
+		merchantRepository = null;
+	}
 }

@@ -51,7 +51,7 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 			if (transaction != null)
 				transaction.rollback();
 			logger.error("Exception Message{} " + e.getMessage());
-			throw new GlobalException("Unbale To Save Merchant Details!! Error:: " + e.getMessage());
+			throw new GlobalException("Unable To Save Merchant Details!! Error:: " + e.getMessage());
 		}
 	}
 
@@ -85,21 +85,54 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 			if (transaction != null)
 				transaction.rollback();
 			logger.error("Exception Message{} " + e.getMessage());
-			throw new GlobalException("Unbale To Fetch Merchant Details");
+			throw new GlobalException("Unable To Check Merchant Records!!Try Again..");
 		}
 	}
 
 	@Override
-	public Merchant findMerchantById(String identificationNo) {
-		logger.info("Entred into MerchantRepository::findMerchantById()");
+	public Merchant findMerchantByMerchantId(String identificationNo) {
+		logger.info("Entred into MerchantRepository::findMerchantByMerchantId()");
 		Session session = entityManager.unwrap(Session.class);
-		String qry = "SELECT m.merchantIdentificationNo AS merchantIdentificationNo, m.aadhaarcardNo AS aadhaarcardNo FROM Merchant m WHERE m.merchantIdentificationNo=:id AND m.isActive=:status";
-		Query query = session.createQuery(qry);
-		query.setParameter("id", identificationNo);
-		query.setParameter("status", IsActive.ACTIVE);
-		logger.debug("Query", query);
-		Merchant merchant = (Merchant) query.uniqueResult();
-		return merchant;
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			Criteria criteria = session.createCriteria(Merchant.class, "merchant");
+			criteria.add(Restrictions.and(Restrictions.eq("merchant.merchantIdentificationNo", identificationNo),
+					Restrictions.eq("merchant.isActive", IsActive.ACTIVE)));
+			criteria.setProjection(Projections.projectionList()
+					.add(Projections.alias(Projections.property("merchant.merchantIdentificationNo"),
+							"merchantIdentificationNo"))
+					.add(Projections.alias(Projections.property("merchant.isActive"), "isActive"))
+					.add(Projections.alias(Projections.property("merchant.documentsUploadStatus"),
+							"documentsUploadStatus"))
+					.add(Projections.alias(Projections.property("merchant.aadhaarcardNo"),
+							"aadhaarcardNo"))
+					.add(Projections.alias(Projections.property("merchant.createdDate"), "createdDate"))
+					.add(Projections.alias(Projections.property("merchant.updatedDate"), "updatedDate")));
+			criteria.setResultTransformer(Transformers.aliasToBean(Merchant.class));
+			Merchant merchantData = (Merchant) criteria.uniqueResult();
+			logger.debug("Merchant Details{} ", merchantData);
+			transaction.commit();
+			return merchantData;
+		} catch (Exception e) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.error("Exception Message{} " + e.getMessage());
+			throw new GlobalException("Unable To Check Merchant Records!!Try Again..");
+		}
 	}
+
+//	@Override
+//	public Merchant findMerchantById(String identificationNo) {
+//		logger.info("Entred into MerchantRepository::findMerchantById()");
+//		Session session = entityManager.unwrap(Session.class);
+//		String qry = "SELECT m.merchantIdentificationNo AS merchantIdentificationNo, m.aadhaarcardNo AS aadhaarcardNo FROM Merchant m WHERE m.userIdentificationNo=:id AND m.isActive=:status";
+//		Query query = session.createQuery(qry);
+//		query.setParameter("id", identificationNo);
+//		query.setParameter("status", IsActive.ACTIVE);
+//		logger.debug("Query", query);
+//		Merchant merchant = (Merchant) query.uniqueResult();
+//		return merchant;
+//	}
 
 }

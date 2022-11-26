@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,18 +16,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.Smartpay.FileUpload.FileStorageService;
 import com.Smartpay.FileUpload.MerchantDocuments;
 import com.Smartpay.FileUpload.Service.DocumentsUploadService;
 import com.Smartpay.Model.Merchant;
-import com.Smartpay.Request.MerchantDocumentsRequest;
 import com.Smartpay.Response.Response;
 import com.Smartpay.Service.MerchantService;
 
@@ -76,12 +77,16 @@ public class UserController {
 	@ApiOperation("Upload Merchnat Documents To Verify With Admin")
 	@RequestMapping(value = "/uploadDocuments/{identificationNo}", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> uploadMerchantDocuments(@PathVariable("identificationNo") String identificationNo,
-			@Valid @ModelAttribute MerchantDocumentsRequest merchantDocumentsRequest) {
+			@Valid @RequestParam("aadharCard") MultipartFile aadharCard,
+			@Valid @RequestParam("panCard") MultipartFile panCard,
+			@Valid @RequestParam("cancelCheque") MultipartFile cancelCheque) {
 		logger.info("Entred into UserController::uploadMerchantDocuments()");
-		logger.info("Request Payload to uploadMerchantDocuments {} ", identificationNo,
-				merchantDocumentsRequest.getDocuments());
-		MerchantDocuments result = documentsUploadService.uploadDocumentsForBankingService(identificationNo,
-				merchantDocumentsRequest);
+		MultipartFile[] files = new MultipartFile[3];
+		files[0] = aadharCard;
+		files[1] = panCard;
+		files[2] = cancelCheque;
+		logger.info("Request Payload to uploadMerchantDocuments {} ", identificationNo, files);
+		MerchantDocuments result = documentsUploadService.uploadDocumentsForBankingService(identificationNo, files);
 		if (null != result) {
 			logger.debug("Documents Uplaod Response {}", result);
 			return new ResponseEntity<Response>(
