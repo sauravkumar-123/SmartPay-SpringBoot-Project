@@ -43,7 +43,7 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(MerchantDocuments.class, "docs");
-			criteria.add(Restrictions.eq("docs.merchant.merchantIdentificationNo", identificationNo));
+			criteria.add(Restrictions.eq("docs.merchantIdentificationNo", identificationNo));
 			criteria.setProjection(Projections.projectionList()
 					.add(Projections.alias(Projections.property("docs.merchantDocumentsID"), "merchantDocumentsID"))
 					.add(Projections.alias(Projections.property("docs.panCardImagePath"), "panCardImagePath"))

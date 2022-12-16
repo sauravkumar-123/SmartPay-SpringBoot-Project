@@ -12,4 +12,6 @@ public interface MerchantRepository {
 	public Merchant findMerchantByUserId(String identificationNo);
 
 	public Merchant findMerchantByMerchantId(String identificationNo);
+
+	public boolean updateMerchantDetails(Merchant merchant);
 }

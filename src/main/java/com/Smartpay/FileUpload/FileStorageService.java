@@ -34,7 +34,7 @@ public class FileStorageService {
 		try {
 			Files.createDirectories(this.fileStorageLocation);
 		} catch (Exception ex) {
-			logger.debug("Failed To Create Directory");
+			logger.error("Failed To Create Directory");
 			throw new FileStorageException("Could not create the directory where the uploaded files will be stored.",
 					ex);
 		}
@@ -58,18 +58,21 @@ public class FileStorageService {
 						|| (fileName.contains(".png") || fileName.contains(".PNG"))) {
 
 					try {
-						Path targetLocation = this.fileStorageLocation.resolve(aadharlast4digit + fileName);
+						Path targetLocation = this.fileStorageLocation.resolve(aadharlast4digit + " " + fileName);
 						Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 						String fileLocation = String.valueOf(targetLocation);
 						resultArr[i] = fileLocation;
 					} catch (IOException ex) {
+						logger.error("Could not store file ", fileName);
 						throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
 					}
 
 				} else {
+					logger.error("Allowed Files in .JPG, .JPEG, .PNG Format Only");
 					throw new FileStorageException("Allowed Files in .JPG, .JPEG, .PNG Format Only");
 				}
 			} else {
+				logger.error("Invalid File Received!!");
 				throw new FileNotFoundException("Invalid File Received!!");
 			}
 		}

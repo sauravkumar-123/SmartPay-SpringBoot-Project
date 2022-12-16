@@ -1,16 +1,12 @@
 package com.Smartpay.FileUpload;
 
 import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -22,8 +18,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.Smartpay.Enum.EnumsStatus.YesNO;
 import com.Smartpay.Model.BaseEntity;
-import com.Smartpay.Model.Merchant;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -62,8 +56,15 @@ public class MerchantDocuments extends BaseEntity {
 	@Column(name = "IsApproved", length = 4)
 	private YesNO isApproved;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JsonBackReference
-	@JoinColumn(name = "merchantIdentificationNo")
-	private Merchant merchant;
+	/*
+	 * @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	 * 
+	 * @JsonBackReference
+	 * 
+	 * @JoinColumn(name = "merchantIdentificationNo") private Merchant merchant;
+	 */
+
+	@Column(name = "Merchant_Identification_No", length = 200)
+	@Size(max = 200)
+	private String merchantIdentificationNo;
 }

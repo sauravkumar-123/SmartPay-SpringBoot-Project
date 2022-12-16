@@ -87,9 +87,14 @@ public class Merchant extends BaseEntity {
 	@JsonManagedReference
 	private AEPSWallet aepsWallet;
 
-	@OneToOne(mappedBy = "merchant", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JsonManagedReference
-	private MerchantDocuments merchantDocuments;
+	/*
+	 * @OneToOne(mappedBy = "merchant", fetch = FetchType.LAZY, cascade =
+	 * CascadeType.ALL)
+	 * 
+	 * @JsonManagedReference
+	 * 
+	 * private MerchantDocuments merchantDocuments;
+	 */
 
 	@NotBlank(message = "Invalid Father/Husband Name")
 	@Size(min = 1, max = 200, message = "Minimum 1 Or Maximum 200 Character are Allowed")
@@ -140,12 +145,12 @@ public class Merchant extends BaseEntity {
 	@Size(max = 100, message = "Max 100 Character are allowed")
 	private String businesspanno;
 
-	@NotBlank(message = "Invalid GST Nummber")
+	@NotBlank(message = "Invalid GST Number")
 	@Size(max = 100, message = "Max 100 Character are allowed")
 	@Column(name = "GST_No", length = 100)
 	private String gstNo;
 
-	@NotBlank(message = "Invalid TAN Nummber")
+	@NotBlank(message = "Invalid TAN Number")
 	@Size(max = 100, message = "Max 100 Character are allowed")
 	@Column(name = "TANNo", length = 100)
 	private String tanNo;

@@ -1,11 +1,12 @@
 package com.Smartpay.DAOImpl;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
@@ -92,6 +93,7 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 	@Override
 	public Merchant findMerchantByMerchantId(String identificationNo) {
 		logger.info("Entred into MerchantRepository::findMerchantByMerchantId()");
+		Merchant merchantData = null;
 		Session session = entityManager.unwrap(Session.class);
 		Transaction transaction = null;
 		try {
@@ -99,18 +101,29 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 			Criteria criteria = session.createCriteria(Merchant.class, "merchant");
 			criteria.add(Restrictions.and(Restrictions.eq("merchant.merchantIdentificationNo", identificationNo),
 					Restrictions.eq("merchant.isActive", IsActive.ACTIVE)));
-			criteria.setProjection(Projections.projectionList()
-					.add(Projections.alias(Projections.property("merchant.merchantIdentificationNo"),
-							"merchantIdentificationNo"))
-					.add(Projections.alias(Projections.property("merchant.isActive"), "isActive"))
-					.add(Projections.alias(Projections.property("merchant.documentsUploadStatus"),
-							"documentsUploadStatus"))
-					.add(Projections.alias(Projections.property("merchant.aadhaarcardNo"),
-							"aadhaarcardNo"))
-					.add(Projections.alias(Projections.property("merchant.createdDate"), "createdDate"))
-					.add(Projections.alias(Projections.property("merchant.updatedDate"), "updatedDate")));
-			criteria.setResultTransformer(Transformers.aliasToBean(Merchant.class));
-			Merchant merchantData = (Merchant) criteria.uniqueResult();
+			List<Merchant> list = criteria.list();
+			/*
+			 * criteria.add(Restrictions.and(Restrictions.eq(
+			 * "merchant.merchantIdentificationNo", identificationNo),
+			 * Restrictions.eq("merchant.isActive", IsActive.ACTIVE)));
+			 * criteria.setProjection(Projections.projectionList()
+			 * .add(Projections.alias(Projections.property(
+			 * "merchant.merchantIdentificationNo"), "merchantIdentificationNo"))
+			 * .add(Projections.alias(Projections.property("merchant.isActive"),
+			 * "isActive"))
+			 * .add(Projections.alias(Projections.property("merchant.documentsUploadStatus")
+			 * , "documentsUploadStatus"))
+			 * .add(Projections.alias(Projections.property("merchant.aadhaarcardNo"),
+			 * "aadhaarcardNo"))
+			 * .add(Projections.alias(Projections.property("merchant.createdDate"),
+			 * "createdDate"))
+			 * .add(Projections.alias(Projections.property("merchant.updatedDate"),
+			 * "updatedDate")));
+			 * criteria.setResultTransformer(Transformers.aliasToBean(Merchant.class));
+			 */
+			if (list.size() > 0) {
+				merchantData = list.get(0);
+			}
 			logger.debug("Merchant Details{} ", merchantData);
 			transaction.commit();
 			return merchantData;
@@ -120,6 +133,27 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 			logger.error("Exception Message{} " + e.getMessage());
 			throw new GlobalException("Unable To Check Merchant Records!!Try Again..");
 		}
+	}
+
+	@Override
+	public boolean updateMerchantDetails(Merchant merchant) {
+		logger.info("Enter into MerchantRepository::updateMerchantDetails()");
+		Session session = entityManager.unwrap(Session.class);
+		Transaction transaction = null;
+		boolean status = false;
+		try {
+			transaction = session.beginTransaction();
+			session.saveOrUpdate(merchant);
+			transaction.commit();
+			status = true;
+		} catch (Exception e) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.error("Exception Message{} " + e.getMessage());
+			throw new GlobalException("Unable To Update Merchant Documents upload status!! Error:: " + e.getMessage());
+		}
+		return status;
+
 	}
 
 //	@Override
