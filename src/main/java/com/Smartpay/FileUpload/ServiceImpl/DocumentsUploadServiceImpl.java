@@ -55,7 +55,7 @@ public class DocumentsUploadServiceImpl implements DocumentsUploadService {
 				merchantDocuments.setIsApproved(YesNO.NO);
 				merchantDocuments.setMerchantIdentificationNo(merchant.getMerchantIdentificationNo());
 				if (merchantRepository.updateMerchantDetails(merchant)) {
-					result = merchantDocumentsRepository.saveDocumentsDetail(docs);
+					result = merchantDocumentsRepository.saveDocumentsDetail(merchantDocuments);
 					logger.debug("Merchant Uploaded documents: {}", result);
 				} else {
 					logger.error("merchant documents upload status not updated..");

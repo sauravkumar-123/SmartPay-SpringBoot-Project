@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,6 +37,12 @@ public class SmartPayApplication {
 	@Value("${server.port}")
 	private String portno;
 
+	@Value("${app.message}")
+	private String appMessage;
+
+	@Value("${spring.profiles.active}")
+	private String profile;
+
 	private static final String dateTimeFormat = "dd-MM-yyyy HH:mm:ss";
 	private static final String dateFormat = "dd-MM-yyyy";
 
@@ -48,6 +55,14 @@ public class SmartPayApplication {
 	@PostConstruct
 	public void init() {
 		logger.info("<---------StarBankingandInsurance Application Server Run On PortNo:------------>" + portno);
+	}
+
+	@Profile(value = { "dev", "test", "uat", "prod" })
+	@Bean
+	public void getEnvironmentConfig() {
+		logger.info("<--- " + appMessage + " --->");
+		logger.info(
+				"<---------SmartPay Application Run On " + profile + " environment and PortNo:------------>" + portno);
 	}
 
 	@Bean

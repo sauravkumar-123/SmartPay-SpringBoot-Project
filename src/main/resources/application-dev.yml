@@ -1,0 +1,79 @@
+app:
+  api:
+    swagger:
+      enable: true
+  message: This is properties configuration for ${spring.application.name} from DEV environment   
+      
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8762/eureka/
+      
+file:
+  upload-dir: C:/Users/saura/Projects/ProjectFiles/smartPay/dev/Images/Uplaod
+  
+hibernate:
+  cache:
+    region:
+      factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+    use_second_level_cache: true
+    
+jwt:
+  header: Authorization
+  key: jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4
+  
+logging:
+  file:
+    name: C:/Users/saura/Projects/SmartPay_Logger/SmartPay/dev/SmartPay.log
+  level:
+    com:
+      Smartpay: DEBUG
+    org:
+      springframework:
+        security:
+          web:
+            FilterChainProxy: DEBUG
+    root: INFO
+    
+server:
+  error:
+    include-stacktrace: never
+  port: 6061
+  
+spring:
+  application:
+    name: SmartPay
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: SmartPay
+    password: 12345
+    platform: mysql
+    url: jdbc:mysql://localhost:3306/smartPayDev?serverTimezone=UTC
+    username: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+  main:
+    allow-circular-references: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 65324304311-tvh4snq709m3abctjfs83g1arlu06t83.apps.googleusercontent.com
+            client-secret: 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
+            
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 20KB
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+  #profiles:
+  #  active: test    

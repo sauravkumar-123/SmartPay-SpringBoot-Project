@@ -12,9 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +50,9 @@ public class AuthController {
 	@Autowired
 	private JWTUtils jwtUtils;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@ApiOperation("Login OTP Send API")
 	@RequestMapping(value = "/send-login-OTP", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> sendLoginOTP(
@@ -76,14 +81,14 @@ public class AuthController {
 	public ResponseEntity<Response> loginUser(
 			@Valid @RequestParam("username") @NotBlank(message = "Invalid Username") String username,
 			@Valid @RequestParam("password") @NotBlank(message = "Invalid Password") String password,
-			@Valid @RequestParam("otpdetails") @NotBlank(message = "Invalid OTP Details") String otpdetails,
+			@Valid @RequestParam("sessionId") @NotBlank(message = "Invalid OTP Details") String sessionId,
 			@Valid @RequestParam("inputOtp") @NotBlank(message = "Invalid OTP") String inputOtp) {
 		Authentication authentication = authProvider
 				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		logger.info("Authentication Details{} " + authentication);
 		if (null != authentication) {
-			TwoFactorResponse twoFactorResponse = Utility.verifyLoginOTP(otpdetails, inputOtp);
+			TwoFactorResponse twoFactorResponse = Utility.verifyLoginOTP(sessionId, inputOtp);
 			if (twoFactorResponse.getStatus().equalsIgnoreCase("Success")) {
 				User user = userRepository.findUserByUsername(authentication.getName());
 				String token = jwtUtils.generateAccessToken(user);
@@ -100,6 +105,59 @@ public class AuthController {
 		} else {
 			return new ResponseEntity<Response>(new Response(false, "Authencation Failed", null),
 					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@ApiOperation("API for send forgot password OTP")
+	@PostMapping("/forgotPassword/OTP/send")
+	public ResponseEntity<Response> forgotPasswordOTPsent(
+			@Valid @RequestParam("username") @NotBlank(message = "Invalid Username") String username) {
+		logger.info("Enter into AuthController::forgotPasswordOTPsent()");
+		User user = userRepository.findUserByUsername(username);
+		if (null != user) {
+			TwoFactorResponse twoFactorResponse = Utility.sendLoginOTP(user.getMobileNo());
+			if (twoFactorResponse.getStatus().equalsIgnoreCase("Success")) {
+				return new ResponseEntity<Response>(new Response(true, "OTP Sent", twoFactorResponse), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Response>(
+						new Response(false, "OTP Send Failed..Try Again!!", twoFactorResponse),
+						HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+		} else {
+			return new ResponseEntity<Response>(new Response(false, "User not found with username: " + username, null),
+					HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@ApiOperation("API for verify forgot password OTP and change user password")
+	@PostMapping("/forgotPassword/OTP/verify")
+	public ResponseEntity<Response> forgotPasswordOTPverify(
+			@Valid @RequestParam("username") @NotBlank(message = "Invalid Username") String username,
+			@Valid @RequestParam("sessionId") @NotBlank(message = "Invalid SessionId") String sessionId,
+			@Valid @RequestParam("inputOtp") @NotBlank(message = "Invalid OTP") String inputOtp,
+			@Valid @RequestParam("password") @NotBlank(message = "Invalid Password") String password) {
+		logger.info("Enter into AuthController::forgotPasswordOTPverify()");
+		User user = userRepository.findUserByUsername(username);
+		if (null != user) {
+			TwoFactorResponse twoFactorResponse = Utility.verifyLoginOTP(sessionId, inputOtp);
+			if (twoFactorResponse.getStatus().equalsIgnoreCase("Success")) {
+				user.setPassword(passwordEncoder.encode(password));
+				boolean result = userRepository.updateUserDetails(user);
+				if (result) {
+					return new ResponseEntity<Response>(new Response(true, "Password Successfully Updated", null),
+							HttpStatus.OK);
+				} else {
+					return null;
+				}
+			} else {
+				return new ResponseEntity<Response>(new Response(false, "OTP verification failed!!", twoFactorResponse),
+						HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+		} else {
+			return new ResponseEntity<Response>(new Response(false, "User not found with username: " + username, null),
+					HttpStatus.NOT_FOUND);
 		}
 	}
 
