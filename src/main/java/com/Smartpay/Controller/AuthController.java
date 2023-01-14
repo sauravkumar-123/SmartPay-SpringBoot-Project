@@ -81,7 +81,7 @@ public class AuthController {
 	public ResponseEntity<Response> loginUser(
 			@Valid @RequestParam("username") @NotBlank(message = "Invalid Username") String username,
 			@Valid @RequestParam("password") @NotBlank(message = "Invalid Password") String password,
-			@Valid @RequestParam("sessionId") @NotBlank(message = "Invalid OTP Details") String sessionId,
+			@Valid @RequestParam("sessionId") @NotBlank(message = "Invalid SessionId") String sessionId,
 			@Valid @RequestParam("inputOtp") @NotBlank(message = "Invalid OTP") String inputOtp) {
 		Authentication authentication = authProvider
 				.authenticate(new UsernamePasswordAuthenticationToken(username, password));

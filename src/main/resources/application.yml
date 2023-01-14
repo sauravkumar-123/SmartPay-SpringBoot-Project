@@ -58,6 +58,11 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+#  config:
+#     import: optional:ConfigurationService:http://localhost:4040
+  cloud:
+    config:
+      enabled: false    
   main:
     allow-circular-references: true
   security:
