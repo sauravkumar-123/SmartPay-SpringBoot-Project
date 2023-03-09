@@ -5,7 +5,11 @@ app:
   message: This is properties configuration for ${spring.application.name} from PRIMARY environment    
       
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
+    fetch-registry: true
+    register-with-eureka: true
     service-url:
       default-zone: http://localhost:8761/eureka/
       
@@ -60,9 +64,7 @@ spring:
     show-sql: true
 #  config:
 #     import: optional:ConfigurationService:http://localhost:4040
-  cloud:
-    config:
-      enabled: false    
+
   main:
     allow-circular-references: true
   security:
@@ -79,9 +81,19 @@ spring:
       file-size-threshold: 20KB
       max-file-size: 10MB
       max-request-size: 20MB
+      
+  cloud:
+      config:
+          enabled: false
+      compatibility-verifier:
+          enabled: false
   
-  profiles:
-    active: dev            #dev ,test, uat, prod  #VM Arguments
+  sleuth:
+      propagation:
+          type: w3c,b3    
+  
+ # profiles:
+ #   active: dev            #dev ,test, uat, prod  #VM Arguments
                            #@  -Dspring.profiles.active=qa
    
         

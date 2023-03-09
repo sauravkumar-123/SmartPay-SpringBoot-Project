@@ -5,7 +5,11 @@ app:
   message: This is properties configuration for ${spring.application.name} from UAT environment    
       
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
+    fetch-registry: true
+    register-with-eureka: true
     service-url:
       default-zone: http://localhost:8764/eureka/
       
@@ -74,6 +78,16 @@ spring:
       file-size-threshold: 20KB
       max-file-size: 10MB
       max-request-size: 20MB
+      
+  cloud:
+      config:
+          enabled: false
+      compatibility-verifier:
+          enabled: false
+  
+  sleuth:
+      propagation:
+          type: w3c,b3    
       
  # profiles:
  #  active: prod    

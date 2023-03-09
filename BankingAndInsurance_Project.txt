@@ -44,9 +44,68 @@ keyClock : t26yHVS3xBmCIqdhVtOenRJSNSrtgTQi
 
 /**************************************************************************************************************************/
 
+npx kill-port 8761
+
 Explain Plan
 Index
 How to understand the time required to execute a query 
 How do you proivde hint for the query
 Store Procedure.
-                  
+
+React----
+npm install -g create-react-app
+create-react-app --version   
+create-react-app <projectname>
+cd <projectname>
+npm start 
+
+
+ npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd smartpay
+  npm start    
+
+
+Splunk
+-----------
+root  root@54321
+For Eureka Server
+..................................
+8088          Review
+Input Type
+Token      :  6a3e694a-ba48-46ec-90fb-67ce131cdf3c
+source : log4j
+index :  eureka_server_dev_logs
+
+
+Name
+EurekaServer_logs
+Source name override
+eureka-server-logs
+Description
+N/A
+Enable indexer acknowledgements
+No
+Output Group
+N/A
+Allowed indexes
+eureka_server_dev_logs
+Default index
+eureka_server_dev_logs
+Source Type
+log4j
+App Context
+launcher
