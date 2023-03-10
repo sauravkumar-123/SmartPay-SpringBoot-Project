@@ -40,7 +40,6 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
             CriteriaBuilder builder = entityManager.getCriteriaBuilder();
             CriteriaQuery<MerchantDocuments> criteria = builder.createQuery(MerchantDocuments.class);
             Root<MerchantDocuments> root = criteria.from(MerchantDocuments.class);
-
             criteria.multiselect(root.get("merchantDocumentsID").alias("merchantDocumentsID"),
                     root.get("panCardImagePath").alias("panCardImagePath"),
                     root.get("aadhaarCardImagePath").alias("aadhaarCardImagePath"),
