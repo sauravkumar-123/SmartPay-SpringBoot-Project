@@ -81,7 +81,7 @@ public class MerchantServiceImpl implements MerchantService {
                 }
             } else {
                 logger.error("User Profile Already Upgraded To Merchant Type.....");
-                throw new GlobalException("User Alreday Updgraded To Merchant Profile");
+                throw new GlobalException("User Already Updgraded To Merchant Profile");
             }
         } else {
             logger.error("User Registration Not Found.....");

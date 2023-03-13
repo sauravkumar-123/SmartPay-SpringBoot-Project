@@ -169,7 +169,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Transactional(rollbackFor = Exception.class)
     public void updateBankingServiceStatus(String userIdNo, EnumsStatus.YesNO status) {
         logger.info("Enter into UserRepository::updateBankingServiceStatus()");
-        entityManager.createQuery("UPDATE User u SET u.bankingServiceStatus=:bankingStatus WHERE u.userIdentificationNo=:idNo AND u.isActive=:activeStatus", User.class)
+        entityManager.createQuery("UPDATE User u SET u.bankingServiceStatus=:bankingStatus WHERE u.userIdentificationNo=:idNo AND u.isActive=:activeStatus")
                 .setParameter("bankingStatus", status)
                 .setParameter("idNo", userIdNo)
                 .setParameter("activeStatus", IsActive.ACTIVE).executeUpdate();
@@ -180,7 +180,7 @@ public class UserRepositoryImpl implements UserRepository {
     public boolean updateUserLoginPassword(String userIdNo, String pwd) {
         logger.info("Enter into UserRepository::updateUserLoginPassword()");
         boolean result = false;
-        int row = entityManager.createQuery("UPDATE User u SET u.password=:pswd WHERE u.userIdentificationNo=:idNo AND u.isActive=:activeStatus", User.class)
+        int row = entityManager.createQuery("UPDATE User u SET u.password=:pswd WHERE u.userIdentificationNo=:idNo AND u.isActive=:activeStatus")
                 .setParameter("pswd", pwd)
                 .setParameter("idNo", userIdNo)
                 .setParameter("activeStatus", IsActive.ACTIVE).executeUpdate();

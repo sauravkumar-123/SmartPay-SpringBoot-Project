@@ -94,11 +94,12 @@ public class MerchantRepositoryImpl implements MerchantRepository {
 
             criteria.multiselect(root.get("merchantIdentificationNo").alias("merchantIdentificationNo"),
                     root.get("userIdentificationNo").alias("userIdentificationNo"),
-                    root.get("")).where(builder.and(
-                    builder.equal(root.get("merchantIdentificationNo"), identificationNo),
-                    builder.equal(root.get("isActive"), IsActive.ACTIVE)
-            )
-            );
+                    root.get("aadhaarcardNo").alias("aadhaarcardNo"))
+                    .where(builder.and(
+                            builder.equal(root.get("merchantIdentificationNo"), identificationNo),
+                            builder.equal(root.get("isActive"), IsActive.ACTIVE)
+                    )
+                    );
             List<Merchant> result = entityManager.createQuery(criteria).getResultList();
             Merchant merchantData = (!result.isEmpty() && result.get(0) != null) ? result.get(0) : null;
             logger.debug("Merchant Details{} ", merchantData);
@@ -113,7 +114,7 @@ public class MerchantRepositoryImpl implements MerchantRepository {
     @Transactional(rollbackFor = Exception.class)
     public void updateDocumentsUploadStatus(String identificationNo, EnumsStatus.DocumentsUploadStatus status) {
         logger.info("Enter into MerchantRepository::updateDocumentsUploadStatus()");
-        entityManager.createQuery("UPDATE Merchant mt SET mt.documentsUploadStatus=:uploadStatus WHERE mt.merchantIdentificationNo=:idNo AND mt.isActive=:activeStatus", Merchant.class)
+        entityManager.createQuery("UPDATE Merchant mt SET mt.documentsUploadStatus=:uploadStatus WHERE mt.merchantIdentificationNo=:idNo AND mt.isActive=:activeStatus")
                 .setParameter("uploadStatus", status)
                 .setParameter("idNo", identificationNo)
                 .setParameter("activeStatus", IsActive.ACTIVE).executeUpdate();

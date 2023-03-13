@@ -37,7 +37,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Setter
 @Getter
@@ -124,7 +123,7 @@ public class Merchant extends BaseEntity {
     private IsActive isActive;
 
     @Column(name = "Pancard_Number", length = 10)
-    @Size(min = 10, max = 10, message = "PanCard should be 10 Character")
+    @Size(min = 10, max = 10, message = "PanCard No should be 10 Character")
     private String panCardNo;
 
     @Column(name = "Aadhaarcard_Number", length = 12)

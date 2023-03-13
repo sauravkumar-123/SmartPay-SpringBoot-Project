@@ -61,7 +61,7 @@ public class DocumentsUploadServiceImpl implements DocumentsUploadService {
                 }
             } else {
                 logger.debug("Documents Already Uploaded");
-                throw new FileStorageException("Documents Alreday Uploaded");
+                throw new FileStorageException("Documents Already Uploaded");
             }
         } else {
             logger.error("Merchant Details Not Found To Uplaod Documents");
