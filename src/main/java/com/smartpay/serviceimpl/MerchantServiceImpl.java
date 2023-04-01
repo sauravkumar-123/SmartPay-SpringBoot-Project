@@ -1,5 +1,6 @@
 package com.smartpay.serviceimpl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 
 import org.slf4j.Logger;
@@ -17,7 +18,13 @@ import com.smartpay.exception.ResourceNotFoundException;
 import com.smartpay.model.AEPSWallet;
 import com.smartpay.model.Merchant;
 import com.smartpay.model.User;
+import com.smartpay.response.BankingServiceOnboardingResponse;
+import com.smartpay.response.MerchantOnboardingResponse;
+import com.smartpay.response.Response;
+import com.smartpay.restcall.BankingServiceApiCall;
 import com.smartpay.service.MerchantService;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MerchantServiceImpl implements MerchantService {
@@ -29,6 +36,12 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private MerchantRepository merchantRepository;
+
+    @Autowired
+    private BankingServiceApiCall BankingServiceApiCall;
+
+    @Autowired
+    private ObjectMapper ObjectMapper;
 
     @Override
     public Merchant updateUserProfileToMerchant(String userName, Merchant merchant) {
@@ -57,6 +70,7 @@ public class MerchantServiceImpl implements MerchantService {
                     merchantProfile.setGstNo(merchant.getGstNo());
                     merchantProfile.setTanNo(merchant.getTanNo());
                     merchantProfile.setUserIdentificationNo(user.getUserIdentificationNo());
+                    merchantProfile.setUserName(user.getUsername());
 
                     AEPSWallet aepsWallet = new AEPSWallet();
                     aepsWallet.setCurrentBalance(BigDecimal.ZERO);
@@ -77,7 +91,7 @@ public class MerchantServiceImpl implements MerchantService {
                 } catch (Exception e) {
                     logger.error("Unable to save merchant detail ", e);
                     userRepository.updateBankingServiceStatus(user.getUserIdentificationNo(), YesNO.NO);
-                    throw new GlobalException("Unable to update merchnat profile for username " + userName);
+                    throw new GlobalException("Unable to update merchant profile for username " + userName);
                 }
             } else {
                 logger.error("User Profile Already Upgraded To Merchant Type.....");
@@ -88,5 +102,21 @@ public class MerchantServiceImpl implements MerchantService {
             throw new ResourceNotFoundException("No User Registred With: " + userName);
         }
 
+    }
+
+    @Override
+    public void pushMerchantOnboardingDataToBankingService() {
+        Response response = BankingServiceApiCall.merchantOnboadingApiCall();
+        try {
+            if (response.isProcessStatus() == true && null != response.getDatasource()) {
+                BankingServiceOnboardingResponse bankOnboardingResponse = ObjectMapper.readValue(response.getDatasource().toString(), BankingServiceOnboardingResponse.class);
+                List<MerchantOnboardingResponse> merchantOnboardList = bankOnboardingResponse.getDatasource();
+                merchantOnboardList.forEach(m -> {
+                    merchantRepository.updateOnboardAndaepsStatus(m.getMerchantIdentificationNo(), m.getOnboardingServiceIdentificationNo(), m.getBankOnboardStatus(), YesNO.YES);
+                });
+            }
+        } catch (Exception ex) {
+            logger.error("Unable to update banking service status{}", ex);
+        }
     }
 }

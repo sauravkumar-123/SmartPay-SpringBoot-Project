@@ -91,6 +91,14 @@ spring:
   sleuth:
       propagation:
           type: w3c,b3    
+          
+merchant:
+    onboarding:
+        inital:
+            schedular:
+                enable: true
+        api:
+          timer: 5000
   
  # profiles:
  #   active: dev            #dev ,test, uat, prod  #VM Arguments

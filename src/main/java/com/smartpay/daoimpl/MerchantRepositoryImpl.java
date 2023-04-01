@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.smartpay.dao.MerchantRepository;
+import com.smartpay.dto.MerchantOnboardingDto;
 import com.smartpay.enums.EnumsStatus;
 import com.smartpay.enums.EnumsStatus.IsActive;
 import com.smartpay.exception.GlobalException;
@@ -87,7 +88,6 @@ public class MerchantRepositoryImpl implements MerchantRepository {
     public Merchant findMerchantByMerchantId(String identificationNo) {
         logger.info("Entred into MerchantRepository::findMerchantByMerchantId()");
         try {
-
             CriteriaBuilder builder = entityManager.getCriteriaBuilder();
             CriteriaQuery<Merchant> criteria = builder.createQuery(Merchant.class);
             Root<Merchant> root = criteria.from(Merchant.class);
@@ -118,6 +118,38 @@ public class MerchantRepositoryImpl implements MerchantRepository {
                 .setParameter("uploadStatus", status)
                 .setParameter("idNo", identificationNo)
                 .setParameter("activeStatus", IsActive.ACTIVE).executeUpdate();
+    }
+
+    @Override
+    public List<MerchantOnboardingDto> fecthMerchnatByOnboardingStatus(EnumsStatus.YesNO status) {
+        logger.info("Entred into MerchantRepository::fecthMerchnatByOnboardingStatus()");
+        try {
+            String qry = "SELECT m.merchantIdentificationNo AS merchantIdentificationNo, "
+                    + "m.aadhaarcardNo AS aadhaarcardNo, "
+                    + "m.panCardNo AS panCardNo, "
+                    + "m.userName AS userName, "
+                    + "m.gstNo AS gstNo "
+                    + "FROM Merchant m WHERE m.bankOnboardStatus=:onboardStatus AND m.isActive=:activeStatus";
+            List<MerchantOnboardingDto> result = entityManager.createQuery(qry)
+                    .setParameter("onboardStatus", status)
+                    .setParameter("activeStatus", IsActive.ACTIVE).getResultList();
+            return result;
+        } catch (Exception ex) {
+            logger.error("Unable to get merchant onboard data{} ", ex);
+            throw new GlobalException("Unable to get merchant onboard data!!");
+        }
+    }
+
+    @Override
+    public void updateOnboardAndaepsStatus(String merchantId, String onboardId, String onboardStatus, EnumsStatus.YesNO aepsStatus) {
+        logger.info("Entred into MerchantRepository::updateOnboardAndaepsStatus()");
+        String qry = "UPDATE Merchant mt SET mt.onboardingServiceIdentificationNo=:onboardId, mt.bankOnboardStatus=:onbaordStatus, "
+                + "mt.aepsServiceStatus=:aepsStatus WHERE mt.merchantIdentificationNo=:merchantId";
+        entityManager.createQuery(qry)
+                .setParameter("onboardId", onboardId)
+                .setParameter("merchantId", merchantId)
+                .setParameter("onbaordStatus", onboardStatus.equals(EnumsStatus.YesNO.YES.toString()) ? EnumsStatus.YesNO.YES : EnumsStatus.YesNO.NO)
+                .setParameter("aepsStatus", aepsStatus).executeUpdate();
     }
 
 }

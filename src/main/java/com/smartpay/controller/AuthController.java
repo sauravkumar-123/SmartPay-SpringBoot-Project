@@ -85,7 +85,7 @@ public class AuthController {
         Authentication authentication = authProvider
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        logger.info("Authentication Details{} " + authentication);
+        logger.info("Authentication Details{} " , authentication);
         if (null != authentication) {
             TwoFactorResponse twoFactorResponse = Utility.verifyLoginOTP(sessionId, inputOtp);
             if (twoFactorResponse.getStatus().equalsIgnoreCase("Success")) {

@@ -67,6 +67,10 @@ public class Merchant extends BaseEntity {
     @Size(max = 200)
     private String userIdentificationNo;
 
+    @Size(min = 1, max = 10)
+    @Column(name = "User_Name", length = 10)
+    private String userName;
+
     @JsonIgnore
     @OneToMany(mappedBy = "merchant", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -143,5 +147,8 @@ public class Merchant extends BaseEntity {
     @Size(max = 100, message = "Max 100 Character are allowed for TAN No")
     @Column(name = "TANNo", length = 100)
     private String tanNo;
+
+    @Column(name = "Merchant_Onboard_Id", length = 150)
+    private String onboardingServiceIdentificationNo;
 
 }

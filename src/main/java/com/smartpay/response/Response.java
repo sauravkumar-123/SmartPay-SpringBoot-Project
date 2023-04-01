@@ -11,7 +11,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Response {
 
-	private boolean processStatus;
-	private String message;
-	private Object datasource;
+    private boolean processStatus;
+    private String message;
+    private Object datasource;
+
+    @Override
+    public String toString() {
+        return "Response{" + "processStatus=" + processStatus + ", message=" + message + ", datasource=" + datasource + '}';
+    }
+
 }

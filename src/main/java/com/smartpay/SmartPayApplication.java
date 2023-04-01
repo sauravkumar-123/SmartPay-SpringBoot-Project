@@ -25,12 +25,14 @@ import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 
 import brave.sampler.Sampler;
 import jakarta.annotation.PostConstruct;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableWebSecurity(debug = true)
+@EnableScheduling
 public class SmartPayApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(SmartPayApplication.class);

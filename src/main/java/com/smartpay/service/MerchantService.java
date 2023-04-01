@@ -7,5 +7,7 @@ import com.smartpay.model.Merchant;
 @Service
 public interface MerchantService {
 
-	public Merchant updateUserProfileToMerchant(String userName, Merchant merchantRequest);
+    public Merchant updateUserProfileToMerchant(String userName, Merchant merchantRequest);
+
+    public void pushMerchantOnboardingDataToBankingService();
 }
