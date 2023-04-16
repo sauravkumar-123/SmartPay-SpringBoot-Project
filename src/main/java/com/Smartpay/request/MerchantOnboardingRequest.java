@@ -4,7 +4,12 @@
  */
 package com.smartpay.request;
 
+import com.smartpay.dto.MerchantOnboardingDto;
+import java.io.Serializable;
+import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -13,13 +18,10 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class MerchantOnboardingRequest {
+@AllArgsConstructor
+@NoArgsConstructor
+//@JsonIgnoreProperties(ignoreUnknown = true)
+public class MerchantOnboardingRequest implements Serializable {
 
-    private String onboardingServiceIdentificationNo;
-    private String merchantIdentificationNo;
-    private String aadhaarcardNo;
-    private String panCardNo;
-    private String userName;
-    private String bankOnboardStatus;
-    private String gstNo;
+    private List<MerchantOnboardingDto> onboardServiceInput;
 }

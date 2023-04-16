@@ -10,6 +10,8 @@ import com.smartpay.dao.MerchantRepository;
 import com.smartpay.dto.MerchantOnboardingDto;
 import com.smartpay.enums.EnumsStatus;
 import com.smartpay.exception.GlobalException;
+import com.smartpay.fingClient.BankingServiceFingClient;
+import com.smartpay.request.MerchantOnboardingRequest;
 import com.smartpay.response.Response;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -42,21 +45,32 @@ public class BankingServiceApiCall {
     @Autowired
     private MerchantRepository merchantRepository;
 
-    public Response merchantOnboadingApiCall() {
-        List<MerchantOnboardingDto> onboardingDto = merchantRepository.fecthMerchnatByOnboardingStatus(EnumsStatus.YesNO.NO);
+//    @Autowired
+//    private BankingServiceFingClient bankingServiceApi;
+
+    public Response merchantOnboardingApiCall() {
+        List<MerchantOnboardingDto> onboardingDto = merchantRepository.fecthMerchantByOnboardingStatus(EnumsStatus.YesNO.NO);
         Response response = null;
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-            HttpEntity<List<MerchantOnboardingDto>> entity = new HttpEntity<>(onboardingDto);
-            ResponseEntity<String> responseEntity = restTemplate.exchange(Constant.onboardingApi, HttpMethod.POST, entity, String.class);
-            String data = responseEntity.getBody();
-            if (null != data) {
-                response = ObjectMapper.readValue(data, Response.class);
+        String responseBody = null;
+        if (null != onboardingDto && !onboardingDto.isEmpty()) {
+            try {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+                MerchantOnboardingRequest merchantOnboardInput = new MerchantOnboardingRequest(onboardingDto);
+                HttpEntity<MerchantOnboardingRequest> entity = new HttpEntity<>(merchantOnboardInput, headers);
+                ResponseEntity<String> responseEntity = restTemplate.exchange(Constant.onboardingApi, HttpMethod.POST, entity, String.class);
+//                Response data = bankingServiceApi.pushMerchantOnboardingDataToBankingSystem(merchantOnboardInput);
+                String data = responseEntity.getBody();
+                logger.info("Onboarding service response data{} ", data);
+                if (null != data) {
+                    response = ObjectMapper.readValue(data, Response.class);
+                }
+            } catch (HttpClientErrorException ex) {
+                responseBody = ex.getResponseBodyAsString();
+            } catch (Exception ex) {
+                logger.error("Error while pushing merchant onboarding data to banking system{} ", ex);
+                throw new GlobalException("Fail to push merchant data in banking system!!Please Try again");
             }
-        } catch (Exception ex) {
-            logger.error("Error while pushing merchant onboarding data to banking system{} ", ex);
-            throw new GlobalException("Fail to push merchant data in banking system!!Please Try again");
         }
         return response;
     }

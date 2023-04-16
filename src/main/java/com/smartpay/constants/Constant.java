@@ -16,5 +16,5 @@ public class Constant {
     public static final String JWTHEADER = "Authorization";
 
     // @MerchantOnboardingAPI
-    public static final String onboardingApi = "http://192.168.0.105:5050/v1/bankingService/onboarding";
+    public static final String onboardingApi = "http://BANKSERVICEPROVIDER/v1/bankingService/onboarding";
 }

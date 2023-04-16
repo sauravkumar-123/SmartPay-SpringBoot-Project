@@ -4,6 +4,7 @@
  */
 package com.smartpay.dto;
 
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MerchantOnboardingDto {
+public class MerchantOnboardingDto implements Serializable {
 
     private String merchantIdentificationNo;
     private String aadhaarcardNo;

@@ -90,7 +90,11 @@ spring:
   
   sleuth:
       propagation:
-          type: w3c,b3    
+          type: w3c,b3
+          
+#  profiles:
+#    active: dev     #dev ,test, uat, prod  #VM Arguments
+                           #@  -Dspring.profiles.active=qa   
           
 merchant:
     onboarding:
@@ -99,9 +103,15 @@ merchant:
                 enable: true
         api:
           timer: 5000
+          
+management:
+    security:
+        enabled: false
+    health:
+        consul:
+            enabled: false        
+          
   
- # profiles:
- #   active: dev            #dev ,test, uat, prod  #VM Arguments
-                           #@  -Dspring.profiles.active=qa
+             
    
         

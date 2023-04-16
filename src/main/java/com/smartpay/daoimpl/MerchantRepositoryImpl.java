@@ -121,7 +121,7 @@ public class MerchantRepositoryImpl implements MerchantRepository {
     }
 
     @Override
-    public List<MerchantOnboardingDto> fecthMerchnatByOnboardingStatus(EnumsStatus.YesNO status) {
+    public List<MerchantOnboardingDto> fecthMerchantByOnboardingStatus(EnumsStatus.YesNO status) {
         logger.info("Entred into MerchantRepository::fecthMerchnatByOnboardingStatus()");
         try {
             String qry = "SELECT m.merchantIdentificationNo AS merchantIdentificationNo, "

@@ -106,7 +106,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public void pushMerchantOnboardingDataToBankingService() {
-        Response response = BankingServiceApiCall.merchantOnboadingApiCall();
+        Response response = BankingServiceApiCall.merchantOnboardingApiCall();
         try {
             if (response.isProcessStatus() == true && null != response.getDatasource()) {
                 BankingServiceOnboardingResponse bankOnboardingResponse = ObjectMapper.readValue(response.getDatasource().toString(), BankingServiceOnboardingResponse.class);

@@ -29,6 +29,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
+//@EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableWebSecurity(debug = true)
