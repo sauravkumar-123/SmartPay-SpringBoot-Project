@@ -19,6 +19,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.ws.rs.BadRequestException;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -47,7 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
             return savedResult;
         } catch (Exception e) {
             logger.error("Exception {} ", e);
-            throw new GlobalException("Unable To Save User Details!! Error:: " + e.getMessage());
+            throw new GlobalException("Unable To Save User Details!! Error:: " + e.getMessage(), HttpStatus.EXPECTATION_FAILED);
         }
 
     }
@@ -74,7 +75,7 @@ public class UserRepositoryImpl implements UserRepository {
             return admindata;
         } catch (Exception e) {
             logger.error("Exception {} ", e);
-            throw new GlobalException("Unbale To Fetch Admin Details");
+            throw new GlobalException("Unbale To Fetch Admin Details", HttpStatus.EXPECTATION_FAILED);
         }
     }
 
@@ -115,7 +116,7 @@ public class UserRepositoryImpl implements UserRepository {
             throw new BadRequestException(e.getMessage());
         } catch (Exception e) {
             logger.error("Exception {} ", e);
-            throw new GlobalException("Unable To Fetch User Details");
+            throw new GlobalException("Unable To Fetch User Details", HttpStatus.EXPECTATION_FAILED);
         }
 
     }
@@ -160,7 +161,7 @@ public class UserRepositoryImpl implements UserRepository {
             throw new BadRequestException(e.getMessage());
         } catch (Exception e) {
             logger.error("Exception {} ", e);
-            throw new GlobalException("Unable To Fetch User Details");
+            throw new GlobalException("Unable To Fetch User Details", HttpStatus.EXPECTATION_FAILED);
         }
 
     }

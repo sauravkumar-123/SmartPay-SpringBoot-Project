@@ -21,10 +21,10 @@ import com.smartpay.model.User;
 import com.smartpay.response.BankingServiceOnboardingResponse;
 import com.smartpay.response.MerchantOnboardingResponse;
 import com.smartpay.response.Response;
-import com.smartpay.restcall.BankingServiceApiCall;
+import com.smartpay.restcall.service.BankingServiceApiCall;
 import com.smartpay.service.MerchantService;
-import java.util.ArrayList;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 
 @Service
 public class MerchantServiceImpl implements MerchantService {
@@ -91,11 +91,11 @@ public class MerchantServiceImpl implements MerchantService {
                 } catch (Exception e) {
                     logger.error("Unable to save merchant detail ", e);
                     userRepository.updateBankingServiceStatus(user.getUserIdentificationNo(), YesNO.NO);
-                    throw new GlobalException("Unable to update merchant profile for username " + userName);
+                    throw new GlobalException("Unable to update merchant profile for username " + userName, HttpStatus.EXPECTATION_FAILED);
                 }
             } else {
                 logger.error("User Profile Already Upgraded To Merchant Type.....");
-                throw new GlobalException("User Already Updgraded To Merchant Profile");
+                throw new GlobalException("User Already Updgraded To Merchant Profile", HttpStatus.EXPECTATION_FAILED);
             }
         } else {
             logger.error("User Registration Not Found.....");

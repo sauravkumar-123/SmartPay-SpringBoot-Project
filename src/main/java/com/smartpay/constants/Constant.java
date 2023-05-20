@@ -1,5 +1,7 @@
 package com.smartpay.constants;
 
+import java.text.SimpleDateFormat;
+
 public class Constant {
 
     // @Pattern Matchers For Attribute Validation.
@@ -15,6 +17,11 @@ public class Constant {
     public static final String JWTKEY = "jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4";
     public static final String JWTHEADER = "Authorization";
 
+    // @Banking service request source name
+    public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss aa");
+    public static final String bankingServiceRequestSourceName = "Banking_Service";
+
     // @MerchantOnboardingAPI
     public static final String onboardingApi = "http://BANKSERVICEPROVIDER/v1/bankingService/onboarding";
+
 }

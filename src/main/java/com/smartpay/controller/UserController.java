@@ -32,6 +32,7 @@ import com.smartpay.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
@@ -53,7 +54,7 @@ public class UserController {
     @Autowired
     private DocumentsUploadService documentsUploadService;
 
-    @PreAuthorize("permitAll()") 
+    @PreAuthorize("permitAll()")
     @ApiOperation("User Registration API")
     @RequestMapping(value = "/saveUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response> registerUser(@Valid @RequestBody User user) {
@@ -62,9 +63,9 @@ public class UserController {
         User result = userService.registerUser(user);
         if (null != result) {
             logger.debug("User Registration Response {} " + result);
-            return new ResponseEntity<Response>(new Response(true, "User Details Saved", result), HttpStatus.CREATED);
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), true, "User Details Saved", result), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<Response>(new Response(false, "Unable To Save User Details", result),
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "Unable To Save User Details", result),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -86,10 +87,10 @@ public class UserController {
         if (null != merchantDetails) {
             logger.debug("Profile Update Response {}", merchantDetails);
             return new ResponseEntity<Response>(
-                    new Response(true, "User Upgraded To Merchant Profile", merchantDetails), HttpStatus.OK);
+                    new Response(LocalDateTime.now(), true, "User Upgraded To Merchant Profile", merchantDetails), HttpStatus.OK);
         } else {
             return new ResponseEntity<Response>(
-                    new Response(false, "Unable to Update Merchant Profile", merchantDetails),
+                    new Response(LocalDateTime.now(), false, "Unable to Update Merchant Profile", merchantDetails),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -110,9 +111,9 @@ public class UserController {
         if (null != result) {
             logger.debug("Documents Uplaod Response {}", result);
             return new ResponseEntity<Response>(
-                    new Response(true, "Upload Success...Wait For Approval", result.getIsApproved()), HttpStatus.OK);
+                    new Response(LocalDateTime.now(), true, "Upload Success...Wait For Approval", result.getIsApproved()), HttpStatus.OK);
         } else {
-            return new ResponseEntity<Response>(new Response(false, "Documents Upload Failed...Try Again", null),
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "Documents Upload Failed...Try Again", null),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

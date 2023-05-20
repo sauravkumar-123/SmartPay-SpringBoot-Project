@@ -52,5 +52,17 @@ public class MerchantServiceImplTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
+
+    /**
+     * Test of pushMerchantOnboardingDataToBankingService method, of class MerchantServiceImpl.
+     */
+    @Test
+    public void testPushMerchantOnboardingDataToBankingService() {
+        System.out.println("pushMerchantOnboardingDataToBankingService");
+        MerchantServiceImpl instance = new MerchantServiceImpl();
+        instance.pushMerchantOnboardingDataToBankingService();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
     
 }

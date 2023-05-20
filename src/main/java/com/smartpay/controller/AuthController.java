@@ -32,6 +32,7 @@ import com.smartpay.utility.Utility;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @RestController
 @Validated
@@ -64,14 +65,14 @@ public class AuthController {
             User user = userRepository.findUserByUsername(authentication.getName());
             TwoFactorResponse twoFactorResponse = Utility.sendLoginOTP(user.getMobileNo());
             if (twoFactorResponse.getStatus().equalsIgnoreCase("Success")) {
-                return new ResponseEntity<Response>(new Response(true, "OTP Sent", twoFactorResponse), HttpStatus.OK);
+                return new ResponseEntity<Response>(new Response(LocalDateTime.now(), true, "OTP Sent", twoFactorResponse), HttpStatus.OK);
             } else {
-                return new ResponseEntity<Response>(new Response(false, "Unable To Send OTP", twoFactorResponse),
+                return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "Unable To Send OTP", twoFactorResponse),
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else {
-            return new ResponseEntity<Response>(new Response(false, "Authencation Failed", null),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "Authencation Failed", null),
+                    HttpStatus.FORBIDDEN);
         }
     }
 
@@ -85,7 +86,7 @@ public class AuthController {
         Authentication authentication = authProvider
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        logger.info("Authentication Details{} " , authentication);
+        logger.info("Authentication Details{} ", authentication);
         if (null != authentication) {
             TwoFactorResponse twoFactorResponse = Utility.verifyLoginOTP(sessionId, inputOtp);
             if (twoFactorResponse.getStatus().equalsIgnoreCase("Success")) {
@@ -96,14 +97,14 @@ public class AuthController {
                 authResponse.setMessage("Authencation Successfully done!!");
                 authResponse.setStatus("success");
                 authResponse.setUsername(authentication.getName());
-                return new ResponseEntity<Response>(new Response(true, "Login Success", authResponse), HttpStatus.OK);
+                return new ResponseEntity<Response>(new Response(LocalDateTime.now(), true, "Login Success", authResponse), HttpStatus.OK);
             } else {
-                return new ResponseEntity<Response>(new Response(false, "Wrong OTP", twoFactorResponse),
-                        HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "Wrong OTP", twoFactorResponse),
+                        HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<Response>(new Response(false, "Authencation Failed", null),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "Authencation Failed", null),
+                    HttpStatus.FORBIDDEN);
         }
     }
 
@@ -116,15 +117,15 @@ public class AuthController {
         if (null != user) {
             TwoFactorResponse twoFactorResponse = Utility.sendLoginOTP(user.getMobileNo());
             if (twoFactorResponse.getStatus().equalsIgnoreCase("Success")) {
-                return new ResponseEntity<Response>(new Response(true, "OTP Sent", twoFactorResponse), HttpStatus.OK);
+                return new ResponseEntity<Response>(new Response(LocalDateTime.now(), true, "OTP Sent", twoFactorResponse), HttpStatus.OK);
             } else {
                 return new ResponseEntity<Response>(
-                        new Response(false, "OTP Send Failed..Try Again!!", twoFactorResponse),
+                        new Response(LocalDateTime.now(), false, "OTP Send Failed..Try Again!!", twoFactorResponse),
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
         } else {
-            return new ResponseEntity<Response>(new Response(false, "User not found with username: " + username, null),
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "User not found with username: " + username, null),
                     HttpStatus.NOT_FOUND);
         }
     }
@@ -144,19 +145,19 @@ public class AuthController {
                 String pswd = passwordEncoder.encode(password);
                 boolean result = userRepository.updateUserLoginPassword(user.getUserIdentificationNo(), pswd);
                 if (result) {
-                    return new ResponseEntity<Response>(new Response(true, "Password Successfully Updated", null),
+                    return new ResponseEntity<Response>(new Response(LocalDateTime.now(), true, "Password Successfully Updated", null),
                             HttpStatus.OK);
                 } else {
-                    return new ResponseEntity<Response>(new Response(false, "Fail to update password!!Try Again..", null),
+                    return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "Fail to update password!!Try Again..", null),
                             HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             } else {
-                return new ResponseEntity<Response>(new Response(false, "OTP verification failed!!", twoFactorResponse),
+                return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "OTP verification failed!!", twoFactorResponse),
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
         } else {
-            return new ResponseEntity<Response>(new Response(false, "User not found with username: " + username, null),
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "User not found with username: " + username, null),
                     HttpStatus.NOT_FOUND);
         }
     }
@@ -174,9 +175,9 @@ public class AuthController {
             oAuthResponse.setDetails(token.getDetails());
             oAuthResponse.setName(token.getName());
             oAuthResponse.setPrincipal(token.getPrincipal());
-            return new ResponseEntity<Response>(new Response(true, "Success", oAuthResponse), HttpStatus.OK);
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), true, "Success", oAuthResponse), HttpStatus.OK);
         } else {
-            return new ResponseEntity<Response>(new Response(false, "Authencation Failed", null),
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "Authencation Failed", null),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

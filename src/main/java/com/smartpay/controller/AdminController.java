@@ -18,6 +18,7 @@ import com.smartpay.service.AdminService;
 
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
@@ -30,7 +31,7 @@ public class AdminController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
-    @PreAuthorize("permitAll()") 
+    @PreAuthorize("permitAll()")
     @ApiOperation("Admin Registration API")
     @RequestMapping(value = "/saveAdmin", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response> registerAdmin(@Valid @RequestBody User user) {
@@ -39,9 +40,9 @@ public class AdminController {
         User result = adminService.registerAdmin(user);
         if (null != result) {
             logger.debug("Admin Registration Response {} " + result);
-            return new ResponseEntity<Response>(new Response(true, "Admin Details Saved", result), HttpStatus.CREATED);
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), true, "Admin Details Saved", result), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<Response>(new Response(false, "Unable To Save Admin Details", result),
+            return new ResponseEntity<Response>(new Response(LocalDateTime.now(), false, "Unable To Save Admin Details", result),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -4,24 +4,41 @@
  */
 package com.smartpay.request;
 
-import com.smartpay.dto.MerchantOnboardingDto;
-import java.io.Serializable;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.smartpay.dto.MerchantOnboardServiceInput;
 
 /**
  *
  * @author saura
  */
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-//@JsonIgnoreProperties(ignoreUnknown = true)
-public class MerchantOnboardingRequest implements Serializable {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class MerchantOnboardingRequest {
 
-    private List<MerchantOnboardingDto> onboardServiceInput;
+    private RequestHeader requestHeader;
+    private MerchantOnboardServiceInput serviceInput;
+
+    public MerchantOnboardingRequest() {
+    }
+
+    public MerchantOnboardingRequest(RequestHeader requestHeader, MerchantOnboardServiceInput serviceInput) {
+        this.requestHeader = requestHeader;
+        this.serviceInput = serviceInput;
+    }
+
+    public RequestHeader getRequestHeader() {
+        return requestHeader;
+    }
+
+    public void setRequestHeader(RequestHeader requestHeader) {
+        this.requestHeader = requestHeader;
+    }
+
+    public MerchantOnboardServiceInput getServiceInput() {
+        return serviceInput;
+    }
+
+    public void setServiceInput(MerchantOnboardServiceInput serviceInput) {
+        this.serviceInput = serviceInput;
+    }
+
 }

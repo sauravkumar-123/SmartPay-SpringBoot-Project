@@ -18,6 +18,7 @@ import com.smartpay.fileupload.dao.MerchantDocumentsRepository;
 import com.smartpay.fileupload.service.DocumentsUploadService;
 import com.smartpay.model.Merchant;
 import com.smartpay.utility.StringUtil;
+import org.springframework.http.HttpStatus;
 
 @Service
 public class DocumentsUploadServiceImpl implements DocumentsUploadService {
@@ -57,7 +58,7 @@ public class DocumentsUploadServiceImpl implements DocumentsUploadService {
                 } catch (Exception e) {
                     logger.error("Error while upload merchant documents ", e);
                     merchantRepository.updateDocumentsUploadStatus(merchant.getMerchantIdentificationNo(), EnumsStatus.DocumentsUploadStatus.FAILED);
-                    throw new GlobalException("Error While Upload Documents!!");
+                    throw new GlobalException("Error While Upload Documents!!", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             } else {
                 logger.debug("Documents Already Uploaded");

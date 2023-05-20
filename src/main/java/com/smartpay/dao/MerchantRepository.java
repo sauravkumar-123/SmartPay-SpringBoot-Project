@@ -19,7 +19,7 @@ public interface MerchantRepository {
 
     public void updateDocumentsUploadStatus(String identificationNo, EnumsStatus.DocumentsUploadStatus uploadStatus);
 
-    public List<MerchantOnboardingDto> fecthMerchantByOnboardingStatus(YesNO status);
+    public List<MerchantOnboardingDto> fetchMerchantByOnboardingStatus(YesNO status);
 
     public void updateOnboardAndaepsStatus(String merchantId, String onboardId, String onboardStatus, YesNO aepsStatus);
 

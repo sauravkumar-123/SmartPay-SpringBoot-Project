@@ -28,7 +28,7 @@ jwt:
   
 logging:
   file:
-    name: C:/Users/saura/Projects/SmartPay_Logger/SmartPay/uat/SmartPay.log
+    name: C:/My Projects/logger/smartPay/uat/SmartPay.log
   level:
     com:
       Smartpay: DEBUG
@@ -50,7 +50,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     name: SmartPay
-    password: 12345
+    password: root@12345
     platform: mysql
     url: jdbc:mysql://localhost:3306/smartPayUat?serverTimezone=UTC
     username: root
@@ -91,3 +91,18 @@ spring:
       
  # profiles:
  #  active: prod    
+merchant:
+    onboarding:
+        inital:
+            schedular:
+                enable: true
+        api:
+          timer: 5000
+          
+management:
+    security:
+        enabled: false
+    health:
+        consul:
+            enabled: false  
+ 

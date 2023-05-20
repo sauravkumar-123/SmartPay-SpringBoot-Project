@@ -14,6 +14,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -54,7 +55,7 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
             return docResult;
         } catch (Exception e) {
             logger.error("Exception {} ", e);
-            throw new GlobalException("Unable To Fetch Documents Details");
+            throw new GlobalException("Unable To Fetch Documents Details", HttpStatus.EXPECTATION_FAILED);
         }
     }
 
@@ -67,8 +68,8 @@ public class MerchnatDocumentsRepositoryImpl implements MerchantDocumentsReposit
             logger.debug("merchant documents saved data {} ", savedResult);
             return savedResult;
         } catch (Exception e) {
-            logger.error("Exception {} ", e);
-            throw new GlobalException("Unable To Save Documents Details");
+            logger.error("Exception while saving documents detail {} ", e);
+            throw new GlobalException("Unable To Save Documents Details", HttpStatus.EXPECTATION_FAILED);
         }
     }
 }

@@ -18,6 +18,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -46,7 +47,7 @@ public class MerchantRepositoryImpl implements MerchantRepository {
             return saveResult;
         } catch (Exception e) {
             logger.error("Exception {} ", e);
-            throw new GlobalException("Unable To Save Merchant Details!! Error:: " + e.getMessage());
+            throw new GlobalException("Unable To Save Merchant Details!! Error:: " + e.getMessage(), HttpStatus.EXPECTATION_FAILED);
         }
     }
 
@@ -78,7 +79,7 @@ public class MerchantRepositoryImpl implements MerchantRepository {
             return merchantData;
         } catch (Exception e) {
             logger.error("Exception {} ", e);
-            throw new GlobalException("Unable To Check Merchant Records!!Try Again..");
+            throw new GlobalException("Unable To Check Merchant Records!!Try Again..", HttpStatus.EXPECTATION_FAILED);
         }
 
     }
@@ -106,7 +107,7 @@ public class MerchantRepositoryImpl implements MerchantRepository {
             return merchantData;
         } catch (Exception e) {
             logger.error("Exception {} ", e);
-            throw new GlobalException("Unable To Check Merchant Records!!Try Again..");
+            throw new GlobalException("Unable To Check Merchant Records!!Try Again..", HttpStatus.EXPECTATION_FAILED);
         }
     }
 
@@ -120,8 +121,9 @@ public class MerchantRepositoryImpl implements MerchantRepository {
                 .setParameter("activeStatus", IsActive.ACTIVE).executeUpdate();
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<MerchantOnboardingDto> fecthMerchantByOnboardingStatus(EnumsStatus.YesNO status) {
+    public List<MerchantOnboardingDto> fetchMerchantByOnboardingStatus(EnumsStatus.YesNO status) {
         logger.info("Entred into MerchantRepository::fecthMerchnatByOnboardingStatus()");
         try {
             String qry = "SELECT m.merchantIdentificationNo AS merchantIdentificationNo, "
@@ -136,10 +138,11 @@ public class MerchantRepositoryImpl implements MerchantRepository {
             return result;
         } catch (Exception ex) {
             logger.error("Unable to get merchant onboard data{} ", ex);
-            throw new GlobalException("Unable to get merchant onboard data!!");
+            throw new GlobalException("Unable to get merchant onboard data!!", HttpStatus.EXPECTATION_FAILED);
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateOnboardAndaepsStatus(String merchantId, String onboardId, String onboardStatus, EnumsStatus.YesNO aepsStatus) {
         logger.info("Entred into MerchantRepository::updateOnboardAndaepsStatus()");
