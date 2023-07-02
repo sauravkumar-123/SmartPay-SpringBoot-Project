@@ -104,5 +104,13 @@ management:
         enabled: false
     health:
         consul:
-            enabled: false  
+            enabled: false
+    endpoints:
+        web:
+          exposure:
+            include: "*" 
+          base-path: /v1/smartpay    
+    endpoint:
+      health:
+        show-details: ALWAYS            
  

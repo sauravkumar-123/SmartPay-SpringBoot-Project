@@ -51,7 +51,10 @@ public class Role {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "Role_Id"), inverseJoinColumns = @JoinColumn(name = "Privilege_Id"))
+    @JoinTable(name = "roles_privileges",
+            joinColumns = {
+                @JoinColumn(name = "Role_Id")}, inverseJoinColumns = {
+                @JoinColumn(name = "Privilege_Id")})
     private Set<Privileges> privileges = new HashSet<>();
 
 }

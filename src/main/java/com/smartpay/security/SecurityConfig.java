@@ -1,5 +1,7 @@
 package com.smartpay.security;
 
+import com.smartpay.security.JWTImpl.JWTAuthencationFilter;
+import com.smartpay.security.JWTImpl.JwtAuthenticationEntryPoint;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -16,9 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import com.smartpay.security.jwt.JWTTokenFilter;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -32,6 +32,12 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/ {
 
     @Autowired
     private LoadUserDetails loadUserDetails;
+
+    @Autowired
+    private JwtAuthenticationEntryPoint JwtAuthenticationEntryPoint;
+
+    @Autowired
+    private JWTAuthencationFilter JWTAuthencationFilter;
 
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -51,33 +57,35 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/ {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().cors()
-                .configurationSource(new CorsConfigurationSource() {
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                        CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Collections.singletonList("*"));
-                        config.setAllowedMethods(Collections.singletonList("*"));
-                        config.setAllowCredentials(true);
-                        config.setAllowedHeaders(Collections.singletonList("*"));
-                        config.setExposedHeaders(Arrays.asList("Authorization"));
-                        config.setMaxAge(3600L);
-                        return config;
-                    }
-                }).and().csrf().disable();
+        return httpSecurity.cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedOrigins(Collections.singletonList("*"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.setAllowCredentials(true);
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setExposedHeaders(Arrays.asList("Authorization"));
+                config.setMaxAge(3600L);
+                return config;
+            }
 
-        httpSecurity.authorizeHttpRequests().requestMatchers("/v1/user/saveUser", "/v1/admin/saveAdmin").permitAll().requestMatchers("/v1/auth/**").permitAll()
-                .requestMatchers("/v1/admin/**").permitAll().requestMatchers("/v1/user/**").permitAll().requestMatchers("/swagger-ui.html#").permitAll().anyRequest()
-                .authenticated().and().oauth2Login().and().exceptionHandling().accessDeniedPage("/403").and()
-                .formLogin().permitAll().and().logout().invalidateHttpSession(true).clearAuthentication(true)
-                .permitAll();
-
-        httpSecurity.exceptionHandling().authenticationEntryPoint((request, response, ex) -> {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
-        });
-
-        httpSecurity.addFilterBefore(new JWTTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        return httpSecurity.build();
+        }))
+                .csrf(csrf -> csrf.disable()).
+                authorizeHttpRequests(auth -> auth.requestMatchers("/v1/user/saveUser", "/v1/admin/saveAdmin").permitAll()
+                .requestMatchers("/v1/auth/**").permitAll()
+                .requestMatchers("/v1/admin/**").permitAll()
+                .requestMatchers("/v1/user/**").permitAll()
+                .requestMatchers("/swagger-ui.html#").permitAll()
+                .anyRequest()
+                .authenticated())
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(JwtAuthenticationEntryPoint)
+                .accessDeniedPage("/403")).oauth2Login().and()
+                .sessionManagement(sessionMng -> sessionMng.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(form -> form.permitAll().loginPage("/login"))
+                .logout(logout -> logout.invalidateHttpSession(true).clearAuthentication(true))
+                .addFilterBefore(JWTAuthencationFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean

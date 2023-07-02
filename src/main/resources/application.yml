@@ -2,7 +2,12 @@ app:
   api:
     swagger:
       enable: true
-  message: This is properties configuration for ${spring.application.name} from PRIMARY environment    
+  message: This is properties configuration for ${spring.application.name} from PRIMARY environment 
+  jwt:
+    secret:
+      key: afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf 
+    token:
+      validity: 20000
       
 eureka:
   instance:
@@ -109,7 +114,20 @@ management:
         enabled: false
     health:
         consul:
-            enabled: false        
+            enabled: false
+    endpoints:
+        web:
+          exposure:
+            include: "*"
+          base-path: /v1/smartpay    
+    endpoint:
+      health:
+        show-details: ALWAYS         
+            
+            
+    
+            
+            
           
   
              

@@ -15,17 +15,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoadUserDetails implements UserDetailsService {
 
-	@Autowired
-	private UserRepository UserRepository;
+    @Autowired
+    private UserRepository UserRepository;
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		log.info("Enter into UserDetailsService::loadUserByUsername()");
-		User user = UserRepository.findUserByUsername(username);
-		if (null == user) {
-			throw new UsernameNotFoundException("User Not Found With Username: " + username);
-		}
-		return new UserSecurity(user);
-	}
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("Enter into UserDetailsService::loadUserByUsername()");
+        User user = UserRepository.findUserByUsername(username);
+        if (null == user) {
+            throw new UsernameNotFoundException("User Not Found With Username: " + username);
+        }
+        return new UserSecurity(user);
+    }
 
 }

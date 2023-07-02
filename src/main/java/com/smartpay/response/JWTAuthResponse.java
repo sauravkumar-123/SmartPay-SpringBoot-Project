@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class JWTAuthResponse {
 
-	private String status;
-	private String message;
-	private String username;
-	private String authToken;
+    private boolean status;
+    private String message;
+    private String username;
+    private String authToken;
 }
